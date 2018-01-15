@@ -39,7 +39,7 @@
   -webkit-border-radius: 50px;
   border-radius: 50px;
   color: rgba(255, 255, 255, 0.8);
-  background: #2087b2;
+  background: #D68322;
   border: 2px solid rgba(255, 255, 255, 0.8);
   font-size: 18px;
   line-height: 40px;
@@ -78,10 +78,4 @@
 }
 .login-page .form-content {
   padding: 40px 0;
-}
-.login-page .user-avatar {
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background: #2087b2;
 }

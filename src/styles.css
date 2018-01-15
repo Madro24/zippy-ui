@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+.rounded-btn {
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.8);
+  background: #D68322;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  line-height: 40px;
+  padding: 0 25px;
+}
+
+.user-avatar {
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: 2px solid #D68322;
+  background: #fff;
+  padding: 20px;
+}

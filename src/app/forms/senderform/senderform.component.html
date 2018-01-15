@@ -1,0 +1,46 @@
+<form role="form">
+  <div>
+    <h3> Datos Remitente</h3>
+    <fieldset class="form-group">
+      <label>Quien envia</label>
+      <input class="form-control">
+    </fieldset>
+    <fieldset class="form-group">
+      <label>Celular</label>
+      <input class="form-control" placeholder="664-XXXXXXX">
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label>Origen</label>
+      <input class="form-control">
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label>Dia de recoleccion</label>
+      <div class="input-group date">
+        <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label>Hora de recoleccion</label>
+      <ngb-timepicker name="serviceTiem" [(ngModel)]="time"></ngb-timepicker>
+
+    </fieldset>
+
+    <div style="display:none">
+      <h4>(Solo empresas afiliadas)</h4>
+
+      <fieldset class="form-group">
+        <label>Usuario</label>
+        <input class="form-control" placeholder="usuario@empresa.com" disabled>
+      </fieldset>
+
+      <fieldset class="form-group">
+        <label>Contrase&ntilde;a</label>
+        <input class="form-control" disabled>
+      </fieldset>
+    </div>
+  </div>
+</form>

@@ -1,88 +1,28 @@
-<div>
+<app-header></app-header>
+<div class="container">
   <h1>Solicitud de Servicio</h1>
-    <div class="row">
-        <div class="col-lg-6">
-
-            <form role="form">
-                <fieldset class="form-group">
-                    <label>Dia de recoleccion</label>
-                    <input class="form-control">
-                </fieldset>
-
-                <div class="form-group">
-                    <label>Servicio</label>
-                    <select class="form-control">
-                        <option>Express</option>
-                        <option>Normal</option>
-                    </select>
-                </div>
-
-                <fieldset class="form-group">
-                    <label>Quien envia</label>
-                    <input class="form-control">
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>Celular</label>
-                    <input class="form-control">
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>Origen</label>
-                    <input class="form-control">
-                </fieldset>
-
-                <h4>(Solo empresas afiliadas)</h4>
-
-                <fieldset class="form-group">
-                    <label>Usuario</label>
-                    <input class="form-control" placeholder="usuario@empresa.com">
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>Contrase&ntilde;a</label>
-                    <input class="form-control">
-                </fieldset>
-
-
-                <button type="submit" class="btn rounded-btn">Agregar</button>
-                <button type="reset" class="btn rounded-btn">Revision de pedido</button>
-
-            </form>
-
-        </div>
-        <div class="col-lg-6">
-            <form role="form">
-
-              <fieldset class="form-group">
-                  <label>Hora de recoleccion</label>
-                  <input class="form-control" placeholder="HH:mm">
-              </fieldset>
-              <br />
-              <br />
-              <fieldset class="form-group">
-                  <label>Quien recibe</label>
-                  <input class="form-control">
-              </fieldset>
-
-              <fieldset class="form-group">
-                  <label>Destino</label>
-                  <input class="form-control">
-              </fieldset>
-
-              <fieldset class="form-group">
-                  <label>Mensaje al destinatario</label>
-                  <textarea class="form-control" rows="3"></textarea>
-              </fieldset>
-
-              <fieldset class="form-group">
-                  <label>Instruccion al mensajero</label>
-                  <textarea class="form-control" rows="3"></textarea>
-              </fieldset>
-
-            </form>
-
-        </div>
+  <hr />
+  <div class="row" *ngIf="isSenderForm()">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <app-senderform></app-senderform>
     </div>
-    <!-- /.row -->
+    <div class="col-lg-3"></div>
+  </div>
+  <div class="row" *ngIf="isDeliveryForm()">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <app-delivery-service-form></app-delivery-service-form>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 btnForm">
+      <a *ngIf="isSenderForm()" class="btn rounded-btn" (click)="addDeliveryService()">Agregar servicios</a>
+      <a *ngIf="isDeliveryForm()" class="btn rounded-btn" (click)="viewSenderForm()">Regresar</a>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
 </div>
