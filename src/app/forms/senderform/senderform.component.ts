@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./senderform.component.css']
 })
 export class SenderformComponent implements OnInit {
+  model;
   time = { hour: 13, minute: 30 };
   constructor() {
   }
