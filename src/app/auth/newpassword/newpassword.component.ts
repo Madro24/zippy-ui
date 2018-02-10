@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
-import {UserRegistrationService} from "../service/user-registration.service";
-import {UserLoginService} from "../service/user-login.service";
-import {CognitoCallback} from "../service/cognito.service";
+import {UserRegistrationService} from "../../service/user-registration.service";
+import {UserLoginService} from "../../service/user-login.service";
+import {CognitoCallback} from "../../service/cognito.service";
 
 export class NewPasswordUser {
     username: string;
@@ -51,12 +51,12 @@ export class NewPasswordComponent implements CognitoCallback {
         } else { //success
             //move to the next step
             console.log("redirecting");
-            this.router.navigate(['/new-service']);
+            this.router.navigate(['/securehome']);
         }
     }
 
     isLoggedIn(message: string, isLoggedIn: boolean) {
         if (isLoggedIn)
-            this.router.navigate(['/new-service']);
+            this.router.navigate(['/securehome']);
     }
 }

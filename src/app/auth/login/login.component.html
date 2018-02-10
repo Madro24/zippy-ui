@@ -22,8 +22,9 @@
                 </div>
                 <a class="btn rounded-btn" (click)="onLogin()"> Log in </a>
                 <hr>
-                <p>
-                    <a [routerLink]="['/']"> <i class="fa fa-fw fa-group"></i> Forgot Password?</a><br/>
+                <p><a [routerLink]="['register']"> <i class="fa fa-fw fa-group"></i> Register</a>
+                    <a [routerLink]="['forgotPassword']"> <i class="fa fa-fw fa-group"></i> Forgot Password?</a><br/>
+                    <a [routerLink]="['resendCode']"> <i class="fa fa-fw fa-group"></i> Resend Confirmation Code</a>
                 </p>
 
             </form>

@@ -1,7 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
-import {UserLoginService} from "../service/user-login.service";
-import {CognitoCallback, LoggedInCallback} from "../service/cognito.service";
+import {UserLoginService} from "../../service/user-login.service";
+import {CognitoCallback, LoggedInCallback} from "../../service/cognito.service";
+import {DynamoDBService} from "../../service/ddb.service";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
   errorMessage: string;
 
   constructor(public router: Router,
+              public ddb: DynamoDBService,
               public userService: UserLoginService) {
       console.log("LoginComponent constructor");
   }
@@ -39,19 +41,20 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
           console.log("result: " + this.errorMessage);
           if (this.errorMessage === 'User is not confirmed.') {
               console.log("redirecting");
-              this.router.navigate(['/home/confirmRegistration', this.email]);
+              this.router.navigate(['confirmRegistration', this.email]);
           } else if (this.errorMessage === 'User needs to set password.') {
               console.log("redirecting to set new password");
-              this.router.navigate(['/newPassword']);
+              this.router.navigate(['newPassword']);
           }
       } else { //success
-          this.router.navigate(['/new-service']);
+           this.ddb.writeLogEntry("login");
+          this.router.navigate(['/newService']);
       }
   }
 
   isLoggedIn(message: string, isLoggedIn: boolean) {
       if (isLoggedIn)
-          this.router.navigate(['/new-service']);
+          this.router.navigate(['/newService']);
   }
 
 }
