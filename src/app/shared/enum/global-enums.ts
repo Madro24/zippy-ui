@@ -9,8 +9,8 @@ export enum PayByEnum {
 };
 
 export enum ServiceStatusEnum {
-  Creating,
-  Starting,
+  Created,
+  Started,
   InProgress,
   Completed,
   Archived

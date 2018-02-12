@@ -6,13 +6,20 @@ import { ServiceTypeEnum, PayByEnum, ServiceStatusEnum } from "../enum/global-en
 export class ServiceItem {
   id: string;
   date: string;
-  type: ServiceTypeEnum;
-  payBy: PayByEnum;
+  type: string;
+  payBy: string;
   sender: Customer;
   originLocation: string;
-  status: ServiceStatusEnum;
+  status: string;
   deliveryGuy: string;
   destinations: Array<Destination>;
   usedFares: PriceLog;
   totalCost: number;
+
+  constructor() {
+    this.type = ServiceTypeEnum[ServiceTypeEnum.Express];
+    this.sender = new Customer();
+    this.usedFares = new PriceLog();
+    this.destinations = [];
+  }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { ServiceItem } from "../shared/model/service-item.model";
+import { Destination } from "../shared/model/destination.model";
+
 
 
 @Component({
@@ -9,30 +11,21 @@ import { ServiceItem } from "../shared/model/service-item.model";
   styleUrls: ['./forms.component.css']
 })
 export class FormsComponent implements OnInit {
-  private serviceItem = new ServiceItem();
-  displayDeliveryServiceForm = false;
+  public serviceItem: ServiceItem;
+  public destinationArray: Array<Destination>;
 
 
-
-  constructor(public router: Router) { }
+  constructor(public router: Router) {
+    this.serviceItem = new ServiceItem();
+    this.serviceItem.destinations.push(new Destination());
+  }
 
   ngOnInit() {
   }
 
   addDeliveryService() {
-    this.displayDeliveryServiceForm = true;
+    console.log("This is my service:", this.serviceItem);
   }
 
-  viewSenderForm() {
-    this.displayDeliveryServiceForm = false;
-  }
-
-  isSenderForm() {
-    return !this.displayDeliveryServiceForm;
-  }
-
-  isDeliveryForm() {
-    return this.displayDeliveryServiceForm;
-  }
 
 }

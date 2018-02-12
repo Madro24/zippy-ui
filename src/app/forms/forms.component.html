@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
-      <app-senderform></app-senderform>
+      <app-senderform [serviceItem]="serviceItem"></app-senderform>
     </div>
     <div class="col-lg-3"></div>
   </div>
@@ -13,7 +13,7 @@
   <div class="row" >
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
-      <app-delivery-service-form></app-delivery-service-form>
+      <app-delivery-service-form *ngFor="let destination of serviceItem.destinations" [destinationItem]="destination"></app-delivery-service-form>
     </div>
     <div class="col-lg-3"></div>
   </div>
@@ -21,9 +21,12 @@
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 btnForm">
-      <a *ngIf="isSenderForm()" class="btn rounded-btn" (click)="addDeliveryService()">Agregar servicios</a>
-      <a *ngIf="isDeliveryForm()" class="btn rounded-btn" (click)="viewSenderForm()">Regresar</a>
+      <a class="btn rounded-btn" (click)="addDeliveryService()">Finalizar</a>
+
     </div>
     <div class="col-lg-3"></div>
   </div>
 </div>
+
+
+<app-services-table></app-services-table>

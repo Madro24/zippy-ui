@@ -28,6 +28,7 @@ import {SecureHomeComponent} from "./secure/landing/securehome.component";
 import {JwtComponent} from "./secure/jwttokens/jwt.component";
 import {MyProfileComponent} from "./secure/profile/myprofile.component";
 import {UseractivityComponent} from "./secure/useractivity/useractivity.component";
+import { ServicesTableComponent } from './forms/services-table/services-table.component';
 
 
 const appRoutes: Routes = [
@@ -38,6 +39,7 @@ const appRoutes: Routes = [
   { path: 'newPassword', component: NewPasswordComponent },
   { path: 'senderForm', component: SenderformComponent },
   { path: 'deliveryServiceForm', component: DeliveryServiceFormComponent },
+  { path: 'serviceslist', component: ServicesTableComponent },
   { path: 'confirmRegistration', component: RegistrationConfirmationComponent },
   { path: 'forgotPassword', component: ForgotPasswordStep1Component },
   { path: 'forgotPassword/:email', component: ForgotPassword2Component},
@@ -68,6 +70,7 @@ const appRoutes: Routes = [
     MyProfileComponent,
     SecureHomeComponent,
     JwtComponent,
+    ServicesTableComponent,
   ],
   imports: [
     RouterModule.forRoot(

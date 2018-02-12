@@ -11,4 +11,9 @@ export class Destination{
   receiver: Customer;
   recolectTime: string;
   sequence: number;
+
+  constructor () {
+    this.logs = [];
+    this.receiver = new Customer();
+  }
 }

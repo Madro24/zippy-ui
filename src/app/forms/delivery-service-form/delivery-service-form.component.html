@@ -4,32 +4,32 @@
 
     <fieldset class="form-group">
       <label>Destino</label>
-      <input class="form-control">
+      <input class="form-control" [(ngModel)]="destinationItem.location" name="destination">
     </fieldset>
 
     <fieldset class="form-group">
       <label>Quien recibe</label>
-      <input class="form-control">
+      <input class="form-control" [(ngModel)]="destinationItem.receiver.name" name="receiverName">
     </fieldset>
 
     <fieldset class="form-group">
       <label>Contenido</label>
-      <input class="form-control">
+      <input class="form-control" [(ngModel)]="destinationItem.packageContent" name="packageContent">
     </fieldset>
 
     <fieldset class="form-group">
       <label>Mensaje al destinatario</label>
-      <textarea class="form-control" rows="3"></textarea>
+      <textarea class="form-control" rows="3" [(ngModel)]="destinationItem.message" name="message"></textarea>
     </fieldset>
 
     <fieldset class="form-group">
       <label>Instruccion al mensajero</label>
-      <textarea class="form-control" rows="3"></textarea>
+      <textarea class="form-control" rows="3" [(ngModel)]="destinationItem.instructions" name="instructions"></textarea>
     </fieldset>
 
     <fieldset class="form-group">
       <label>Distancia (km)</label>
-      <input class="form-control">
+      <input class="form-control" [(ngModel)]="destinationItem.distance" name="distance">
     </fieldset>
 
   </div>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ServiceTypeEnum } from "../../shared/enum/global-enums";
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { ServiceItem } from "../../shared/model/service-item.model";
 
 const now = new Date();
 
@@ -10,12 +11,11 @@ const now = new Date();
   styleUrls: ['./senderform.component.css']
 })
 export class SenderformComponent implements OnInit {
+  @Input() serviceItem: ServiceItem;
+
   model: NgbDateStruct;
   date: {year: number, month: number};
   time = { hour: 8, minute: 0 };
-
-
-  serviceTypeSelected: string;
 
   constructor() {
     this.model = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
