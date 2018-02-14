@@ -16,7 +16,7 @@ export const environment = {
       bucketRegion: 'us-east-1',
 
       ddbLoginTrailTable: 'LoginTrail',
-
+      ddbServiceItemsTable: 'ServiceItems',
       cognito_idp_endpoint: '',
       cognito_identity_endpoint: '',
       sts_endpoint: '',
