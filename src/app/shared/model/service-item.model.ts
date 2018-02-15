@@ -14,7 +14,8 @@ export class ServiceItem {
   deliveryGuy: string;
   destinations: Array<Destination>;
   usedFares: PriceLog;
-  totalCost: number;
+  totalCost: string;
+  recolectTime: string;
 
   constructor() {
     this.type = ServiceTypeEnum[ServiceTypeEnum.Express];

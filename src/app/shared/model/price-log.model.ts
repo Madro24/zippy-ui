@@ -1,4 +1,4 @@
 export class PriceLog {
-  distanceFare: number;
-  timeFare: number;
+  distanceFare: string;
+  timeFare: string;
 }

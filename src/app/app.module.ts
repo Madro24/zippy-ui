@@ -12,6 +12,7 @@ import {UserLoginService} from "./service/user-login.service";
 import {CognitoUtil} from "./service/cognito.service";
 import {AwsUtil} from "./service/aws.service";
 import {DynamoDBService} from "./service/ddb.service";
+import { ServiceItemDDBService } from "./service/ddbServiceItems.service";
 
 import { SenderformComponent } from './forms/senderform/senderform.component';
 import { DeliveryServiceFormComponent } from './forms/delivery-service-form/delivery-service-form.component';
@@ -88,7 +89,8 @@ const appRoutes: Routes = [
     UserRegistrationService,
     UserLoginService,
     UserParametersService,
-    DynamoDBService
+    DynamoDBService,
+    ServiceItemDDBService
   ],
   bootstrap: [AppComponent]
 })

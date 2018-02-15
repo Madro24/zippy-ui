@@ -1,5 +1,5 @@
 export class LogData {
   status: string;
-  duration: number;
+  duration: string;
   timestamp: string;
 }
