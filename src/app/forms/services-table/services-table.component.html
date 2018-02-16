@@ -11,34 +11,24 @@
             <th>Quien Envia</th>
             <th>Celular</th>
             <th>Origen</th>
-            <th>Destino</th>
             <th>Hora Recoleccion</th>
             <th>Dia Recoleccion</th>
-            <th>Contenido</th>
-            <th>Mensaje</th>
-            <th>Instrucciones</th>
             <th>Status</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+        <tr *ngFor="let item of mapArray">
+            <th scope="row">{{item.itemId}}</th>
+            <td>{{item.itemId}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.sender.name}}</td>
+            <td>{{item.sender.phone}}</td>
+            <td>{{item.originLocation}}</td>
+            <td>{{item.recolectTime}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.status}}</td>
         </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
+
         </tbody>
     </table>
 </div>

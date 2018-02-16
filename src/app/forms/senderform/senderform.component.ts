@@ -13,12 +13,13 @@ const now = new Date();
 export class SenderformComponent implements OnInit {
   @Input() serviceItem: ServiceItem;
 
-  model: NgbDateStruct;
-  date: {year: number, month: number};
-  time = { hour: 8, minute: 0 };
+  // model: NgbDateStruct;
+  // date: {year: number, month: number};
+  // time = { hour: 8, minute: 0 };
 
   constructor() {
-    this.model = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
+
+  //  this.model = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
   }
 
   ngOnInit() {

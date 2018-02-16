@@ -51,6 +51,36 @@ export class ServiceItemDDBService {
     }
   }
 
+  getServiceAllItems(mapArray: Array<ServiceItem>) {
+    console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
+    var params = {
+      TableName: environment.ddbServiceItemsTable,
+      KeyConditionExpression: "status = :status",
+      ExpressionAttributeValues: {
+        ":status": "CREATED"
+      }
+    };
+
+    var clientParams: any = {};
+    if (environment.dynamodb_endpoint) {
+      clientParams.endpoint = environment.dynamodb_endpoint;
+    }
+    var docClient = new DynamoDB.DocumentClient(clientParams);
+    docClient.scan(params, onQuery);
+
+    function onQuery(err, data) {
+      if (err) {
+        console.error("ServiceItemDDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
+      } else {
+        // print all the movies
+        console.log("ServiceItemDDBService: Query succeeded.");
+        data.Items.forEach(function(logitem) {
+          mapArray.push(logitem);
+        });
+      }
+    }
+  }
+
   writeServiceItem(item: ServiceItem) {
     try {
       let date = new Date().toString();
@@ -99,6 +129,7 @@ export class ServiceItemDDBService {
               }
             ]
           },
+          "recolectDate": { S: item.recolectDate },
           "recolectTime": { S: item.recolectTime },
           "itemId": { S: item.id },
           "originLocation": { S: item.originLocation },

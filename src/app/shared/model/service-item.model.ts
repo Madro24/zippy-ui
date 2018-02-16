@@ -2,6 +2,7 @@ import { Customer } from "./customer.model";
 import { Destination } from "./destination.model";
 import { PriceLog } from "./price-log.model";
 import { ServiceTypeEnum, PayByEnum, ServiceStatusEnum } from "../enum/global-enums";
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 export class ServiceItem {
   id: string;
@@ -15,8 +16,10 @@ export class ServiceItem {
   destinations: Array<Destination>;
   usedFares: PriceLog;
   totalCost: string;
+  recolectDate: string
   recolectTime: string;
-
+  datePicker: NgbDateStruct;
+  timePicker: any;
   constructor() {
     this.type = ServiceTypeEnum[ServiceTypeEnum.Express];
     this.sender = new Customer();

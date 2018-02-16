@@ -11,7 +11,8 @@ export class ServicesTableComponent implements OnInit {
   constructor(public serviceItemDDB: ServiceItemDDBService) { }
 
   ngOnInit() {
-    this.serviceItemDDB.getServiceItems(this.mapArray,"1");
+    this.mapArray = [];
+    this.serviceItemDDB.getServiceAllItems(this.mapArray);
   }
 
 }
