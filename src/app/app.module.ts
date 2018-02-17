@@ -13,6 +13,7 @@ import {CognitoUtil} from "./service/cognito.service";
 import {AwsUtil} from "./service/aws.service";
 import {DynamoDBService} from "./service/ddb.service";
 import { ServiceItemDDBService } from "./service/ddbServiceItems.service";
+import { DataMapService } from "./service/data-map.service";
 
 import { SenderformComponent } from './forms/senderform/senderform.component';
 import { DeliveryServiceFormComponent } from './forms/delivery-service-form/delivery-service-form.component';
@@ -90,7 +91,8 @@ const appRoutes: Routes = [
     UserLoginService,
     UserParametersService,
     DynamoDBService,
-    ServiceItemDDBService
+    ServiceItemDDBService,
+    DataMapService
   ],
   bootstrap: [AppComponent]
 })

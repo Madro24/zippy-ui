@@ -55,10 +55,11 @@ export class ServiceItemDDBService {
     console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
     var params = {
       TableName: environment.ddbServiceItemsTable,
-      KeyConditionExpression: "status = :status",
-      ExpressionAttributeValues: {
-        ":status": "CREATED"
-      }
+      FilterExpression: "#item_status = :itemStatus",
+      ExpressionAttributeNames: {
+        "#item_status": "itemStatus",
+      },
+      ExpressionAttributeValues: { ":itemStatus": 'CREATED' }
     };
 
     var clientParams: any = {};
@@ -140,7 +141,7 @@ export class ServiceItemDDBService {
               "phone": { S: item.sender.phone }
             }
           },
-          "status": { S: item.status },
+          "itemStatus": { S: item.itemStatus },
           "totalCost": { N: item.totalCost },
           "type": { S: item.type },
           "usedFares": {

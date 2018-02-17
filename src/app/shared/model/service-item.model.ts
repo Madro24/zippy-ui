@@ -11,7 +11,7 @@ export class ServiceItem {
   payBy: string;
   sender: Customer;
   originLocation: string;
-  status: string;
+  itemStatus: string;
   deliveryGuy: string;
   destinations: Array<Destination>;
   usedFares: PriceLog;
