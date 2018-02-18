@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ServiceItemDDBService } from "../../service/ddbServiceItems.service"
+import { DataMapService } from "../../service/data-map.service";
 import { ServiceItem } from "../../shared/model/service-item.model";
 @Component({
   selector: 'app-services-table',
@@ -7,12 +7,22 @@ import { ServiceItem } from "../../shared/model/service-item.model";
   styleUrls: ['./services-table.component.css']
 })
 export class ServicesTableComponent implements OnInit {
-  @Input() mapArray: Array<ServiceItem>;
-  constructor(public serviceItemDDB: ServiceItemDDBService) {
+  _serviceItemArray: Array<ServiceItem>;
+
+  constructor(private dataMapService: DataMapService) {
 
   }
 
+  getServiceItems(): void {
+    this.dataMapService.getItems()
+      .subscribe(
+        resultArray => this._serviceItemArray = resultArray,
+        error => console.log("Error getting service items array. " + error)
+      );
+  }
+
   ngOnInit() {
+    this.getServiceItems();
   }
 
 }

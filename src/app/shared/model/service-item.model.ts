@@ -5,7 +5,7 @@ import { ServiceTypeEnum, PayByEnum, ServiceStatusEnum } from "../enum/global-en
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 export class ServiceItem {
-  id: string;
+  itemId: string;
   date: string;
   type: string;
   payBy: string;
@@ -16,7 +16,7 @@ export class ServiceItem {
   destinations: Array<Destination>;
   usedFares: PriceLog;
   totalCost: string;
-  recolectDate: string
+  recolectDate: string;
   recolectTime: string;
   datePicker: NgbDateStruct;
   timePicker: any;

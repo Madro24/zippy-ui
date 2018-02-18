@@ -132,7 +132,7 @@ export class ServiceItemDDBService {
           },
           "recolectDate": { S: item.recolectDate },
           "recolectTime": { S: item.recolectTime },
-          "itemId": { S: item.id },
+          "itemId": { S: item.itemId },
           "originLocation": { S: item.originLocation },
           "payBy": { S: item.payBy },
           "sender": {

@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ServiceTypeEnum } from "../../shared/enum/global-enums";
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { ServiceItem } from "../../shared/model/service-item.model";
-
+import { Destination } from "../../shared/model/destination.model";
+import { DataMapService } from "../../service/data-map.service"
 const now = new Date();
 
 @Component({
@@ -18,7 +19,7 @@ export class SenderformComponent implements OnInit {
   // date: {year: number, month: number};
   // time = { hour: 8, minute: 0 };
 
-  constructor() {
+  constructor(public dataMapService:DataMapService) {
     this.serviceItem = new ServiceItem();
     this.serviceItem.date = String(now.getFullYear()) + String(now.getMonth()+1) + String(now.getDate()) ;
     this.serviceItem.destinations.push(new Destination());
@@ -43,8 +44,6 @@ export class SenderformComponent implements OnInit {
 
       var recolectTime = this.serviceItem.timePicker.hour+ ":"+this.serviceItem.timePicker.minute;
 
-
-
       this.serviceItem.itemId = itemId;
       this.serviceItem.usedFares.distanceFare = "9";
       this.serviceItem.usedFares.timeFare = "2.25";
@@ -53,8 +52,8 @@ export class SenderformComponent implements OnInit {
       this.serviceItem.destinations[0].sequence = "1";
       this.serviceItem.itemStatus = "CREATED";
       this.serviceItem.totalCost = "50";
-      this.serviceItemDDB.writeServiceItem(this.serviceItem);
-      this.mapArray.push(this.serviceItem);
+
+      this.dataMapService.pushItem(this.serviceItem);
     }
 
 }

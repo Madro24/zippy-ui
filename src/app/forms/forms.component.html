@@ -1,31 +1,5 @@
 <app-header></app-header>
 <div class="container">
-  <app-services-table [mapArray]="mapArray"></app-services-table>
 
-  <h1>Solicitud de Servicio</h1>
-  <hr />
-  <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6">
-      <app-senderform [serviceItem]="serviceItem"></app-senderform>
-    </div>
-    <div class="col-lg-3"></div>
-  </div>
-  <hr />
-  <div class="row" >
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6">
-      <app-delivery-service-form *ngFor="let destination of serviceItem.destinations" [destinationItem]="destination"></app-delivery-service-form>
-    </div>
-    <div class="col-lg-3"></div>
-  </div>
 
-  <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6 btnForm">
-      <a class="btn rounded-btn" (click)="addDeliveryService()">Finalizar</a>
-
-    </div>
-    <div class="col-lg-3"></div>
-  </div>
 </div>
