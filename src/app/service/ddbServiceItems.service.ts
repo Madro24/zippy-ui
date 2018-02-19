@@ -55,11 +55,11 @@ export class ServiceItemDDBService {
     console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
     var params = {
       TableName: environment.ddbServiceItemsTable,
-      FilterExpression: "#item_status = :itemStatus",
+      FilterExpression: "#item_status <> :itemStatus",
       ExpressionAttributeNames: {
         "#item_status": "itemStatus",
       },
-      ExpressionAttributeValues: { ":itemStatus": 'CREATED' }
+      ExpressionAttributeValues: { ":itemStatus": 'ARCHIVED' }
     };
 
     var clientParams: any = {};
@@ -115,7 +115,7 @@ export class ServiceItemDDBService {
               {
                 M:
                 {
-                  "distance": { N: item.destinations[0].distance },
+                  "distance": { N: item.destinations[0].distance.toString() },
                   "instructions": { S: item.destinations[0].instructions },
                   "location": { S: item.destinations[0].location },
                   "message": { S: item.destinations[0].message },
@@ -125,13 +125,24 @@ export class ServiceItemDDBService {
                       "name": { S: item.destinations[0].receiver.name }
                     }
                   },
-                  "sequence": { N: item.destinations[0].sequence }
+                  "sequence": { N: item.destinations[0].sequence.toString() }
                 }
               }
             ]
           },
-          "recolectDate": { S: item.recolectDate },
-          "recolectTime": { S: item.recolectTime },
+          "recolectDate": { M:
+            {
+              "year":{N:item.recolectDate.year.toString()},
+              "month":{N: item.recolectDate.month.toString()},
+              "day":{N:item.recolectDate.day.toString()}
+            }
+          },
+          "recolectTime": { M:
+            {
+              "hour": {S:item.recolectTime.hour.toString()},
+              "minute": {S: item.recolectTime.minute.toString()}
+            }
+          },
           "itemId": { S: item.itemId },
           "originLocation": { S: item.originLocation },
           "payBy": { S: item.payBy },

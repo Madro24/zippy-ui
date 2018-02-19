@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DataMapService } from "../../service/data-map.service";
 import { ServiceItem } from "../../shared/model/service-item.model";
+import { ServiceStatusEnum } from "../../shared/enum/global-enums";
+
 @Component({
   selector: 'app-services-table',
   templateUrl: './services-table.component.html',
@@ -16,8 +18,8 @@ export class ServicesTableComponent implements OnInit {
   getServiceItems(): void {
     this.dataMapService.getItems()
       .subscribe(
-        resultArray => this._serviceItemArray = resultArray,
-        error => console.log("Error getting service items array. " + error)
+      resultArray => this._serviceItemArray = resultArray,
+      error => console.log("Error getting service items array. " + error)
       );
   }
 

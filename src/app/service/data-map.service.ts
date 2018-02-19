@@ -15,10 +15,20 @@ export class DataMapService {
       this.serviceItemDDB.getServiceAllItems(this.serviceItemArray);
     }
     return Observable.of(this.serviceItemArray);
+  }
 
+  getServiceItemByIndex(index: number) {
+    return this.serviceItemArray[index];
   }
 
   pushItem(item: ServiceItem) {
+    this.serviceItemDDB.writeServiceItem(item);
     this.serviceItemArray.push(item);
+  }
+
+  updateItem(item: ServiceItem, index: number) {
+    console.log("Update ServiceItem, index:"+ index+". Item:" +item);
+    this.serviceItemDDB.writeServiceItem(item);
+    this.serviceItemArray[index] = item;
   }
 }

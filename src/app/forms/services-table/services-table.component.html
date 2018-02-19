@@ -1,34 +1,38 @@
 <div class="card-header">
-  Servicios
+  Agenda de Servicios
 </div>
-<div class="card-body table-responsive">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Folio</th>
-            <th>Servicio</th>
-            <th>Quien Envia</th>
-            <th>Celular</th>
-            <th>Origen</th>
-            <th>Hora Recoleccion</th>
-            <th>Dia Recoleccion</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of _serviceItemArray; let i = index">
-            <th scope="row">{{i+1}}</th>
-            <td>{{item.itemId}}</td>
-            <td>{{item.type}}</td>
-            <td>{{item.sender.name}}</td>
-            <td>{{item.sender.phone}}</td>
-            <td>{{item.originLocation}}</td>
-            <td>{{item.recolectTime}}</td>
-            <td>{{item.date}}</td>
-            <td>{{item.itemStatus}}</td>
-        </tr>
 
-        </tbody>
-    </table>
+<div class="addServiceBtn">
+<a class="btn rounded-btn" [routerLink]="['/serviceItem']">Agregar Servicio</a>
+</div>
+<div class="card-body table-responsive text-center mx-auto">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Folio</th>
+        <th>Servicio</th>
+        <th>Quien Envia</th>
+        <th>Celular</th>
+        <th>Origen</th>
+        <th>Hora</th>
+        <th>Dia</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of _serviceItemArray; let i = index">
+        <td scope="row">{{i+1}}</td>
+        <td><a [routerLink]="['/serviceItem/'+i]">{{item.itemId}}</a></td>
+        <td>{{item.type}}</td>
+        <td>{{item.sender.name}}</td>
+        <td>{{item.sender.phone}}</td>
+        <td>{{item.originLocation}}</td>
+        <td>{{item.recolectTime.hour + ":" + item.recolectTime.minute}}</td>
+        <td>{{item.recolectDate.year + "-" + item.recolectDate.month + "-" +  item.recolectDate.day}}</td>
+        <td>{{item.itemStatus}}</td>
+      </tr>
+
+    </tbody>
+  </table>
 </div>

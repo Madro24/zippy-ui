@@ -32,6 +32,7 @@ import {MyProfileComponent} from "./secure/profile/myprofile.component";
 import {UseractivityComponent} from "./secure/useractivity/useractivity.component";
 import { ServicesTableComponent } from './forms/services-table/services-table.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { ServiceDetailComponent } from './forms/service-detail/service-detail.component';
 
 
 const appRoutes: Routes = [
@@ -39,11 +40,11 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent},
   { path: 'admin-home', component: AdminHomeComponent},
-  { path: 'newService', component: FormsComponent },
+  { path: 'serviceItem/:index', component: SenderformComponent },
+  { path: 'serviceItem', component: SenderformComponent },
   { path: 'newPassword', component: NewPasswordComponent },
-  { path: 'senderForm', component: SenderformComponent },
   { path: 'deliveryServiceForm', component: DeliveryServiceFormComponent },
-  { path: 'serviceslist', component: ServicesTableComponent },
+  { path: 'serviceItemList', component: ServicesTableComponent },
   { path: 'confirmRegistration', component: RegistrationConfirmationComponent },
   { path: 'forgotPassword', component: ForgotPasswordStep1Component },
   { path: 'forgotPassword/:email', component: ForgotPassword2Component},
@@ -76,6 +77,7 @@ const appRoutes: Routes = [
     JwtComponent,
     ServicesTableComponent,
     AdminHomeComponent,
+    ServiceDetailComponent,
   ],
   imports: [
     RouterModule.forRoot(

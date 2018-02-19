@@ -1,5 +1,7 @@
-<app-header></app-header>
+
 <h1>Solicitud de Servicio</h1>
+<h2> {{serviceItem.itemId}}</h2>
+
 <hr />
 <div class="container">
   <form role="form">
@@ -7,7 +9,14 @@
       <h3> Datos Remitente</h3>
 
       <div class="form-group">
-        <label>Servicio {{serviceItem.type}}</label>
+        <label>Estatus</label>
+        <select class="form-control" [(ngModel)]="serviceItem.itemStatus" name="serviceStatus" [disabled]='!isEditAction'>
+          <option *ngFor="let itemStatus of getServiceStatus()" [value]="itemStatus">{{itemStatus}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Servicio</label>
         <select class="form-control" [(ngModel)]="serviceItem.type" name="serviceType">
         <option *ngFor="let type of getServiceTypes()" [value]="type">{{type}}</option>
       </select>
@@ -17,7 +26,7 @@
         <label>Dia de recoleccion</label>
         <div class="form-group">
           <div class="input-group datepicker-input">
-            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="serviceItem.datePicker" ngbDatepicker #d="ngbDatepicker">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="serviceItem.recolectDate" ngbDatepicker #d="ngbDatepicker">
             <button class="input-group-addon" (click)="d.toggle()" type="button">
                       <i class="fa fa-calendar"></i>
                   </button>
@@ -27,7 +36,7 @@
 
       <fieldset class="form-group">
         <label>Hora de recoleccion</label>
-        <ngb-timepicker name="serviceTime" [(ngModel)]="serviceItem.timePicker" [minuteStep]="30"></ngb-timepicker>
+        <ngb-timepicker name="serviceTime" [(ngModel)]="serviceItem.recolectTime" [minuteStep]="30"></ngb-timepicker>
       </fieldset>
 
 
@@ -50,14 +59,9 @@
       <div class="form-group">
         <label>Paga</label>
         <select class="form-control" name="payBy" [(ngModel)]="serviceItem.payBy">
-        <option>Origen</option>
-        <option>Destino</option>
-      </select>
+          <option *ngFor="let payBy of getPayByList()" [value]="payBy">{{payBy}}</option>
+        </select>
       </div>
-
-
-
-
       <div style="display:none">
         <h4>(Solo empresas afiliadas)</h4>
 
@@ -75,9 +79,16 @@
   </form>
   <div class="row">
     <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <app-delivery-service-form *ngFor="let destination of serviceItem.destinations" [destinationItem]="destination"></app-delivery-service-form>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3"></div>
     <div class="col-lg-6 btnForm">
-      <a class="btn rounded-btn" (click)="addDeliveryService()">Finalizar</a>
-
+      <a class="btn rounded-btn" (click)="addDeliveryService()">Guardar</a>
+      <a class="btn rounded-btn" [routerLink]="['/serviceItemList']">Cancelar</a>
     </div>
     <div class="col-lg-3"></div>
   </div>
