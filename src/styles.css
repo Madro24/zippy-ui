@@ -1,3 +1,6 @@
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~mdbootstrap/css/bootstrap.min.css";
+
 /* You can add global styles to this file, and also import other style files */
 .rounded-btn {
   -webkit-border-radius: 50px;
@@ -16,4 +19,12 @@
   border: 2px solid #D68322;
   background: #fff;
   padding: 20px;
+}
+
+body {
+   padding-top: 130px;
+}
+.starter-template {
+    padding: 3rem 1.5rem;
+    text-align: center;
 }

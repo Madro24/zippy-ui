@@ -2,15 +2,14 @@
   display: block;
 }
 .login-page {
-  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   overflow: auto;
-  background: #222;
+  background: #fff;
   text-align: center;
-  color: #fff;
+  color: #000;
   padding: 3em;
 }
 .login-page .col-lg-4 {
@@ -27,12 +26,12 @@
   background: 0 0;
   border: none;
   box-shadow: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
+  border-bottom: 2px solid #000;
+  color: #000;
   border-radius: 0;
 }
 .login-page .input-underline:focus {
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid #D68322;
   box-shadow: none;
 }
 .login-page .rounded-btn {
@@ -46,8 +45,8 @@
   padding: 0 25px;
 }
 .login-page .rounded-btn:hover, .login-page .rounded-btn:focus, .login-page .rounded-btn:active, .login-page .rounded-btn:visited {
-  color: rgba(255, 255, 255, 1);
-  border: 2px solid rgba(255, 255, 255, 1);
+  color: #000;
+  border: 2px solid #000;
   outline: none;
 }
 .login-page h1 {
@@ -57,25 +56,28 @@
   font-size: 36px;
 }
 .login-page h1 small {
-  color: rgba(255, 255, 255, 0.7);
+  color: #000;
 }
 .login-page .form-group {
   padding: 8px 0;
 }
 .login-page .form-group input::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: lightgray !important;
 }
 .login-page .form-group input:-moz-placeholder {
   /* Firefox 18- */
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: lightgray !important;
 }
 .login-page .form-group input::-moz-placeholder {
   /* Firefox 19+ */
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: lightgray !important;
 }
 .login-page .form-group input:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: lightgray !important;
 }
 .login-page .form-content {
   padding: 40px 0;
+}
+a {
+  color: #000;
 }

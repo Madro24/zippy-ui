@@ -38,7 +38,7 @@ export class SenderformComponent implements OnInit {
       this.newServiceItem();
     }
 
-    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
+
   }
 
   newServiceItem() {
@@ -75,12 +75,13 @@ export class SenderformComponent implements OnInit {
       this.serviceItem.itemId = itemId;
     }
 
+    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
     this.serviceItem.usedFares.distanceFare = "9";
     this.serviceItem.usedFares.timeFare = "2.25";
     this.serviceItem.totalCost = "50";
 
     if (this.isEditAction) {
-      this.dataMapService.updateItem(this.serviceItem,this.itemIndex);
+      this.dataMapService.updateItem(this.serviceItem, this.itemIndex);
     }
     else {
       this.dataMapService.pushItem(this.serviceItem);

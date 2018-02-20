@@ -1,12 +1,12 @@
 
-<h1>Solicitud de Servicio</h1>
-<h2> {{serviceItem.itemId}}</h2>
+<h2 *ngIf="serviceItem.itemId==null">Solicitud de Servicio</h2>
+<h2 *ngIf="serviceItem.itemId!=null"> Folio : {{serviceItem.itemId}}</h2>
 
-Costo Total: {{ serviceItem.totalCost}}
+Costo Total: {{ (this.serviceItem.destinations[0].distance * 8.90).toFixed(2) }}
 <hr />
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
       <form role="form">
         <div>
           <h3> Datos Remitente</h3>
@@ -81,7 +81,9 @@ Costo Total: {{ serviceItem.totalCost}}
         </div>
       </form>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-5">
         <app-delivery-service-form *ngFor="let destination of serviceItem.destinations" [destinationItem]="destination"></app-delivery-service-form>
     </div>
   </div>

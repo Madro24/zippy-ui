@@ -1,9 +1,7 @@
 <div class="login-page">
     <div class="row justify-content-md-center">
         <div class="col-md-4 col-md-offset-4">
-            <div class="user-avatar" >
-              <img src="assets/images/zippy-logo.png" width="180px"  />
-            </div>
+
             <h1>Zippy Office Boys</h1>
             <form role="form">
                 <div class="form-content">
@@ -22,7 +20,8 @@
                 </div>
                 <a class="btn rounded-btn" (click)="onLogin()"> Log in </a>
                 <hr>
-                <p><a [routerLink]="['register']"> <i class="fa fa-fw fa-group"></i> Register</a>
+                <p>
+                  <!-- <a [routerLink]="['register']"> <i class="fa fa-fw fa-group"></i> Register</a> -->
                     <a [routerLink]="['forgotPassword']"> <i class="fa fa-fw fa-group"></i> Forgot Password?</a><br/>
                     <a [routerLink]="['resendCode']"> <i class="fa fa-fw fa-group"></i> Resend Confirmation Code</a>
                 </p>
