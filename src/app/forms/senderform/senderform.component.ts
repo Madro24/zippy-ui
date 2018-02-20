@@ -37,6 +37,8 @@ export class SenderformComponent implements OnInit {
     else {
       this.newServiceItem();
     }
+
+    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
   }
 
   newServiceItem() {
