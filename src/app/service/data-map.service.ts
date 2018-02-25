@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ServiceItemDDBService } from "../service/ddbServiceItems.service"
+import { ServiceItemDDBService, ServiceItemCallback } from "../service/ddbServiceItems.service"
 import { ServiceItem } from "../shared/model/service-item.model";
-import { Observable } from 'rxjs/Rx'
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DataMapService {
@@ -10,9 +10,9 @@ export class DataMapService {
     this.serviceItemArray = [];
   }
 
-  getItems(): Observable<Array<ServiceItem>>  {
+  getItems( callback: ServiceItemCallback): Observable<Array<ServiceItem>>  {
     if (this.serviceItemArray.length == 0) {
-      this.serviceItemDDB.getServiceAllItems(this.serviceItemArray);
+      this.serviceItemDDB.getServiceAllItems(this.serviceItemArray,  callback);
     }
     return Observable.of(this.serviceItemArray);
   }
@@ -21,14 +21,14 @@ export class DataMapService {
     return this.serviceItemArray[index];
   }
 
-  pushItem(item: ServiceItem) {
-    this.serviceItemDDB.writeServiceItem(item);
+  pushItem(item: ServiceItem, callback: ServiceItemCallback) {
+    this.serviceItemDDB.writeServiceItem(item, callback);
     this.serviceItemArray.push(item);
   }
 
-  updateItem(item: ServiceItem, index: number) {
+  updateItem(item: ServiceItem, index: number, callback: ServiceItemCallback) {
     console.log("Update ServiceItem, index:"+ index+". Item:" +item);
-    this.serviceItemDDB.writeServiceItem(item);
+    this.serviceItemDDB.writeServiceItem(item, callback);
     this.serviceItemArray[index] = item;
   }
 }

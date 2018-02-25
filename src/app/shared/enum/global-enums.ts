@@ -4,14 +4,12 @@ export enum ServiceTypeEnum {
 };
 
 export enum PayByEnum {
-  Origin,
-  Destination
+  Remitente,
+  Destinatario
 };
 
 export enum ServiceStatusEnum {
-  CREATED,
-  STARTED,
-  INPROGRESS,
-  COMPLETED,
-  ARCHIVED
+  Nuevo,
+  Iniciado,
+  Completado
 };

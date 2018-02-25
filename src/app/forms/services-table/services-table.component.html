@@ -5,7 +5,8 @@
   </div>
 
   <div class="addServiceBtn">
-    <a class="btn rounded-btn" [routerLink]="['/serviceItem']">Agregar Servicio</a>
+    <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=!isLoadingData>Agregar Servicio</a>
+    <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=isLoadingData>Cargando <i class="fa fa-spinner fa-spin" style="font-size:15px"></i></a>
   </div>
   <div class="card-body table-responsive text-center mx-auto">
     <table class="table">
@@ -16,7 +17,6 @@
           <th>Servicio</th>
           <th>Quien Envia</th>
           <th>Celular</th>
-          <th>Origen</th>
           <th>Hora</th>
           <th>Dia</th>
           <th>Status</th>
@@ -29,7 +29,6 @@
           <td>{{item.type}}</td>
           <td>{{item.sender.name}}</td>
           <td>{{item.sender.phone}}</td>
-          <td>{{item.originLocation}}</td>
           <td>{{item.recolectTime.hour + ":" + item.recolectTime.minute}}</td>
           <td>{{item.recolectDate.year + "-" + item.recolectDate.month + "-" + item.recolectDate.day}}</td>
           <td>{{item.itemStatus}}</td>

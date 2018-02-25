@@ -1,0 +1,27 @@
+div {
+  text-align: left;
+  font-size: 12px;
+}
+
+
+.row {
+  margin-top: 10px;
+}
+.borderdiv {
+  border: 2px black solid;
+  padding : 5px;
+}
+
+.sideborder {
+  border-left: 2px black solid;
+  border-right: 2px black solid;
+  padding : 5px;
+}
+
+.msgdiv {
+  height: 100px;
+}
+
+.instdiv {
+  height: 200px;
+}

@@ -10,6 +10,7 @@ export class Destination{
   packageContent: string;
   receiver: Customer;
   sequence: number;
+  urlMap: string
 
   constructor () {
     this.logs = [];

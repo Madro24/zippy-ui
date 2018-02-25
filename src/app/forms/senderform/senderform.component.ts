@@ -3,8 +3,9 @@ import { ServiceTypeEnum, ServiceStatusEnum, PayByEnum } from "../../shared/enum
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ServiceItem } from "../../shared/model/service-item.model";
 import { Destination } from "../../shared/model/destination.model";
-import { DataMapService } from "../../service/data-map.service"
+import { DataMapService } from "../../service/data-map.service";
 import { Router, ActivatedRoute } from "@angular/router";
+import { ServiceItemCallback } from "../../service/ddbServiceItems.service";
 
 const now = new Date();
 
@@ -13,12 +14,13 @@ const now = new Date();
   templateUrl: './senderform.component.html',
   styleUrls: ['./senderform.component.css']
 })
-export class SenderformComponent implements OnInit {
+export class SenderformComponent implements OnInit, ServiceItemCallback {
   public serviceItem: ServiceItem;
   public destinationArray: Array<Destination>;
 
   private itemIndex: number;
   public isEditAction = false;
+  public wasSaveClicked = false;
   // model: NgbDateStruct;
   // date: {year: number, month: number};
   // time = { hour: 8, minute: 0 };
@@ -43,8 +45,8 @@ export class SenderformComponent implements OnInit {
 
   newServiceItem() {
     this.serviceItem = new ServiceItem();
-    this.serviceItem.itemStatus = ServiceStatusEnum[ServiceStatusEnum.CREATED];
-    this.serviceItem.payBy = PayByEnum[PayByEnum.Origin];
+    this.serviceItem.itemStatus = ServiceStatusEnum[ServiceStatusEnum.Nuevo];
+    this.serviceItem.payBy = PayByEnum[PayByEnum.Remitente];
     this.serviceItem.date = String(now.getFullYear()) + String(now.getMonth() + 1) + String(now.getDate());
 
     var destinationDefault = new Destination();
@@ -67,8 +69,17 @@ export class SenderformComponent implements OnInit {
     return keys.slice(keys.length / 2);
   }
 
+  callback() {
+    this.router.navigate(['/serviceItemList']);
+    this.wasSaveClicked = false;
+  }
+  callbackWithParam(result: any){}
+
+
   addDeliveryService() {
     console.log("This is my service:", this.serviceItem);
+
+    this.wasSaveClicked = true;
 
     if (!this.isEditAction) {
       var itemId = this.serviceItem.date + this.serviceItem.recolectTime.hour + this.serviceItem.recolectTime.minute + "E1";
@@ -81,13 +92,19 @@ export class SenderformComponent implements OnInit {
     this.serviceItem.totalCost = "50";
 
     if (this.isEditAction) {
-      this.dataMapService.updateItem(this.serviceItem, this.itemIndex);
+      this.dataMapService.updateItem(this.serviceItem, this.itemIndex, this);
     }
     else {
-      this.dataMapService.pushItem(this.serviceItem);
+      this.dataMapService.pushItem(this.serviceItem, this);
     }
 
-    this.router.navigate(['/serviceItemList']);
+
+  }
+
+  printLabel() {
+    if (this.itemIndex !=null) {
+      this.router.navigate(['/service-item-label/',this.itemIndex]);
+    }
   }
 
 }

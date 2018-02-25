@@ -3,6 +3,8 @@
 <h2 *ngIf="serviceItem.itemId!=null"> Folio : {{serviceItem.itemId}}</h2>
 
 Costo Total: {{ (this.serviceItem.destinations[0].distance * 8.90).toFixed(2) }}
+
+<button *ngIf="serviceItem.itemId!=null" type="button" class="btn btn-info" (click)="printLabel()">Etiqueta</button>
 <hr />
 <div class="container">
   <div class="row">
@@ -91,7 +93,7 @@ Costo Total: {{ (this.serviceItem.destinations[0].distance * 8.90).toFixed(2) }}
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 btnForm">
-      <a class="btn rounded-btn" (click)="addDeliveryService()">Guardar</a>
+      <a class="btn rounded-btn" (click)="addDeliveryService()">Guardar <i class="fa fa-spinner fa-spin" style="font-size:13px" *ngIf=wasSavedClicked></i></a>
       <a class="btn rounded-btn" [routerLink]="['/serviceItemList']">Cancelar</a>
     </div>
     <div class="col-lg-3"></div>

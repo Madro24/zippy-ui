@@ -1,0 +1,50 @@
+
+  <div class="row">
+    <div class="col-xs-6">{{this.serviceItem.payBy}}</div>
+    <div class="col-xs-6">{{this.serviceItem.itemId}}</div>
+  </div>
+
+  <div class="borderdiv">
+    <div class="row">
+      <div class="col-sm-6">
+        <b>Envia:</b>
+      </div>
+      <div class="col-sm-6">{{this.serviceItem.sender.name}} <br/> {{this.serviceItem.originLocation}}
+      </div>
+    </div>
+    <div class="row" style="margin-top:30px">
+      <div class="col-sm-6">
+        <b>Celular:</b>
+      </div>
+      <div class="col-sm-6">{{this.serviceItem.sender.phone}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <b>Recibe:</b>
+      </div>
+      <div class="col-sm-6">{{this.serviceItem.destinations[0].receiver.name}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <b>Contiene:</b>
+      </div>
+      <div class="col-sm-6">{{this.serviceItem.destinations[0].packageContent}}</div>
+    </div>
+  </div>
+  <div class="sideborder">
+    <div class="row msgdiv">
+      <div class="col-sm-12">
+        <b>Mensaje:</b> <br /> {{this.serviceItem.destinations[0].message}}
+      </div>
+    </div>
+  </div>
+  <div class="borderdiv">
+    <div class="row instdiv">
+      <div class="col-sm-6">
+        <b>Instrucciones:</b> <br /> {{this.serviceItem.destinations[0].instructions}}
+      </div>
+      <div class="col-sm-6">
+        <img src="http://qrickit.com/api/qr.php?d=zippyofficeboys.com" alt="">
+      </div>
+    </div>
+  </div>

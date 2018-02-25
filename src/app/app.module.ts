@@ -33,6 +33,7 @@ import {UseractivityComponent} from "./secure/useractivity/useractivity.componen
 import { ServicesTableComponent } from './forms/services-table/services-table.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { ServiceDetailComponent } from './forms/service-detail/service-detail.component';
+import { ServiceItemLabelComponent } from './forms/service-item-label/service-item-label.component';
 
 
 const appRoutes: Routes = [
@@ -53,7 +54,10 @@ const appRoutes: Routes = [
   { path: 'myprofile', component: MyProfileComponent },
   { path: 'jwttokens', component: JwtComponent },
   { path: 'useractivity', component: UseractivityComponent },
-  { path: 'securehome', component: SecureHomeComponent }
+  { path: 'securehome', component: SecureHomeComponent },
+  { path: 'service-item-label/:index', component: ServiceItemLabelComponent }
+
+
 ];
 
 @NgModule({
@@ -78,6 +82,7 @@ const appRoutes: Routes = [
     ServicesTableComponent,
     AdminHomeComponent,
     ServiceDetailComponent,
+    ServiceItemLabelComponent,
   ],
   imports: [
     RouterModule.forRoot(

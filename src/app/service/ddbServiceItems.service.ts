@@ -6,9 +6,10 @@ import { ServiceItem } from "../shared/model/service-item.model";
 import * as AWS from "aws-sdk/global";
 import * as DynamoDB from "aws-sdk/clients/dynamodb";
 
-/**
- * Created by Vladimir Budilov
- */
+export interface ServiceItemCallback {
+    callback(): void;
+    callbackWithParam(result: any): void;
+}
 
 @Injectable()
 export class ServiceItemDDBService {
@@ -51,7 +52,7 @@ export class ServiceItemDDBService {
     }
   }
 
-  getServiceAllItems(mapArray: Array<ServiceItem>) {
+  getServiceAllItems(mapArray: Array<ServiceItem>,  callback: ServiceItemCallback) {
     console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
     var params = {
       TableName: environment.ddbServiceItemsTable,
@@ -78,22 +79,23 @@ export class ServiceItemDDBService {
         data.Items.forEach(function(logitem) {
           mapArray.push(logitem);
         });
+        callback.callback();
       }
     }
   }
 
-  writeServiceItem(item: ServiceItem) {
+  writeServiceItem(item: ServiceItem, callback: ServiceItemCallback) {
     try {
       let date = new Date().toString();
       console.log("ServiceItemDDBService: Adding new service item entry. Type:" + item.type);
-      this.write(item);
+      this.write(item, callback);
     } catch (exc) {
       console.log("ServiceItemDDBService: Couldn't write to DDB");
     }
 
   }
 
-  write(item: ServiceItem): void {
+  write(item: ServiceItem,  callback: ServiceItemCallback): void {
     console.log("ServiceItemDDBService: writing " + item.type + " entry");
 
     let clientParams: any = {
@@ -163,9 +165,12 @@ export class ServiceItemDDBService {
           }
         }
       };
-    DDB.putItem(itemParams, function(result) {
-      console.log("ServiceItemDDBService: wrote entry: " + JSON.stringify(result));
-    });
+    DDB.putItem(itemParams,
+       function(result) {
+       console.log("ServiceItemDDBService: wrote entry: " + JSON.stringify(result));
+       callback.callback();
+     }
+  );
   }
 
 }
