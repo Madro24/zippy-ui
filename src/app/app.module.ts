@@ -14,6 +14,7 @@ import {AwsUtil} from "./service/aws.service";
 import {DynamoDBService} from "./service/ddb.service";
 import { ServiceItemDDBService } from "./service/ddbServiceItems.service";
 import { DataMapService } from "./service/data-map.service";
+import { AuthGuardService } from "./service/auth-guard.service";
 
 import { SenderformComponent } from './forms/senderform/senderform.component';
 import { DeliveryServiceFormComponent } from './forms/delivery-service-form/delivery-service-form.component';
@@ -40,12 +41,11 @@ const appRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent},
-  { path: 'admin-home', component: AdminHomeComponent},
-  { path: 'serviceItem/:index', component: SenderformComponent },
-  { path: 'serviceItem', component: SenderformComponent },
+  { path: 'admin-home', component: AdminHomeComponent, canActivate:[AuthGuardService]},
+  { path: 'serviceItem/:index', component: SenderformComponent, canActivate:[AuthGuardService] },
+  { path: 'serviceItem', component: SenderformComponent, canActivate:[AuthGuardService] },
   { path: 'newPassword', component: NewPasswordComponent },
-  { path: 'deliveryServiceForm', component: DeliveryServiceFormComponent },
-  { path: 'serviceItemList', component: ServicesTableComponent },
+  { path: 'serviceItemList', component: ServicesTableComponent, canActivate:[AuthGuardService] },
   { path: 'confirmRegistration', component: RegistrationConfirmationComponent },
   { path: 'forgotPassword', component: ForgotPasswordStep1Component },
   { path: 'forgotPassword/:email', component: ForgotPassword2Component},
@@ -55,7 +55,7 @@ const appRoutes: Routes = [
   { path: 'jwttokens', component: JwtComponent },
   { path: 'useractivity', component: UseractivityComponent },
   { path: 'securehome', component: SecureHomeComponent },
-  { path: 'service-item-label/:index', component: ServiceItemLabelComponent }
+  { path: 'service-item-label/:index', component: ServiceItemLabelComponent, canActivate:[AuthGuardService] }
 
 
 ];
@@ -102,7 +102,8 @@ const appRoutes: Routes = [
     UserParametersService,
     DynamoDBService,
     ServiceItemDDBService,
-    DataMapService
+    DataMapService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

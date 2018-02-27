@@ -135,4 +135,29 @@ export class UserLoginService {
         }
     }
 
+    isAuthenticatedPromise(){
+      return  new Promise<boolean> (
+        (resolve, reject) => {
+          let cognitoUser = this.cognitoUtil.getCurrentUser();
+
+          if (cognitoUser != null) {
+              cognitoUser.getSession(function (err, session) {
+                  if (err) {
+                      console.log("UserLoginService: Couldn't get the session: " + err, err.stack);
+                      reject(new Error(err));
+                  }
+                  else {
+                      console.log("UserLoginService: Session is " + session.isValid());
+                      resolve(session.isValid());
+                  }
+              });
+          } else {
+              console.log("UserLoginService: can't retrieve the current user");
+              reject("Can't retrieve the CurrentUser");
+          }
+        }
+      );
+    }
+
+
 }
