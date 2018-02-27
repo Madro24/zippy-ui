@@ -120,6 +120,7 @@ export class ServiceItemDDBService {
                   "distance": { N: item.destinations[0].distance.toString() },
                   "instructions": { S: item.destinations[0].instructions },
                   "location": { S: item.destinations[0].location },
+                  "urlMap": { S: item.destinations[0].urlMap },
                   "message": { S: item.destinations[0].message },
                   "packageContent": { S: item.destinations[0].packageContent },
                   "receiver": {

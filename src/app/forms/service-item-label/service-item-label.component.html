@@ -1,50 +1,66 @@
 
+<div class="col col-md-4">
+
+  <button type="button" class="btn btn-info" (click)="back()">Regresar</button>
+
+  <div class="labelbody">
   <div class="row">
-    <div class="col-xs-6">{{this.serviceItem.payBy}}</div>
-    <div class="col-xs-6">{{this.serviceItem.itemId}}</div>
+    <div class="col">{{this.serviceItem.payBy}}</div>
+    <div class="col" style="text-align:right">Folio: {{this.serviceItem.itemId}}</div>
   </div>
 
   <div class="borderdiv">
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col">
         <b>Envia:</b>
       </div>
-      <div class="col-sm-6">{{this.serviceItem.sender.name}} <br/> {{this.serviceItem.originLocation}}
+      <div class="col">{{this.serviceItem.sender.name}} <br/> {{this.serviceItem.originLocation}}
       </div>
     </div>
     <div class="row" style="margin-top:30px">
-      <div class="col-sm-6">
+      <div class="col">
         <b>Celular:</b>
       </div>
-      <div class="col-sm-6">{{this.serviceItem.sender.phone}}</div>
+      <div class="col">{{this.serviceItem.sender.phone}}</div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col">
         <b>Recibe:</b>
       </div>
-      <div class="col-sm-6">{{this.serviceItem.destinations[0].receiver.name}}</div>
+      <div class="col">{{this.serviceItem.destinations[0].receiver.name}}</div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col">
         <b>Contiene:</b>
       </div>
-      <div class="col-sm-6">{{this.serviceItem.destinations[0].packageContent}}</div>
+      <div class="col">{{this.serviceItem.destinations[0].packageContent}}</div>
     </div>
   </div>
   <div class="sideborder">
     <div class="row msgdiv">
-      <div class="col-sm-12">
+      <div class="col">
         <b>Mensaje:</b> <br /> {{this.serviceItem.destinations[0].message}}
       </div>
     </div>
   </div>
   <div class="borderdiv">
     <div class="row instdiv">
-      <div class="col-sm-6">
+      <div class="col">
         <b>Instrucciones:</b> <br /> {{this.serviceItem.destinations[0].instructions}}
       </div>
-      <div class="col-sm-6">
-        <img src="http://qrickit.com/api/qr.php?d=zippyofficeboys.com" alt="">
+      <div class="col">
+        <img src="http://qrickit.com/api/qr.php?d={{this.serviceItem.destinations[0].urlMap}}" alt="" width="140px">
       </div>
     </div>
   </div>
+  <div class="row" >
+    <div class="col" style="text-align: center">
+        <img src="assets/images/zippy-logo.png" width="25px" alt="Zippy OfficeBoys" />
+    </div>
+    <div class="col" style="text-align: center">
+      www.zippyofficeboys.com <br/>
+      664 251 4275
+    </div>
+  </div>
+  </div>
+</div>

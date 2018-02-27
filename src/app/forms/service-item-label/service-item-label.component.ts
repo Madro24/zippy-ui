@@ -22,27 +22,18 @@ export class ServiceItemLabelComponent implements OnInit {
     console.log("index:" + this.itemIndex);
     if (this.itemIndex != null) {
 
-      // this.serviceItem = this.dataMapService.getServiceItemByIndex(this.itemIndex);
-      this.serviceItem = new ServiceItem();
-      this.serviceItem.payBy = "Remitente";
-      this.serviceItem.itemId = "201822050E1";
-      this.serviceItem.originLocation = "Torre Cosmopolitan";
-      this.serviceItem.sender = new Customer();
-      this.serviceItem.sender.name = "Omar Madrid";
-      this.serviceItem.sender.phone = "6646405540";
-      this.serviceItem.destinations = [];
-      this.serviceItem.destinations[0] = new Destination();
-      this.serviceItem.destinations[0].receiver = new Customer();
-      this.serviceItem.destinations[0].receiver.name = "Laura Ruiz";
-      this.serviceItem.destinations[0].packageContent = "Regalo";
-      this.serviceItem.destinations[0].message = "Guardalo bien";
-      this.serviceItem.destinations[0].instructions = "Dejarlo en recepcion";
+      this.serviceItem = this.dataMapService.getServiceItemByIndex(this.itemIndex);
+
       console.log("this.serviceItem:" + this.serviceItem.itemId);
 
     }
     else {
       this.router.navigate(['/serviceItemList']);
     }
+  }
+
+  back() {
+      this.router.navigate(['/serviceItem/',this.itemIndex]);
   }
 
 }
