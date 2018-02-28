@@ -33,7 +33,22 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   ngOnInit() {
     this.itemId = this.actRoute.snapshot.params['itemId'];
     if (this.itemId != null) {
-      //this.serviceItem = this.dataMapService.getServiceItemById(this.itemId).;
+      this.dataMapService.getServiceItemById(this.itemId, <ServiceItemCallback> {
+        callback: () => {
+          this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId == this.itemId);
+          console.log("Item ID:"+this.serviceItem.itemId);
+        },
+        callbackWithParam: (result: any) => {}
+      })
+        .subscribe(
+          item => this.serviceItem = item,
+          error => {
+            console.log("Error getting service items array. " + error);
+            this.router.navigate(['/admin-home'])
+          }
+        );
+
+      console.log("this.serviceItem:" + this.serviceItem.itemId);
       this.isEditAction = true;
     }
     else {

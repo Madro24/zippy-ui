@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DataMapService {
-  private serviceItemArray: Array<ServiceItem>;
+  public serviceItemArray: Array<ServiceItem>;
   constructor(private serviceItemDDB: ServiceItemDDBService) {
     this.serviceItemArray = [];
   }
@@ -21,31 +21,14 @@ export class DataMapService {
     return this.serviceItemArray[index];
   }
 
-  getServiceItemById (itemId: string) : Promise<ServiceItem> {
-    return new Promise<ServiceItem> (
-      (resolve, reject) => {
-          if (this.serviceItemArray.length == 0) {
-            this.serviceItemDDB.getServiceAllItems(this.serviceItemArray, <ServiceItemCallback> {
-              callback() {
-                console.log("getting data from getServiceItemById");
-                let serviceItem: ServiceItem = this.serviceItemArray.find(x => x.itemId === itemId);
+  getServiceItemById (itemId: string, callback: ServiceItemCallback) : Observable<ServiceItem> {
+    if (this.serviceItemArray.length == 0) {
+      this.serviceItemDDB.getServiceAllItems(this.serviceItemArray,  callback);
+    }
 
-                if(serviceItem != null) {
-                  resolve(serviceItem);
-                }
-                else {
-                  reject(new Error("Item not found!"));
-                }
-              },
-              callbackWithParam(result: any) {
-                console.log("getting data from callbackWithParam")
-              }
-            }
-          );
+    let findItem = this.serviceItemArray.find(x => x.itemId === itemId);
+    return Observable.of(findItem);
 
-          }
-      }
-    );
   }
 
   pushItem(item: ServiceItem, callback: ServiceItemCallback) {
