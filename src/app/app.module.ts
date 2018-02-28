@@ -42,7 +42,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent},
   { path: 'admin-home', component: AdminHomeComponent, canActivate:[AuthGuardService]},
-  { path: 'serviceItem/:index', component: SenderformComponent, canActivate:[AuthGuardService] },
+  { path: 'serviceItem/:itemId', component: SenderformComponent, canActivate:[AuthGuardService] },
   { path: 'serviceItem', component: SenderformComponent, canActivate:[AuthGuardService] },
   { path: 'newPassword', component: NewPasswordComponent },
   { path: 'serviceItemList', component: ServicesTableComponent, canActivate:[AuthGuardService] },
@@ -55,7 +55,7 @@ const appRoutes: Routes = [
   { path: 'jwttokens', component: JwtComponent },
   { path: 'useractivity', component: UseractivityComponent },
   { path: 'securehome', component: SecureHomeComponent },
-  { path: 'service-item-label/:index', component: ServiceItemLabelComponent, canActivate:[AuthGuardService] }
+  { path: 'service-item-label/:itemId', component: ServiceItemLabelComponent, canActivate:[AuthGuardService] }
 
 
 ];

@@ -12,17 +12,27 @@ import { Destination } from "../../shared/model/destination.model";
 })
 export class ServiceItemLabelComponent implements OnInit {
   public serviceItem: ServiceItem;
-  private itemIndex: number;
+  private itemId: string;
 
   constructor(private router: Router, private actRoute: ActivatedRoute, public dataMapService: DataMapService) { }
 
   ngOnInit() {
     console.log("service item label init");
-    this.itemIndex = this.actRoute.snapshot.params['index'];
-    console.log("index:" + this.itemIndex);
-    if (this.itemIndex != null) {
+    this.itemId = this.actRoute.snapshot.params['itemId'];
+    console.log("index:" + this.itemId);
+    if (this.itemId != null) {
 
-      this.serviceItem = this.dataMapService.getServiceItemByIndex(this.itemIndex);
+
+      const promise = this.dataMapService.getServiceItemById(this.itemId)
+        .then(
+          (item: ServiceItem) => {
+            this.serviceItem = item;
+          }
+        );
+
+      promise.catch((err) => {
+          this.router.navigate(['/admin-home'])
+      })
 
       console.log("this.serviceItem:" + this.serviceItem.itemId);
 
@@ -33,7 +43,7 @@ export class ServiceItemLabelComponent implements OnInit {
   }
 
   back() {
-      this.router.navigate(['/serviceItem/',this.itemIndex]);
+      this.router.navigate(['/serviceItem/',this.itemId]);
   }
 
 }

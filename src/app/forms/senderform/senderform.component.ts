@@ -18,7 +18,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   public serviceItem: ServiceItem;
   public destinationArray: Array<Destination>;
 
-  private itemIndex: number;
+  private itemId: string;
   public isEditAction = false;
   public wasSaveClicked = false;
   // model: NgbDateStruct;
@@ -31,9 +31,9 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   }
 
   ngOnInit() {
-    this.itemIndex = this.actRoute.snapshot.params['index'];
-    if (this.itemIndex != null) {
-      this.serviceItem = this.dataMapService.getServiceItemByIndex(this.itemIndex);
+    this.itemId = this.actRoute.snapshot.params['itemId'];
+    if (this.itemId != null) {
+      //this.serviceItem = this.dataMapService.getServiceItemById(this.itemId).;
       this.isEditAction = true;
     }
     else {
@@ -92,7 +92,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
     this.serviceItem.totalCost = "50";
 
     if (this.isEditAction) {
-      this.dataMapService.updateItem(this.serviceItem, this.itemIndex, this);
+      this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     }
     else {
       this.dataMapService.pushItem(this.serviceItem, this);
@@ -102,8 +102,8 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   }
 
   printLabel() {
-    if (this.itemIndex !=null) {
-      this.router.navigate(['/service-item-label/',this.itemIndex]);
+    if (this.itemId !=null) {
+      this.router.navigate(['/service-item-label/',this.itemId]);
     }
   }
 
