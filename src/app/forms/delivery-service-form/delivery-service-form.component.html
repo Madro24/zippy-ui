@@ -1,35 +1,40 @@
 <form role="form">
   <div>
-    <h3>Datos de Servicio</h3>
-
-    <div class="form-group">
-      <label>Servicio</label>
-      <select class="form-control">
-                        <option>Express</option>
-                        <option>Normal</option>
-                    </select>
-    </div>
+    <h3>Datos de Destino</h3>
 
     <fieldset class="form-group">
-      <label>Quien recibe</label>
-      <input class="form-control">
+      <label>Destino </label>
+      <input class="form-control" [(ngModel)]="destinationItem.location" name="destination">
     </fieldset>
 
     <fieldset class="form-group">
-      <label>Destino</label>
-      <input class="form-control">
+      <label>Copiar link de mapa: <a href="{{getSearchMapURI()}}" target="_blank">google maps</a> </label>
+      <input class="form-control" [(ngModel)]="destinationItem.urlMap" name="urlMap">
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label>Quien recibe</label>
+      <input class="form-control" [(ngModel)]="destinationItem.receiver.name" name="receiverName">
+    </fieldset>
+
+    <fieldset class="form-group">
+      <label>Contenido</label>
+      <input class="form-control" [(ngModel)]="destinationItem.packageContent" name="packageContent">
     </fieldset>
 
     <fieldset class="form-group">
       <label>Mensaje al destinatario</label>
-      <textarea class="form-control" rows="3"></textarea>
+      <textarea class="form-control" rows="3" [(ngModel)]="destinationItem.message" name="message"></textarea>
     </fieldset>
 
     <fieldset class="form-group">
       <label>Instruccion al mensajero</label>
-      <textarea class="form-control" rows="3"></textarea>
+      <textarea class="form-control" rows="3" [(ngModel)]="destinationItem.instructions" name="instructions"></textarea>
     </fieldset>
 
-
+    <fieldset class="form-group">
+      <label>Distancia (Precio por Kilometro: $8.90)</label>
+      <input class="form-control" [(ngModel)]="destinationItem.distance" name="distance">
+    </fieldset>
   </div>
 </form>

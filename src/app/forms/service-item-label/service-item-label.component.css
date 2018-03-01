@@ -1,0 +1,33 @@
+div {
+  text-align: left;
+  font-size: 11px;
+}
+
+.labelbody {
+  margin-top:100px;
+  margin-bottom: 200px;
+}
+
+
+.row {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.borderdiv {
+  border: 2px black solid;
+  padding : 5px;
+}
+
+.sideborder {
+  border-left: 2px black solid;
+  border-right: 2px black solid;
+  padding : 5px;
+}
+
+.msgdiv {
+  height: 100px;
+}
+
+.instdiv {
+  height: 150px;
+}

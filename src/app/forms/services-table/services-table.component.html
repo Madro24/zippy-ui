@@ -1,0 +1,38 @@
+
+<div>
+  <div class="card-header">
+    Servicios Activos
+  </div>
+
+  <div class="addServiceBtn">
+    <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=!isLoadingData>Agregar Servicio</a>
+    <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=isLoadingData>Cargando <i class="fa fa-spinner fa-spin" style="font-size:15px"></i></a>
+  </div>
+  <div class="card-body table-responsive text-center mx-auto">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Folio</th>
+          <th>Servicio</th>
+          <th>Quien Envia</th>
+          <th>Celular</th>
+          <th>Hora</th>
+          <th>Dia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of _serviceItemArray; let i = index">
+          <td scope="row">{{i+1}}</td>
+          <td><a [routerLink]="['/serviceItem/'+item.itemId]">{{item.itemId}}</a></td>
+          <td>{{item.type}}</td>
+          <td style="text-align: left">{{item.sender.name}}</td>
+          <td>{{item.sender.phone}}</td>
+          <td>{{getItemTime(item)}}</td>
+          <td>{{getItemDate(item)}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

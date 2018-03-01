@@ -1,0 +1,83 @@
+:host {
+  display: block;
+}
+.login-page {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  background: #fff;
+  text-align: center;
+  color: #000;
+  padding: 3em;
+}
+.login-page .col-lg-4 {
+  padding: 0;
+}
+.login-page .input-lg {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33333;
+  border-radius: 0;
+}
+.login-page .input-underline {
+  background: 0 0;
+  border: none;
+  box-shadow: none;
+  border-bottom: 2px solid #000;
+  color: #000;
+  border-radius: 0;
+}
+.login-page .input-underline:focus {
+  border-bottom: 2px solid #D68322;
+  box-shadow: none;
+}
+.login-page .rounded-btn {
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.8);
+  background: #D68322;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  line-height: 40px;
+  padding: 0 25px;
+}
+.login-page .rounded-btn:hover, .login-page .rounded-btn:focus, .login-page .rounded-btn:active, .login-page .rounded-btn:visited {
+  color: #000;
+  border: 2px solid #000;
+  outline: none;
+}
+.login-page h1 {
+  font-weight: 300;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 36px;
+}
+.login-page h1 small {
+  color: #000;
+}
+.login-page .form-group {
+  padding: 8px 0;
+}
+.login-page .form-group input::-webkit-input-placeholder {
+  color: lightgray !important;
+}
+.login-page .form-group input:-moz-placeholder {
+  /* Firefox 18- */
+  color: lightgray !important;
+}
+.login-page .form-group input::-moz-placeholder {
+  /* Firefox 19+ */
+  color: lightgray !important;
+}
+.login-page .form-group input:-ms-input-placeholder {
+  color: lightgray !important;
+}
+.login-page .form-content {
+  padding: 40px 0;
+}
+a {
+  color: #000;
+}

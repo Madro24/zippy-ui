@@ -1,34 +1,26 @@
-<div class="example3">
-  <nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar3">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand user-avatar" href="#">
-            <img src="assets/images/zippy-logo.png" width="100px" alt="Zippy OfficeBoys" />
-        </a>
-      </div>
-      <div id="navbar3" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Nosotros</a></li>
-          <li><a href="#">Contactanos</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Servicios <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Nuevo</a></li>
-              <li><a href="#">Historial</a></li>
-              <li><a href="#">Buscar</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <!--/.nav-collapse -->
-    </div>
-    <!--/.container-fluid -->
-  </nav>
-</div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand user-avatar" href="#">
+      <img src="assets/images/zippy-logo.png" width="100px" alt="Zippy OfficeBoys" />
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="http://zippyofficeboys.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" >Disabled</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input name="searchItemInput" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" [(ngModel)]="searchItem">
+      <button class="btn btn-outline-warning my-2 my-sm-0" type="submit" (click)="searchServiceItem()">Search</button>
+    </form>
+  </div>
+</nav>
