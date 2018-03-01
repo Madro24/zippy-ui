@@ -20,7 +20,7 @@ export class ServiceItem {
   recolectDate: NgbDateStruct;
   recolectTime: TimeModel;
   constructor() {
-    this.type = ServiceTypeEnum[ServiceTypeEnum.Express];
+    this.type = ServiceTypeEnum[ServiceTypeEnum.EXPRESS];
     this.sender = new Customer();
     this.usedFares = new PriceLog();
     this.destinations = [];

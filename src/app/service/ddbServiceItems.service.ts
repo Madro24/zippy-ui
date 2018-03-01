@@ -1,21 +1,21 @@
-import { Injectable } from "@angular/core";
-import { CognitoUtil } from "./cognito.service";
-import { environment } from "../../environments/environment";
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
 
-import { ServiceItem } from "../shared/model/service-item.model";
-import * as AWS from "aws-sdk/global";
-import * as DynamoDB from "aws-sdk/clients/dynamodb";
+import {ServiceItem} from '../shared/model/service-item.model';
+import * as AWS from 'aws-sdk/global';
+import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 
 export interface ServiceItemCallback {
-    callback(): void;
-    callbackWithParam(result: any): void;
+  callback(): void;
+
+  callbackWithParam(result: any): void;
 }
 
 @Injectable()
 export class ServiceItemDDBService {
 
-  constructor(public cognitoUtil: CognitoUtil) {
-    console.log("DynamoDBService: constructor");
+  constructor() {
+    console.log('DynamoDBService: constructor');
   }
 
   getAWS() {
@@ -23,60 +23,60 @@ export class ServiceItemDDBService {
   }
 
   getServiceItems(mapArray: Array<ServiceItem>, itemId: string) {
-    console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
-    var params = {
+    console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
+    const params = {
       TableName: environment.ddbServiceItemsTable,
-      KeyConditionExpression: "itemId = :itemId",
+      KeyConditionExpression: 'itemId = :itemId',
       ExpressionAttributeValues: {
-        ":itemId": itemId
+        ':itemId': itemId
       }
     };
 
-    var clientParams: any = {};
+    const clientParams: any = {};
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
     }
-    var docClient = new DynamoDB.DocumentClient(clientParams);
+    const docClient = new DynamoDB.DocumentClient(clientParams);
     docClient.query(params, onQuery);
 
     function onQuery(err, data) {
       if (err) {
-        console.error("ServiceItemDDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
+        console.error('ServiceItemDDBService: Unable to query the table. Error JSON:', JSON.stringify(err, null, 2));
       } else {
         // print all the movies
-        console.log("ServiceItemDDBService: Query succeeded.");
-        data.Items.forEach(function(logitem) {
+        console.log('ServiceItemDDBService: Query succeeded.');
+        data.Items.forEach(function (logitem) {
           mapArray.push(logitem);
         });
       }
     }
   }
 
-  getServiceAllItems(mapArray: Array<ServiceItem>,  callback: ServiceItemCallback) {
-    console.log("ServiceItemDDBService: reading from DDB with creds - " + AWS.config.credentials);
-    var params = {
+  getActiveItems(mapArray: Array<ServiceItem>, callback: ServiceItemCallback) {
+    console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
+    const params = {
       TableName: environment.ddbServiceItemsTable,
-      FilterExpression: "#item_status <> :itemStatus",
+      FilterExpression: '#item_status = :itemStatus',
       ExpressionAttributeNames: {
-        "#item_status": "itemStatus",
+        '#item_status': 'itemStatus',
       },
-      ExpressionAttributeValues: { ":itemStatus": 'ARCHIVED' }
+      ExpressionAttributeValues: {':itemStatus': 'ACTIVO'}
     };
 
-    var clientParams: any = {};
+    const clientParams: any = {};
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
     }
-    var docClient = new DynamoDB.DocumentClient(clientParams);
+    const docClient = new DynamoDB.DocumentClient(clientParams);
     docClient.scan(params, onQuery);
 
     function onQuery(err, data) {
       if (err) {
-        console.error("ServiceItemDDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
+        console.error('ServiceItemDDBService: Unable to query the table. Error JSON:', JSON.stringify(err, null, 2));
       } else {
         // print all the movies
-        console.log("ServiceItemDDBService: Query succeeded.");
-        data.Items.forEach(function(logitem) {
+        console.log('ServiceItemDDBService: Query succeeded.');
+        data.Items.forEach(function (logitem) {
           mapArray.push(logitem);
         });
         callback.callback();
@@ -86,92 +86,92 @@ export class ServiceItemDDBService {
 
   writeServiceItem(item: ServiceItem, callback: ServiceItemCallback) {
     try {
-      let date = new Date().toString();
-      console.log("ServiceItemDDBService: Adding new service item entry. Type:" + item.type);
+      console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
       this.write(item, callback);
     } catch (exc) {
-      console.log("ServiceItemDDBService: Couldn't write to DDB");
+      console.log('ServiceItemDDBService: Couldn\'t write to DDB');
     }
 
   }
 
-  write(item: ServiceItem,  callback: ServiceItemCallback): void {
-    console.log("ServiceItemDDBService: writing " + item.type + " entry");
+  write(item: ServiceItem, callback: ServiceItemCallback): void {
+    console.log('ServiceItemDDBService: writing ' + item.type + ' entry');
 
-    let clientParams: any = {
-      params: { TableName: environment.ddbServiceItemsTable }
+    const clientParams: any = {
+      params: {TableName: environment.ddbServiceItemsTable}
     };
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
     }
-    var DDB = new DynamoDB(clientParams);
+    const DDB = new DynamoDB(clientParams);
 
     // Write the item to the table
-    var itemParams =
-      {
-        TableName: environment.ddbServiceItemsTable,
-        Item: {
-          "date": { S: item.date },
-          "destinations": {
-            L: [
-              {
-                M:
+    const itemParams = {
+      TableName: environment.ddbServiceItemsTable,
+      Item: {
+        'date': {S: item.date},
+        'destinations': {
+          L: [
+            {
+              M:
                 {
-                  "distance": { N: item.destinations[0].distance.toString() },
-                  "instructions": { S: item.destinations[0].instructions },
-                  "urlMap": { S: item.destinations[0].urlMap },
-                  "location": { S: item.destinations[0].location },
-                  "message": { S: item.destinations[0].message },
-                  "packageContent": { S: item.destinations[0].packageContent },
-                  "receiver": {
+                  'distance': {N: item.destinations[0].distance.toString()},
+                  'instructions': {S: item.destinations[0].instructions},
+                  'urlMap': {S: item.destinations[0].urlMap},
+                  'location': {S: item.destinations[0].location},
+                  'message': {S: item.destinations[0].message},
+                  'packageContent': {S: item.destinations[0].packageContent},
+                  'receiver': {
                     M: {
-                      "name": { S: item.destinations[0].receiver.name }
+                      'name': {S: item.destinations[0].receiver.name}
                     }
                   },
-                  "sequence": { N: item.destinations[0].sequence.toString() }
+                  'sequence': {N: item.destinations[0].sequence.toString()}
                 }
-              }
-            ]
-          },
-          "recolectDate": { M:
+            }
+          ]
+        },
+        'recolectDate': {
+          M:
             {
-              "year":{N:item.recolectDate.year.toString()},
-              "month":{N: item.recolectDate.month.toString()},
-              "day":{N:item.recolectDate.day.toString()}
+              'year': {N: item.recolectDate.year.toString()},
+              'month': {N: item.recolectDate.month.toString()},
+              'day': {N: item.recolectDate.day.toString()}
             }
-          },
-          "recolectTime": { M:
+        },
+        'recolectTime': {
+          M:
             {
-              "hour": {S:item.recolectTime.hour.toString()},
-              "minute": {S: item.recolectTime.minute.toString()}
+              'hour': {S: item.recolectTime.hour.toString()},
+              'minute': {S: item.recolectTime.minute.toString()}
             }
-          },
-          "itemId": { S: item.itemId },
-          "originLocation": { S: item.originLocation },
-          "payBy": { S: item.payBy },
-          "sender": {
-            M: {
-              "name": { S: item.sender.name },
-              "phone": { S: item.sender.phone }
-            }
-          },
-          "itemStatus": { S: item.itemStatus },
-          "totalCost": { N: item.totalCost },
-          "type": { S: item.type },
-          "usedFares": {
-            M: {
-              "distance": { N: item.usedFares.distanceFare },
-              "time": { N: item.usedFares.timeFare }
-            }
+        },
+        'itemId': {S: item.itemId},
+        'originLocation': {S: item.originLocation},
+        'payBy': {S: item.payBy},
+        'sender': {
+          M: {
+            'name': {S: item.sender.name},
+            'phone': {S: item.sender.phone}
+          }
+        },
+        'itemStatus': {S: item.itemStatus},
+        'totalCost': {N: item.totalCost},
+        'type': {S: item.type},
+        'usedFares': {
+          M: {
+            'distance': {N: item.usedFares.distanceFare},
+            'time': {N: item.usedFares.timeFare}
           }
         }
-      };
+      }
+    };
     DDB.putItem(itemParams,
-       function(result) {
-       console.log("ServiceItemDDBService: wrote entry: " + JSON.stringify(result));
-       callback.callback();
-     }
-  );
+      function (result) {
+        console.log('ServiceItemDDBService: wrote entry: ' + JSON.stringify(result));
+        callback.callback();
+      }
+    );
   }
 
 }

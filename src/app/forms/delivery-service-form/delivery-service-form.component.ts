@@ -14,4 +14,7 @@ export class DeliveryServiceFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  getSearchMapURI(): string {
+    return encodeURI('https://www.google.com/maps/search/' +  this.destinationItem.location);
+  }
 }

@@ -1,7 +1,7 @@
 
 <div>
   <div class="card-header">
-    Agenda de Servicios
+    Servicios Activos
   </div>
 
   <div class="addServiceBtn">
@@ -19,7 +19,6 @@
           <th>Celular</th>
           <th>Hora</th>
           <th>Dia</th>
-          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -27,11 +26,10 @@
           <td scope="row">{{i+1}}</td>
           <td><a [routerLink]="['/serviceItem/'+item.itemId]">{{item.itemId}}</a></td>
           <td>{{item.type}}</td>
-          <td>{{item.sender.name}}</td>
+          <td style="text-align: left">{{item.sender.name}}</td>
           <td>{{item.sender.phone}}</td>
-          <td>{{item.recolectTime.hour + ":" + item.recolectTime.minute}}</td>
-          <td>{{item.recolectDate.year + "-" + item.recolectDate.month + "-" + item.recolectDate.day}}</td>
-          <td>{{item.itemStatus}}</td>
+          <td>{{getItemTime(item)}}</td>
+          <td>{{getItemDate(item)}}</td>
         </tr>
 
       </tbody>

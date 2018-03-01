@@ -9,3 +9,7 @@ h3 {
 .dropdown-menu {
   min-width: 185px;
 }
+
+input {
+  text-transform: uppercase;
+}

@@ -1,15 +1,14 @@
 export enum ServiceTypeEnum {
-  Express,
-  Normal
-};
+  EXPRESS,
+  NORMAL
+}
 
 export enum PayByEnum {
-  Remitente,
-  Destinatario
-};
+  REMITENTE,
+  DESTINATARIO
+}
 
 export enum ServiceStatusEnum {
-  Nuevo,
-  Iniciado,
-  Completado
-};
+  ACTIVO,
+  COMPLETADO
+}
