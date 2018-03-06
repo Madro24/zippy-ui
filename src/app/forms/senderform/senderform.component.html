@@ -1,101 +1,137 @@
-
 <h2 *ngIf="serviceItem.itemId==null">Solicitud de Servicio</h2>
 <h2 *ngIf="serviceItem.itemId!=null"> Folio : {{serviceItem.itemId}}</h2>
 
 Costo Total: {{ (this.serviceItem.destinations[0].distance * 8.90).toFixed(2) }}
 
-<button *ngIf="serviceItem.itemId!=null" type="button" class="btn btn-info" (click)="printLabel()">Etiqueta</button>
-<hr />
+<button *ngIf="serviceItem.itemId!=null && !itemRegForm.touched" type="button" class="btn btn-info" (click)="printLabel()">Etiqueta</button>
+<hr/>
 <div class="container">
-  <div class="row">
-    <div class="col-md-5">
-      <form role="form">
-        <div>
-          <h3> Datos Remitente</h3>
 
-          <div class="form-group">
-            <label>Estatus</label>
-            <select class="form-control" [(ngModel)]="serviceItem.itemStatus" name="serviceStatus" [disabled]='!isEditAction'>
-              <option *ngFor="let itemStatus of getServiceStatus()" [value]="itemStatus">{{itemStatus}}</option>
-            </select>
-          </div>
 
-          <div class="form-group">
-            <label>Servicio</label>
-            <select class="form-control" [(ngModel)]="serviceItem.type" name="serviceType">
+  <form role="form" (ngSubmit)="onSubmit()" #itemRegForm="ngForm">
+    <div class="row">
+      <div class="col-md-5">
+        <h3> Datos Remitente</h3>
+
+        <div class="form-group">
+          <label>Estatus</label>
+          <select class="form-control" name="itemStatus" [disabled]='!isEditAction' [ngModel]="serviceItem.itemStatus">
+            <option *ngFor="let itemStatus of getServiceStatus()" [value]="itemStatus">{{itemStatus}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Servicio</label>
+          <select class="form-control" name="itemType" [ngModel]="serviceItem.type">
             <option *ngFor="let type of getServiceTypes()" [value]="type">{{type}}</option>
           </select>
-          </div>
-
-          <fieldset class="form-group">
-            <label>Dia de recoleccion</label>
-            <div class="form-group">
-              <div class="input-group datepicker-input">
-                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="serviceItem.recolectDate" ngbDatepicker #d="ngbDatepicker">
-                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                          <i class="fa fa-calendar"></i>
-                      </button>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset class="form-group">
-            <label>Hora de recoleccion</label>
-            <ngb-timepicker name="serviceTime" [(ngModel)]="serviceItem.recolectTime" [minuteStep]="30"></ngb-timepicker>
-          </fieldset>
-
-
-
-
-          <fieldset class="form-group">
-            <label>Quien envia</label>
-            <input class="form-control" name="senderName" [(ngModel)]="serviceItem.sender.name">
-          </fieldset>
-          <fieldset class="form-group">
-            <label>Celular</label>
-            <input class="form-control" name="senderPhone" placeholder="664-XXXXXXX" [(ngModel)]="serviceItem.sender.phone">
-          </fieldset>
-
-          <fieldset class="form-group">
-            <label>Origen</label>
-            <input class="form-control" name="originLocation" [(ngModel)]="serviceItem.originLocation">
-          </fieldset>
-
-          <div class="form-group">
-            <label>Paga</label>
-            <select class="form-control" name="payBy" [(ngModel)]="serviceItem.payBy">
-              <option *ngFor="let payBy of getPayByList()" [value]="payBy">{{payBy}}</option>
-            </select>
-          </div>
-          <div style="display:none">
-            <h4>(Solo empresas afiliadas)</h4>
-
-            <fieldset class="form-group">
-              <label>Usuario</label>
-              <input class="form-control" placeholder="usuario@empresa.com" disabled>
-            </fieldset>
-
-            <fieldset class="form-group">
-              <label>Contrase&ntilde;a</label>
-              <input class="form-control" disabled>
-            </fieldset>
-          </div>
         </div>
-      </form>
-    </div>
-    <div class="col-md-2">
-    </div>
-    <div class="col-md-5">
-        <app-delivery-service-form *ngFor="let destination of serviceItem.destinations" [destinationItem]="destination"></app-delivery-service-form>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6 btnForm">
-      <a class="btn rounded-btn" (click)="addDeliveryService()">Guardar <i class="fa fa-spinner fa-spin" style="font-size:13px" *ngIf=wasSavedClicked></i></a>
-      <a class="btn rounded-btn" [routerLink]="['/serviceItemList']">Cancelar</a>
+        <fieldset class="form-group">
+          <label>Dia de recoleccion</label>
+          <div class="form-group">
+            <div class="input-group datepicker-input">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [ngModel]="serviceItem.recolectDate"
+                     required>
+              <button class="input-group-addon" (click)="d.toggle()" type="button">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Hora de recoleccion</label>
+          <ngb-timepicker name="serviceTime" [minuteStep]="30" [ngModel]="serviceItem.recolectTime" required></ngb-timepicker>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Quien envia</label>
+          <input class="form-control" name="senderName" [ngModel]="serviceItem.sender.name" required>
+        </fieldset>
+        <fieldset class="form-group">
+          <label>Celular</label>
+          <input class="form-control" name="senderPhone" placeholder="664-XXXXXXX" [ngModel]="serviceItem.sender.phone" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Origen</label>
+          <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required>
+        </fieldset>
+
+        <div class="form-group">
+          <label>Paga</label>
+          <select class="form-control" name="payBy" [ngModel]="serviceItem.payBy">
+            <option *ngFor="let payBy of getPayByList()" [value]="payBy">{{payBy}}</option>
+          </select>
+        </div>
+        <div style="display:none">
+          <h4>(Solo empresas afiliadas)</h4>
+
+          <fieldset class="form-group">
+            <label>Usuario</label>
+            <input class="form-control" placeholder="usuario@empresa.com" disabled>
+          </fieldset>
+
+          <fieldset class="form-group">
+            <label>Contrase&ntilde;a</label>
+            <input class="form-control" disabled>
+          </fieldset>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-5">
+        <!--Multiple Destination-->
+        <!--<app-delivery-service-form *ngFor="let destination of serviceItem.destinations"-->
+        <!--[destinationItem]="destination"></app-delivery-service-form>-->
+        <h3>Datos de Destino</h3>
+
+        <fieldset class="form-group">
+          <label>Destino </label>
+          <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel">
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Copiar link de mapa: <a [href]="getSearchMapURI(destLoc.value)" target="_blank" (click)="enableUrlMap()">google maps</a> </label>
+          <input class="form-control" name="destUrlMap" [ngModel]="serviceItem.destinations[0].urlMap" required [disabled]="!destLoc.valid || !enableUrlMapField">
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Quien recibe</label>
+          <input class="form-control" name="destRecName" [ngModel]="serviceItem.destinations[0].receiver.name" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Contenido</label>
+          <input class="form-control" name="destPkgContent" [ngModel]="serviceItem.destinations[0].packageContent" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Mensaje al destinatario</label>
+          <textarea class="form-control" rows="3" name="destMsg" [ngModel]="serviceItem.destinations[0].message" required></textarea>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Instruccion al mensajero</label>
+          <textarea class="form-control" rows="3" name="destInst" [ngModel]="serviceItem.destinations[0].instructions" required></textarea>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>Distancia (Precio por Kilometro: $8.90)</label>
+          <input class="form-control"  name="destDistance" [ngModel]="serviceItem.destinations[0].distance" required>
+        </fieldset>
+      </div>
     </div>
-    <div class="col-lg-3"></div>
-  </div>
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6 btnForm">
+        <button class="btn rounded-btn" type="submit">Guardar <i class="fa fa-spinner fa-spin" style="font-size:13px"
+                                                                 *ngIf=wasSavedClicked></i></button>
+        <a class="btn rounded-btn" [routerLink]="['/serviceItemList']">Cancelar</a>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </form>
+
+
 </div>

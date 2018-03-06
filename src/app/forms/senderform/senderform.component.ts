@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ServiceTypeEnum, ServiceStatusEnum, PayByEnum} from '../../shared/enum/global-enums';
 import {ServiceItem} from '../../shared/model/service-item.model';
 import {Destination} from '../../shared/model/destination.model';
@@ -6,7 +6,7 @@ import {DataMapService} from '../../service/data-map.service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ServiceItemCallback} from '../../service/ddbServiceItems.service';
 import {CommonUtilService} from '../../service/common-util.service';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgForm } from '@angular/forms';
 
 const now = new Date();
 
@@ -16,15 +16,22 @@ const now = new Date();
   styleUrls: ['./senderform.component.css']
 })
 export class SenderformComponent implements OnInit, ServiceItemCallback {
+  @ViewChild('itemRegForm') itemRegForm: NgForm;
   public serviceItem: ServiceItem;
   public destinationArray: Array<Destination>;
 
   private itemId: string;
-  public isEditAction = false;
-  public wasSaveClicked = false;
-  // model: NgbDateStruct;
-  // date: {year: number, month: number};
-  // time = { hour: 8, minute: 0 };
+  isEditAction = false;
+  wasSaveClicked = false;
+  enableUrlMapField = false;
+  submitted = false;
+
+  // Default values
+  defaultItemStatus = 'ACTIVO';
+  defaultServType = 'EXPRESS';
+  defaultPayBy = 'REMITENTE';
+  defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
+  defaultTime = { hour: now.getHours(), minute: 0 };
 
   constructor(private router: Router,
               private actRoute: ActivatedRoute,
@@ -52,10 +59,11 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
             this.router.navigate(['/admin-home']);
           }
         );
-
       console.log('this.serviceItem:' + this.serviceItem.itemId);
       this.isEditAction = true;
     } else {
+      this.enableUrlMapField = false;
+      this.isEditAction = false;
       this.newServiceItem();
     }
 
@@ -64,10 +72,12 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
 
   newServiceItem() {
     this.serviceItem = new ServiceItem();
-    this.serviceItem.type = ServiceTypeEnum[ServiceTypeEnum.EXPRESS];
-    this.serviceItem.itemStatus = ServiceStatusEnum[ServiceStatusEnum.ACTIVO];
-    this.serviceItem.payBy = PayByEnum[PayByEnum.REMITENTE];
     this.serviceItem.date = String(now.getFullYear()) + String(now.getMonth() + 1) + String(now.getDate());
+    this.serviceItem.recolectDate = this.defaultDay;
+    this.serviceItem.recolectTime = this.defaultTime;
+    this.serviceItem.itemStatus = this.defaultItemStatus;
+    this.serviceItem.payBy = this.defaultPayBy;
+
     const destinationDefault = new Destination();
     destinationDefault.sequence = 1;
     this.serviceItem.destinations.push(destinationDefault);
@@ -89,43 +99,11 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   }
 
   callback() {
-    this.router.navigate(['/serviceItemList']);
     this.wasSaveClicked = false;
+    this.router.navigate(['/serviceItemList']);
   }
 
   callbackWithParam(result: any) {
-  }
-
-
-  addDeliveryService() {
-    console.log('This is my service:', this.serviceItem);
-
-    this.wasSaveClicked = true;
-
-    if (!this.isEditAction) {
-      const formattedDate =
-        this.serviceItem.recolectDate.year
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.month)
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.day);
-      const formattedTime =
-        this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.hour)
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.minute);
-
-      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.itemStatus.charAt(0) + '1';
-    }
-
-    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
-    this.serviceItem.usedFares.distanceFare = '9';
-    this.serviceItem.usedFares.timeFare = '2.25';
-
-    this.setServiceItemToUpperCase(this.serviceItem);
-    if (this.isEditAction) {
-      this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
-    } else {
-      this.dataMapService.pushItem(this.serviceItem, this);
-    }
-
-
   }
 
   setServiceItemToUpperCase(item: ServiceItem) {
@@ -141,6 +119,87 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
     if (this.itemId != null) {
       this.router.navigate(['/service-item-label/', this.itemId]);
     }
+  }
+
+  enableUrlMap() {
+    this.enableUrlMapField = true;
+  }
+
+  getSearchMapURI(location: string): string {
+    return encodeURI('https://www.google.com/maps/search/' +  location);
+  }
+
+  onSubmit() {
+    console.log(this.itemRegForm);
+    this.wasSaveClicked = true;
+
+    this.mapFormToObj();
+    if (!this.isEditAction) {
+      const formattedDate =
+        this.serviceItem.recolectDate.year
+        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.month)
+        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.day);
+      const formattedTime =
+        this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.hour)
+        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.minute);
+
+      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.itemStatus.charAt(0) + '1';
+    }
+    this.serviceItem.usedFares.distanceFare = '9';
+    this.serviceItem.usedFares.timeFare = '2.25';
+    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
+
+    this.setServiceItemToUpperCase(this.serviceItem);
+    if (this.isEditAction) {
+      this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
+    } else {
+      this.dataMapService.pushItem(this.serviceItem, this);
+    }
+
+    this.itemRegForm.reset();
+
+  }
+
+  mapFormToObj() {
+    this.serviceItem.itemStatus = this.itemRegForm.value.itemStatus;
+    this.serviceItem.type = this.itemRegForm.value.itemType;
+    this.serviceItem.recolectDate = this.itemRegForm.value.dp;
+    this.serviceItem.recolectTime = this.itemRegForm.value.serviceTime;
+    this.serviceItem.sender.name = this.itemRegForm.value.senderName;
+    this.serviceItem.sender.phone = this.itemRegForm.value.senderPhone;
+    this.serviceItem.originLocation = this.itemRegForm.value.originLocation;
+    this.serviceItem.payBy = this.itemRegForm.value.payBy;
+
+    this.serviceItem.destinations[0].location = this.itemRegForm.value.destLocation;
+    this.serviceItem.destinations[0].urlMap = this.itemRegForm.value.destUrlMap;
+    this.serviceItem.destinations[0].receiver.name = this.itemRegForm.value.destRecName;
+    this.serviceItem.destinations[0].packageContent = this.itemRegForm.value.destPkgContent;
+    this.serviceItem.destinations[0].message = this.itemRegForm.value.destMsg;
+    this.serviceItem.destinations[0].instructions = this.itemRegForm.value.destInst;
+    this.serviceItem.destinations[0].distance = this.itemRegForm.value.destDistance;
+
+
+  }
+
+  mapObjToForm(item: ServiceItem, form: NgForm) {
+    form.setValue({
+      itemStatus: item.itemStatus,
+      itemType: item.type,
+      dp: item.recolectDate,
+      serviceTime: item.recolectTime,
+      senderName: item.sender.name,
+      senderPhone: item.sender.phone,
+      originLocation: item.originLocation,
+      payBy: item.payBy,
+      //
+      destLocation: item.destinations[0].location,
+      destUrlMap: item.destinations[0].urlMap,
+      destRecName: item.destinations[0].receiver.name,
+      destPkgContent: item.destinations[0].packageContent,
+      destMsg: item.destinations[0].message,
+      destInst: item.destinations[0].instructions,
+      destDistance: item.destinations[0].distance
+    });
   }
 
 }
