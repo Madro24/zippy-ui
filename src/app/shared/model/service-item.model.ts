@@ -25,4 +25,19 @@ export class ServiceItem {
     this.usedFares = new PriceLog();
     this.destinations = [];
   }
+
+  static compare(item1: ServiceItem, item2: ServiceItem): number {
+    if (item1.itemStatus === 'ACTIVO' && item2.itemStatus !== 'ACTIVO') {
+      return -1;
+    } else if (item1.itemStatus !== 'ACTIVO' && item2.itemStatus === 'ACTIVO') {
+      return 1;
+    }
+    if (item1.itemId < item2.itemId) {
+      return -1;
+    } else if (item1.itemId > item2.itemId) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }

@@ -1,11 +1,11 @@
 
 <div>
   <div class="card-header">
-    Servicios Activos
+    Servicios Solicitados
   </div>
 
   <div class="addServiceBtn">
-    <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=!isLoadingData>Agregar Servicio</a>
+    <button class="btn btn-primary" [routerLink]="['/serviceItem']" *ngIf=!isLoadingData><i class="fa fa-plus"></i> Agregar Servicio</button>
     <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=isLoadingData>Cargando <i class="fa fa-spinner fa-spin" style="font-size:15px"></i></a>
   </div>
   <div class="card-body table-responsive text-center mx-auto">
@@ -19,6 +19,7 @@
           <th>Celular</th>
           <th>Hora</th>
           <th>Dia</th>
+          <th>Estatus</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,7 @@
           <td>{{item.sender.phone}}</td>
           <td>{{getItemTime(item)}}</td>
           <td>{{getItemDate(item)}}</td>
+          <td>{{item.itemStatus}}</td>
         </tr>
 
       </tbody>

@@ -13,3 +13,7 @@ h3 {
 input {
   text-transform: uppercase;
 }
+
+textarea {
+  text-transform: uppercase;
+}

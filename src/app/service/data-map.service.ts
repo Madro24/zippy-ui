@@ -34,6 +34,7 @@ export class DataMapService {
   pushItem(item: ServiceItem, callback: ServiceItemCallback) {
     this.serviceItemDDB.writeServiceItem(item, callback);
     this.serviceItemArray.push(item);
+    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
   }
 
   updateItem(item: ServiceItem, itemId: string, callback: ServiceItemCallback) {

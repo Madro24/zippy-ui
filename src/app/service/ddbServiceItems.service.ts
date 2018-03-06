@@ -56,11 +56,11 @@ export class ServiceItemDDBService {
     console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
     const params = {
       TableName: environment.ddbServiceItemsTable,
-      FilterExpression: '#item_status = :itemStatus',
-      ExpressionAttributeNames: {
-        '#item_status': 'itemStatus',
-      },
-      ExpressionAttributeValues: {':itemStatus': 'ACTIVO'}
+      //FilterExpression: '#item_status = :itemStatus',
+      //ExpressionAttributeNames: {
+       // '#item_status': 'itemStatus',
+      //},
+      //ExpressionAttributeValues: {':itemStatus': ['ACTIVO', 'COMPLETADO']}
     };
 
     const clientParams: any = {};
@@ -79,6 +79,7 @@ export class ServiceItemDDBService {
         data.Items.forEach(function (logitem) {
           mapArray.push(logitem);
         });
+        mapArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
         callback.callback();
       }
     }

@@ -9,7 +9,13 @@ import {CommonUtilService} from '../../service/common-util.service';
 import { NgForm } from '@angular/forms';
 
 const now = new Date();
-
+const defaultItemStatus = 'ACTIVO';
+const defaultServType = 'EXPRESS';
+const defaultPayBy = 'REMITENTE';
+const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
+const defaultTime = { hour: now.getHours(), minute: 0 };
+const distanceFare = 8.90;
+const timeFare = 2.25;
 @Component({
   selector: 'app-senderform',
   templateUrl: './senderform.component.html',
@@ -25,13 +31,6 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   wasSaveClicked = false;
   enableUrlMapField = false;
   submitted = false;
-
-  // Default values
-  defaultItemStatus = 'ACTIVO';
-  defaultServType = 'EXPRESS';
-  defaultPayBy = 'REMITENTE';
-  defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-  defaultTime = { hour: now.getHours(), minute: 0 };
 
   constructor(private router: Router,
               private actRoute: ActivatedRoute,
@@ -73,10 +72,11 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   newServiceItem() {
     this.serviceItem = new ServiceItem();
     this.serviceItem.date = String(now.getFullYear()) + String(now.getMonth() + 1) + String(now.getDate());
-    this.serviceItem.recolectDate = this.defaultDay;
-    this.serviceItem.recolectTime = this.defaultTime;
-    this.serviceItem.itemStatus = this.defaultItemStatus;
-    this.serviceItem.payBy = this.defaultPayBy;
+    this.serviceItem.type = defaultServType;
+    this.serviceItem.recolectDate = defaultDay;
+    this.serviceItem.recolectTime = defaultTime;
+    this.serviceItem.itemStatus = defaultItemStatus;
+    this.serviceItem.payBy = defaultPayBy;
 
     const destinationDefault = new Destination();
     destinationDefault.sequence = 1;
@@ -145,11 +145,13 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
 
       this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.itemStatus.charAt(0) + '1';
     }
-    this.serviceItem.usedFares.distanceFare = '9';
-    this.serviceItem.usedFares.timeFare = '2.25';
-    this.serviceItem.totalCost = (this.serviceItem.destinations[0].distance * 8.90).toFixed(2);
+    this.serviceItem.usedFares.distanceFare = distanceFare.toString();
+    this.serviceItem.usedFares.timeFare = timeFare.toString();
+    this.serviceItem.totalCost = this.getTotalCost(this.serviceItem.destinations[0].distance);
 
     this.setServiceItemToUpperCase(this.serviceItem);
+    console.log(this.serviceItem);
+
     if (this.isEditAction) {
       this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     } else {
@@ -161,7 +163,11 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   }
 
   mapFormToObj() {
-    this.serviceItem.itemStatus = this.itemRegForm.value.itemStatus;
+    if ( this.itemRegForm.value.itemStatus != null) {
+      this.serviceItem.itemStatus = this.itemRegForm.value.itemStatus;
+    } else {
+      this.serviceItem.itemStatus = defaultItemStatus;
+    }
     this.serviceItem.type = this.itemRegForm.value.itemType;
     this.serviceItem.recolectDate = this.itemRegForm.value.dp;
     this.serviceItem.recolectTime = this.itemRegForm.value.serviceTime;
@@ -177,29 +183,9 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
     this.serviceItem.destinations[0].message = this.itemRegForm.value.destMsg;
     this.serviceItem.destinations[0].instructions = this.itemRegForm.value.destInst;
     this.serviceItem.destinations[0].distance = this.itemRegForm.value.destDistance;
-
-
   }
-
-  mapObjToForm(item: ServiceItem, form: NgForm) {
-    form.setValue({
-      itemStatus: item.itemStatus,
-      itemType: item.type,
-      dp: item.recolectDate,
-      serviceTime: item.recolectTime,
-      senderName: item.sender.name,
-      senderPhone: item.sender.phone,
-      originLocation: item.originLocation,
-      payBy: item.payBy,
-      //
-      destLocation: item.destinations[0].location,
-      destUrlMap: item.destinations[0].urlMap,
-      destRecName: item.destinations[0].receiver.name,
-      destPkgContent: item.destinations[0].packageContent,
-      destMsg: item.destinations[0].message,
-      destInst: item.destinations[0].instructions,
-      destDistance: item.destinations[0].distance
-    });
+  getTotalCost(value) {
+    return (+value * distanceFare).toFixed(2);
   }
 
 }

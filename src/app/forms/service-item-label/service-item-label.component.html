@@ -1,66 +1,71 @@
+<div class="col col-md-4 justify-content-md-center label-top">
 
-<div class="col col-md-4 justify-content-md-center">
-
-  <button type="button" class="btn btn-info" (click)="back()">Regresar</button>
+  <button type="button" class="btn btn-primary" style="margin-top: 20px" (click)="back()">Regresar <i class="fa fa-arrow-left"></i></button>
 
   <div class="labelbody">
-  <div class="row">
-    <div class="col">{{this.serviceItem.payBy}}</div>
-    <div class="col" style="text-align:right">Folio: {{this.serviceItem.itemId}}</div>
-  </div>
+    <div class="row">
+      <div class="col-5">{{this.serviceItem.payBy}}</div>
+      <div class="col-7" style="text-align:right">Folio: {{this.serviceItem.itemId}}</div>
+    </div>
 
-  <div class="borderdiv">
+    <div class="borderdiv">
+      <div class="row">
+        <div class="col-4">
+          <b>Envia:</b>
+        </div>
+        <div class="col-8">{{this.serviceItem.sender.name}} <br/> {{this.serviceItem.originLocation}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <b>Celular:</b>
+        </div>
+        <div class="col-8">{{this.serviceItem.sender.phone}}</div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <b>Recibe:</b>
+        </div>
+        <div class="col-8">{{this.serviceItem.destinations[0].receiver.name}}</div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <b>Contiene:</b>
+        </div>
+        <div class="col-8">{{this.serviceItem.destinations[0].packageContent}}</div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <b>Distancia:</b>
+        </div>
+        <div class="col-8">{{this.serviceItem.destinations[0].distance}} km</div>
+      </div>
+    </div>
+    <div class="sideborder">
+      <div class="row msgdiv">
+        <div class="col">
+          <b>Mensaje:</b> <br/> {{this.serviceItem.destinations[0].message}}
+        </div>
+      </div>
+    </div>
+    <div class="borderdiv">
+      <div class="row instdiv">
+        <div class="col-5">
+          <b>Instrucciones:</b> <br/> {{this.serviceItem.destinations[0].instructions}}
+        </div>
+        <div class="col-7 qrcode">
+          <img src="http://qrickit.com/api/qr.php?d={{this.serviceItem.destinations[0].urlMap}}" alt="" width="140px">
+        </div>
+      </div>
+    </div>
     <div class="row">
-      <div class="col">
-        <b>Envia:</b>
+      <div class="col" style="text-align: center">
+        <img src="assets/images/zippy-logo.png" width="25px" alt="Zippy OfficeBoys"/>
       </div>
-      <div class="col">{{this.serviceItem.sender.name}} <br/> {{this.serviceItem.originLocation}}
-      </div>
-    </div>
-    <div class="row" style="margin-top:30px">
-      <div class="col">
-        <b>Celular:</b>
-      </div>
-      <div class="col">{{this.serviceItem.sender.phone}}</div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <b>Recibe:</b>
-      </div>
-      <div class="col">{{this.serviceItem.destinations[0].receiver.name}}</div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <b>Contiene:</b>
-      </div>
-      <div class="col">{{this.serviceItem.destinations[0].packageContent}}</div>
-    </div>
-  </div>
-  <div class="sideborder">
-    <div class="row msgdiv">
-      <div class="col">
-        <b>Mensaje:</b> <br /> {{this.serviceItem.destinations[0].message}}
+      <div class="col" style="text-align: center">
+        www.zippyofficeboys.com <br/>
+        664 251 4275
       </div>
     </div>
-  </div>
-  <div class="borderdiv">
-    <div class="row instdiv">
-      <div class="col">
-        <b>Instrucciones:</b> <br /> {{this.serviceItem.destinations[0].instructions}}
-      </div>
-      <div class="col">
-        <img src="http://qrickit.com/api/qr.php?d={{this.serviceItem.destinations[0].urlMap}}" alt="" width="140px">
-      </div>
-    </div>
-  </div>
-  <div class="row" >
-    <div class="col" style="text-align: center">
-        <img src="assets/images/zippy-logo.png" width="25px" alt="Zippy OfficeBoys" />
-    </div>
-    <div class="col" style="text-align: center">
-      www.zippyofficeboys.com <br/>
-      664 251 4275
-    </div>
-  </div>
   </div>
 </div>
