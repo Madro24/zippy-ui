@@ -43,6 +43,7 @@ export class DataMapService {
 
     const index = this.serviceItemArray.findIndex(x => x.itemId === itemId);
     this.serviceItemArray[index] = item;
+    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
   }
 
 

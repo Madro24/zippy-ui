@@ -1,6 +1,29 @@
 @import "~font-awesome/css/font-awesome.min.css";
 @import "~mdbootstrap/css/bootstrap.min.css";
 
+body {
+  font-size: 12px;
+}
+
+.btn {
+  font-size: 12px;
+}
+
+td {
+  font-size: 10px;
+}
+
+/*h2 {*/
+  /*font-size: 16px;*/
+/*}*/
+
+/*h3 {*/
+  /*font-size: 14px;*/
+/*}*/
+
+.form-control {
+  font-size: 11px;
+}
 /* You can add global styles to this file, and also import other style files */
 .rounded-btn {
   -webkit-border-radius: 50px;
@@ -18,9 +41,10 @@
   border-radius: 50%;
   border: 2px solid #D68322;
   background: #fff;
-  padding: 20px;
+  padding: 10px;
 }
 
 .starter-template {
+    margin-top: 15px;
     text-align: center;
 }

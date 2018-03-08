@@ -1,7 +1,13 @@
-<h2 *ngIf="!isEditAction">Solicitud de Servicio</h2>
-<h2 *ngIf="isEditAction"> Folio : {{serviceItem.itemId}}</h2>
+<h3 *ngIf="!isEditAction">Solicitud de Servicio</h3>
+<h3 *ngIf="isEditAction"> Folio : {{serviceItem.itemId}}</h3>
 
-<button *ngIf="isEditAction && !itemRegForm.touched" type="button" class="btn btn-warning" (click)="printLabel()">Etiqueta</button>
+<button *ngIf="isEditAction && !itemRegForm.touched" type="button" class="btn btn-info" (click)="printLabel()">
+  Imprimir Etiqueta
+  <i class="fa fa-tags"></i>
+</button>
+<div class="alert alert-warning" role="alert" *ngIf="isEditAction && itemRegForm.touched">
+  ** Se realizaron cambios, guardalos para poder ver la etiqueta
+</div>
 <hr/>
 <div class="container">
 
@@ -9,7 +15,7 @@
   <form role="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" #itemRegForm="ngForm">
     <div class="row">
       <div class="col-md-5">
-        <h3> Datos Remitente</h3>
+        <h4> Datos Remitente</h4>
 
         <fieldset *ngIf="isEditAction" class="form-group">
           <label>Estatus</label>
@@ -82,7 +88,7 @@
         <!--Multiple Destination-->
         <!--<app-delivery-service-form *ngFor="let destination of serviceItem.destinations"-->
         <!--[destinationItem]="destination"></app-delivery-service-form>-->
-        <h3>Datos de Destino</h3>
+        <h4>Datos de Destino</h4>
 
         <fieldset class="form-group">
           <label>Destino </label>
@@ -117,13 +123,13 @@
         <fieldset class="form-group">
           <label>Distancia (Precio por Kilometro: $8.90)</label>
           <input class="form-control"  name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required>
-          Costo Total: {{ getTotalCost(this.distance.value) }}
         </fieldset>
+
+        <h2>Costo Total: {{ getTotalCost(this.distance.value) }}</h2>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-3"></div>
-      <div class="col-lg-6 btnForm">
+    <div class="row btnForm">
+      <div class="col btnForm">
         <button class="btn btn-primary" type="submit"
                 *ngIf="!isEditAction || (isEditAction && itemRegForm.touched)"
                 [disabled]="!itemRegForm.valid">Guardar
@@ -135,7 +141,6 @@
           <i class="fa fa-arrow-left"></i>
         </button>
       </div>
-      <div class="col-lg-3"></div>
     </div>
   </form>
 

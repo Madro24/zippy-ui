@@ -32,10 +32,10 @@ export class ServiceItem {
     } else if (item1.itemStatus !== 'ACTIVO' && item2.itemStatus === 'ACTIVO') {
       return 1;
     }
-    if (item1.itemId < item2.itemId) {
-      return -1;
-    } else if (item1.itemId > item2.itemId) {
+    if (item1.date < item2.date) {
       return 1;
+    } else if (item1.date > item2.date) {
+      return -1;
     } else {
       return 0;
     }

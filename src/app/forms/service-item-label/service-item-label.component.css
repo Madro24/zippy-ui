@@ -10,6 +10,9 @@ div {
 .labelbody {
   margin-top:150px;
   margin-bottom: 200px;
+  margin-left: auto;
+  margin-right: auto;
+
 }
 
 
@@ -34,8 +37,10 @@ div {
 
 .instdiv {
   height: 140px;
+  padding-right: 0px;
 }
 
 .qrcode {
   text-align: right;
+  padding-left: 0px;
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { ServiceItem } from "../shared/model/service-item.model";
-import { Destination } from "../shared/model/destination.model";
-import { ServiceItemDDBService } from "../service/ddbServiceItems.service"
+import { Router } from '@angular/router';
+import { ServiceItemDDBService } from '../service/ddbServiceItems.service';
 
 const now = new Date();
 

@@ -1,8 +1,10 @@
-<div class="col col-md-4 justify-content-md-center label-top">
-
+<div class="justify-content-md-center label-top">
+  <h3> Folio : {{serviceItem.itemId}}</h3>
   <button type="button" class="btn btn-primary" style="margin-top: 20px" (click)="back()">Regresar <i class="fa fa-arrow-left"></i></button>
 
-  <div class="labelbody">
+  <hr/>
+
+  <div class="labelbody col-md-6 justify-content-center">
     <div class="row">
       <div class="col-5">{{this.serviceItem.payBy}}</div>
       <div class="col-7" style="text-align:right">Folio: {{this.serviceItem.itemId}}</div>
@@ -50,10 +52,10 @@
     </div>
     <div class="borderdiv">
       <div class="row instdiv">
-        <div class="col-5">
+        <div class="col-6">
           <b>Instrucciones:</b> <br/> {{this.serviceItem.destinations[0].instructions}}
         </div>
-        <div class="col-7 qrcode">
+        <div class="col-6 qrcode">
           <img src="http://qrickit.com/api/qr.php?d={{this.serviceItem.destinations[0].urlMap}}" alt="" width="140px">
         </div>
       </div>

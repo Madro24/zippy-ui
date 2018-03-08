@@ -71,8 +71,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
 
   newServiceItem() {
     this.serviceItem = new ServiceItem();
-    this.serviceItem.date = String(now.getFullYear()) + String(now.getMonth() + 1) + String(now.getDate());
-    this.serviceItem.type = defaultServType;
+    this.serviceItem.date = now.toISOString();
     this.serviceItem.recolectDate = defaultDay;
     this.serviceItem.recolectTime = defaultTime;
     this.serviceItem.itemStatus = defaultItemStatus;
@@ -143,7 +142,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
         this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.hour)
         + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.minute);
 
-      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.itemStatus.charAt(0) + '1';
+      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.type.charAt(0) + '1';
     }
     this.serviceItem.usedFares.distanceFare = distanceFare.toString();
     this.serviceItem.usedFares.timeFare = timeFare.toString();
