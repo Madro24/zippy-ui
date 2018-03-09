@@ -46,7 +46,26 @@
 
         <fieldset class="form-group">
           <label>Hora de recoleccion</label>
-          <ngb-timepicker name="serviceTime" [minuteStep]="30" [ngModel]="serviceItem.recolectTime" required></ngb-timepicker>
+          <select class="custom-select" [ngModel]="serviceItem.recolectTime" required>
+            <option value="1">8:20</option>
+            <option value="2">8:40</option>
+            <option value="3">9:00</option>
+            <option value="4">9:20</option>
+            <option value="5">9:40</option>
+            <option value="6">10:00</option>
+            <option value="7">10:20</option>
+            <option value="8">10:40</option>
+            <option value="9">11:00</option>
+            <option value="10">11:20</option>
+            <option value="11">11:40</option>
+            <option value="12">12:00</option>
+            <option value="13">12:20</option>
+            <option value="14">12:40</option>
+            <option value="15">13:00</option>
+            <option value="16">13:20</option>
+            <option value="17">13:40</option>
+            <option value="18">14:00</option>
+          </select>
         </fieldset>
 
         <fieldset class="form-group">
@@ -88,6 +107,10 @@
         <!--Multiple Destination-->
         <!--<app-delivery-service-form *ngFor="let destination of serviceItem.destinations"-->
         <!--[destinationItem]="destination"></app-delivery-service-form>-->
+        <div class="d-block d-sm-block d-md-none" >
+          <hr/>
+        </div>
+
         <h4>Datos de Destino</h4>
 
         <fieldset class="form-group">
