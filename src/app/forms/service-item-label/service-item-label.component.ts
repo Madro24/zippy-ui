@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { ServiceItem } from "../../shared/model/service-item.model";
 import { Customer } from "../../shared/model/customer.model";
 import { Destination } from "../../shared/model/destination.model";
-import { ServiceItemCallback } from "../../service/ddbServiceItems.service";
+import { ServiceItemCallback } from "../../service/dynamodb-services/ddbServiceItems.service";
 
 @Component({
   selector: 'app-service-item-label',

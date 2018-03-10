@@ -21,19 +21,18 @@ export class AuthGuardService implements CanActivate {
       const promise = this.userLoginService.isAuthenticatedPromise()
         .then(
           (authenticated: boolean) => {
-            if(authenticated) {
+            if (authenticated) {
               return true;
-            }
-            else {
-              this.router.navigate(['/login'])
+            } else {
+              this.router.navigate(['/login']);
             }
           }
 
         );
 
         promise.catch((err) => {
-            this.router.navigate(['/login'])
-            return false
+            this.router.navigate(['/login']);
+            return false;
         });
 
         return promise;

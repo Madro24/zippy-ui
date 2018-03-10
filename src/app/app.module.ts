@@ -11,8 +11,8 @@ import {UserParametersService} from './service/user-parameters.service';
 import {UserLoginService} from './service/user-login.service';
 import {CognitoUtil} from './service/cognito.service';
 import {AwsUtil} from './service/aws.service';
-import {DynamoDBService} from './service/ddb.service';
-import {ServiceItemDDBService} from './service/ddbServiceItems.service';
+import {DynamoDBService} from './service/dynamodb-services/ddb.service';
+import {ServiceItemDDBService} from './service/dynamodb-services/ddbServiceItems.service';
 import {DataMapService} from './service/data-map.service';
 import {AuthGuardService} from './service/auth-guard.service';
 

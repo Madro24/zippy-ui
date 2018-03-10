@@ -4,16 +4,18 @@ import {ServiceItem} from '../../shared/model/service-item.model';
 import {Destination} from '../../shared/model/destination.model';
 import {DataMapService} from '../../service/data-map.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {ServiceItemCallback} from '../../service/ddbServiceItems.service';
 import {CommonUtilService} from '../../service/common-util.service';
 import { NgForm } from '@angular/forms';
+import {AvailTimeLog} from '../../shared/model/available-time-log.model';
+import {ScheduledItemLog} from '../../shared/model/scheduled-items.model';
+import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
 const defaultServType = 'EXPRESS';
 const defaultPayBy = 'REMITENTE';
 const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-const defaultTime = { hour: now.getHours(), minute: 0 };
+const defaultTime = '1';
 const distanceFare = 8.90;
 const timeFare = 2.25;
 @Component({
@@ -21,10 +23,9 @@ const timeFare = 2.25;
   templateUrl: './senderform.component.html',
   styleUrls: ['./senderform.component.css']
 })
-export class SenderformComponent implements OnInit, ServiceItemCallback {
+export class SenderformComponent implements OnInit, IDDBcallback {
   @ViewChild('itemRegForm') itemRegForm: NgForm;
-  public serviceItem: ServiceItem;
-  public destinationArray: Array<Destination>;
+  serviceItem: ServiceItem;
 
   private itemId: string;
   isEditAction = false;
@@ -43,7 +44,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   ngOnInit() {
     this.itemId = this.actRoute.snapshot.params['itemId'];
     if (this.itemId != null) {
-      this.dataMapService.getServiceItemById(this.itemId, <ServiceItemCallback> {
+      this.dataMapService.getServiceItemById(this.itemId, <IDDBcallback> {
         callback: () => {
           this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId === this.itemId);
           console.log('Item ID:' + this.serviceItem.itemId);
@@ -139,8 +140,7 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
         + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.month)
         + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.day);
       const formattedTime =
-        this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.hour)
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectTime.minute);
+        this.commonUtils.twoDigitsFormat(+this.serviceItem.recolectTime);
 
       this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.type.charAt(0) + '1';
     }
@@ -185,6 +185,35 @@ export class SenderformComponent implements OnInit, ServiceItemCallback {
   }
   getTotalCost(value) {
     return (+value * distanceFare).toFixed(2);
+  }
+
+  scheduledLogItem(scheduledTimeLog: AvailTimeLog, item: ServiceItem): AvailTimeLog {
+
+    if (scheduledTimeLog === null) {
+      scheduledTimeLog = new AvailTimeLog();
+      scheduledTimeLog.dateStr = item.recolectDate.year
+        + this.commonUtils.twoDigitsFormat(item.recolectDate.month)
+        + this.commonUtils.twoDigitsFormat(item.recolectDate.day);
+
+    }
+
+    if (scheduledTimeLog.busyHours === null) {
+      scheduledTimeLog.busyHours = new Array<ScheduledItemLog>();
+    }
+
+    const timelogIndex = scheduledTimeLog.busyHours.findIndex(x => x.id === item.recolectTime);
+
+    if (timelogIndex !== -1) {
+      const timeLog = new ScheduledItemLog();
+      timeLog.id = item.recolectTime;
+      timeLog.items = new Array<string>();
+      timeLog.items.push(item.itemId);
+      scheduledTimeLog.busyHours.push(timeLog);
+    } else {
+      scheduledTimeLog.busyHours[timelogIndex].items.push(item.itemId);
+    }
+
+    return scheduledTimeLog;
   }
 
 }

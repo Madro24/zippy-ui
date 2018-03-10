@@ -1,5 +1,4 @@
 export class ScheduledItemLog {
-    hourStr: string;
+    id: string;
     items: Array<string>;
-
 }

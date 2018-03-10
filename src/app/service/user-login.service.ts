@@ -1,6 +1,6 @@
 import {environment} from "../../environments/environment";
 import {Injectable} from "@angular/core";
-import {DynamoDBService} from "./ddb.service";
+import {DynamoDBService} from "./dynamodb-services/ddb.service";
 import {CognitoCallback, CognitoUtil, LoggedInCallback} from "./cognito.service";
 import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
 import * as AWS from "aws-sdk/global";
@@ -135,7 +135,7 @@ export class UserLoginService {
         }
     }
 
-    isAuthenticatedPromise(){
+    isAuthenticatedPromise() {
       return  new Promise<boolean> (
         (resolve, reject) => {
           let cognitoUser = this.cognitoUtil.getCurrentUser();

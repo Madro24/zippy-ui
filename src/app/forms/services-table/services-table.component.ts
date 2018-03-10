@@ -2,7 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {DataMapService} from '../../service/data-map.service';
 import {ServiceItem} from '../../shared/model/service-item.model';
 import {ServiceStatusEnum} from '../../shared/enum/global-enums';
-import {ServiceItemCallback} from '../../service/ddbServiceItems.service';
+import {ServiceItemCallback} from '../../service/dynamodb-services/ddbServiceItems.service';
 import {CommonUtilService} from '../../service/common-util.service';
 
 @Component({

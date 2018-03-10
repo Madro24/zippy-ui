@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ServiceItemDDBService, ServiceItemCallback } from '../service/ddbServiceItems.service';
+import { ServiceItemDDBService } from './dynamodb-services/ddbServiceItems.service';
 import { ServiceItem } from '../shared/model/service-item.model';
 import { Observable } from 'rxjs/Rx';
+import {IDDBcallback} from './dynamodb-services/iddbcallback';
 
 @Injectable()
 export class DataMapService {
@@ -10,7 +11,7 @@ export class DataMapService {
     this.serviceItemArray = [];
   }
 
-  getItems( callback: ServiceItemCallback): Observable<Array<ServiceItem>>  {
+  getItems( callback: IDDBcallback): Observable<Array<ServiceItem>>  {
     if (this.serviceItemArray.length === 0) {
       this.serviceItemDDB.getActiveItems(this.serviceItemArray,  callback);
     }
@@ -21,7 +22,7 @@ export class DataMapService {
     return this.serviceItemArray[index];
   }
 
-  getServiceItemById (itemId: string, callback: ServiceItemCallback): Observable<ServiceItem> {
+  getServiceItemById (itemId: string, callback: IDDBcallback): Observable<ServiceItem> {
     if (this.serviceItemArray.length === 0) {
       this.serviceItemDDB.getActiveItems(this.serviceItemArray,  callback);
     }
@@ -31,13 +32,13 @@ export class DataMapService {
 
   }
 
-  pushItem(item: ServiceItem, callback: ServiceItemCallback) {
+  pushItem(item: ServiceItem, callback: IDDBcallback) {
     this.serviceItemDDB.writeServiceItem(item, callback);
     this.serviceItemArray.push(item);
     this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
   }
 
-  updateItem(item: ServiceItem, itemId: string, callback: ServiceItemCallback) {
+  updateItem(item: ServiceItem, itemId: string, callback: IDDBcallback) {
     console.log('Update ServiceItem, itemId:' + itemId + '. Item:' + item);
     this.serviceItemDDB.writeServiceItem(item, callback);
 

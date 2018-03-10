@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServiceItemDDBService } from '../service/ddbServiceItems.service';
+import { ServiceItemDDBService } from '../service/dynamodb-services/ddbServiceItems.service';
 
 const now = new Date();
 

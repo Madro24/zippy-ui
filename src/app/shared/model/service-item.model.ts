@@ -18,7 +18,7 @@ export class ServiceItem {
   usedFares: PriceLog;
   totalCost: string;
   recolectDate: NgbDateStruct;
-  recolectTime: TimeModel;
+  recolectTime: String;
   constructor() {
     this.type = ServiceTypeEnum[ServiceTypeEnum.EXPRESS];
     this.sender = new Customer();

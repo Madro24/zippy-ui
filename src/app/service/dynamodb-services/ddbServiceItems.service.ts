@@ -1,15 +1,10 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../environments/environment';
+import {environment} from '../../../environments/environment';
 
-import {ServiceItem} from '../shared/model/service-item.model';
+import {ServiceItem} from '../../shared/model/service-item.model';
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
-
-export interface ServiceItemCallback {
-  callback(): void;
-
-  callbackWithParam(result: any): void;
-}
+import {IDDBcallback} from './iddbcallback';
 
 @Injectable()
 export class ServiceItemDDBService {
@@ -52,7 +47,7 @@ export class ServiceItemDDBService {
     }
   }
 
-  getActiveItems(mapArray: Array<ServiceItem>, callback: ServiceItemCallback) {
+  getActiveItems(mapArray: Array<ServiceItem>, callback: IDDBcallback) {
     console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
     const params = {
       TableName: environment.ddbServiceItemsTable,
@@ -85,7 +80,7 @@ export class ServiceItemDDBService {
     }
   }
 
-  writeServiceItem(item: ServiceItem, callback: ServiceItemCallback) {
+  writeServiceItem(item: ServiceItem, callback: IDDBcallback) {
     try {
       console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
       this.write(item, callback);
@@ -95,7 +90,7 @@ export class ServiceItemDDBService {
 
   }
 
-  write(item: ServiceItem, callback: ServiceItemCallback): void {
+  write(item: ServiceItem, callback: IDDBcallback): void {
     console.log('ServiceItemDDBService: writing ' + item.type + ' entry');
 
     const clientParams: any = {
@@ -140,13 +135,7 @@ export class ServiceItemDDBService {
               'day': {N: item.recolectDate.day.toString()}
             }
         },
-        'recolectTime': {
-          M:
-            {
-              'hour': {S: item.recolectTime.hour.toString()},
-              'minute': {S: item.recolectTime.minute.toString()}
-            }
-        },
+        'recolectTime': { S: item.recolectTime },
         'itemId': {S: item.itemId},
         'originLocation': {S: item.originLocation},
         'payBy': {S: item.payBy},

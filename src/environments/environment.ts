@@ -12,11 +12,12 @@ export const environment = {
       clientId: '696j7pu1ulhtqgu7nf91ea262c',
 
       rekognitionBucket: '',
-      albumName: "usercontent",
+      albumName: 'usercontent',
       bucketRegion: 'us-east-1',
 
       ddbLoginTrailTable: 'LoginTrail',
       ddbServiceItemsTable: 'ServiceItems',
+      ddbAvailabilityTable: 'AvailabilityTime',
       cognito_idp_endpoint: '',
       cognito_identity_endpoint: '',
       sts_endpoint: '',

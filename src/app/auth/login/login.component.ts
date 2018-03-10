@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {UserLoginService} from "../../service/user-login.service";
 import {CognitoCallback, LoggedInCallback} from "../../service/cognito.service";
-import {DynamoDBService} from "../../service/ddb.service";
+import {DynamoDBService} from "../../service/dynamodb-services/ddb.service";
 
 @Component({
   selector: 'app-login',
