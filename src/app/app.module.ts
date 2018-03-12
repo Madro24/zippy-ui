@@ -36,6 +36,8 @@ import {AdminHomeComponent} from './admin-home/admin-home.component';
 import {ServiceDetailComponent} from './forms/service-detail/service-detail.component';
 import {ServiceItemLabelComponent} from './forms/service-item-label/service-item-label.component';
 import {CommonUtilService} from './service/common-util.service';
+import {DataAvailabilityMapService} from './service/data-availability-map.service';
+import {AvailableTimeDDBserviceService} from './service/dynamodb-services/available-time-ddbservice.service';
 
 
 const appRoutes: Routes = [
@@ -102,10 +104,12 @@ const appRoutes: Routes = [
     UserLoginService,
     UserParametersService,
     DynamoDBService,
+    AvailableTimeDDBserviceService,
     ServiceItemDDBService,
     DataMapService,
     AuthGuardService,
-    CommonUtilService
+    CommonUtilService,
+    DataAvailabilityMapService
   ],
   bootstrap: [AppComponent]
 })

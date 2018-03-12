@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import {AvailTimeLog} from '../../shared/model/available-time-log.model';
 import {ScheduledItemLog} from '../../shared/model/scheduled-items.model';
 import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
+import {DataAvailabilityMapService, WorkdayHour} from '../../service/data-availability-map.service';
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
@@ -31,11 +32,13 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   isEditAction = false;
   wasSaveClicked = false;
   enableUrlMapField = false;
-  submitted = false;
+
+  timeAvailArray: Array<WorkdayHour>;
 
   constructor(private router: Router,
               private actRoute: ActivatedRoute,
               private dataMapService: DataMapService,
+              private dataAvailTimeService: DataAvailabilityMapService,
               private commonUtils: CommonUtilService) {
 
     //  this.model = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
@@ -67,7 +70,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       this.newServiceItem();
     }
 
-
+    this.timeAvailArray = this.dataAvailTimeService.getWorkDayArray();
   }
 
   newServiceItem() {

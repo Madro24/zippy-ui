@@ -46,25 +46,9 @@
 
         <fieldset class="form-group">
           <label>Hora de recoleccion</label>
-          <select class="custom-select" [ngModel]="serviceItem.recolectTime" required>
-            <option value="1">8:20</option>
-            <option value="2">8:40</option>
-            <option value="3">9:00</option>
-            <option value="4">9:20</option>
-            <option value="5">9:40</option>
-            <option value="6">10:00</option>
-            <option value="7">10:20</option>
-            <option value="8">10:40</option>
-            <option value="9">11:00</option>
-            <option value="10">11:20</option>
-            <option value="11">11:40</option>
-            <option value="12">12:00</option>
-            <option value="13">12:20</option>
-            <option value="14">12:40</option>
-            <option value="15">13:00</option>
-            <option value="16">13:20</option>
-            <option value="17">13:40</option>
-            <option value="18">14:00</option>
+          <select class="custom-select" [ngModel]="serviceItem.recolectTime" name="recolecTime" required>
+            <option *ngFor="let timeAvailable of timeAvailArray" [value]="timeAvailable.id" [disabled]="!timeAvailable.enabled">{{timeAvailable.hour}}</option>
+
           </select>
         </fieldset>
 

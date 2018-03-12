@@ -3,8 +3,6 @@ import {environment} from '../../../environments/environment';
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {AvailTimeLog} from '../../shared/model/available-time-log.model';
-import {IDDBcallback} from './iddbcallback';
-import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AvailableTimeDDBserviceService {
