@@ -80,4 +80,44 @@ export class AvailableTimeDDBserviceService {
       }
     );
   }
+
+  updateItem(item: AvailTimeLog) {
+    try {
+      console.log('AvailableTimeDDBserviceService: Update item entry. Date:' + item.dateStr);
+      this.update(item);
+    } catch (exc) {
+      console.log('AvailableTimeDDBserviceService: Couldn\'t write to DDB');
+    }
+  }
+
+  update(item: AvailTimeLog): void {
+    console.log('AvailableTimeDDBserviceService: writing ' + item.dateStr + ' entry');
+
+    const clientParams: any = {
+      params: {TableName: environment.ddbAvailabilityTable}
+    };
+    if (environment.dynamodb_endpoint) {
+      clientParams.endpoint = environment.dynamodb_endpoint;
+    }
+
+    const DB = new DynamoDB.DocumentClient(clientParams)
+    // Write the item to the table
+    const itemParams = {
+      TableName: environment.ddbAvailabilityTable,
+      Key: { dateStr: item.dateStr },
+      ReturnValues: 'ALL_NEW',
+      UpdateExpression: 'set #busyHours = :bshrs',
+      ExpressionAttributeNames: {
+        '#busyHours': 'busyHours'
+      },
+      ExpressionAttributeValues: {
+        ':bshrs': item.busyHours,
+      }
+    };
+
+
+    DB.update(itemParams);
+  }
+
+
 }

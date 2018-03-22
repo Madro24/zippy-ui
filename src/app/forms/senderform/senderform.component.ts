@@ -16,7 +16,7 @@ const defaultItemStatus = 'ACTIVO';
 const defaultServType = 'EXPRESS';
 const defaultPayBy = 'REMITENTE';
 const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-const defaultTime = '1';
+const defaultTime = '0';
 const distanceFare = 8.90;
 const timeFare = 2.25;
 @Component({
@@ -70,7 +70,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       this.newServiceItem();
     }
 
-    this.timeAvailArray = this.dataAvailTimeService.getWorkDayArray();
+    this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(defaultDay);
   }
 
   newServiceItem() {
@@ -159,7 +159,17 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     } else {
       this.dataMapService.pushItem(this.serviceItem, this);
-      this.dataAvailTimeService.addAvailTimeLog(new AvailTimeLog(formattedDate, this.serviceItem.recolectTime, this.serviceItem.itemId));
+
+      // Add AvailTimeLog
+      const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
+      const schedLogItem = this.scheduledLogItem(availTimeLog,this.serviceItem);
+
+      if (availTimeLog === null) {
+        this.dataAvailTimeService.addAvailTimeLog(schedLogItem);
+      } else {
+          this.dataAvailTimeService.updateAvailTimeLog(schedLogItem);
+      }
+
     }
 
     this.itemRegForm.reset();
@@ -202,13 +212,13 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
     }
 
-    if (scheduledTimeLog.busyHours === null) {
+    if (!scheduledTimeLog.busyHours || scheduledTimeLog.busyHours === null) {
       scheduledTimeLog.busyHours = new Array<ScheduledItemLog>();
     }
 
     const timelogIndex = scheduledTimeLog.busyHours.findIndex(x => x.id === item.recolectTime);
 
-    if (timelogIndex !== -1) {
+    if (timelogIndex === -1) {
       const timeLog = new ScheduledItemLog();
       timeLog.id = item.recolectTime;
       timeLog.items = new Array<string>();
@@ -221,4 +231,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     return scheduledTimeLog;
   }
 
+  changeDatePicker() {
+    this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.itemRegForm.value.dp);
+  }
 }
