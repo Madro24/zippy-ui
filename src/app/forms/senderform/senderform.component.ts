@@ -137,11 +137,12 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     this.wasSaveClicked = true;
 
     this.mapFormToObj();
+    const formattedDate =
+      this.serviceItem.recolectDate.year
+      + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.month)
+      + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.day);
     if (!this.isEditAction) {
-      const formattedDate =
-        this.serviceItem.recolectDate.year
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.month)
-        + this.commonUtils.twoDigitsFormat(this.serviceItem.recolectDate.day);
+
       const formattedTime =
         this.commonUtils.twoDigitsFormat(+this.serviceItem.recolectTime);
 
@@ -158,6 +159,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     } else {
       this.dataMapService.pushItem(this.serviceItem, this);
+      this.dataAvailTimeService.addAvailTimeLog(new AvailTimeLog(formattedDate, this.serviceItem.recolectTime, this.serviceItem.itemId));
     }
 
     this.itemRegForm.reset();

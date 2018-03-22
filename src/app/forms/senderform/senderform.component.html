@@ -46,7 +46,7 @@
 
         <fieldset class="form-group">
           <label>Hora de recoleccion</label>
-          <select class="custom-select" [ngModel]="serviceItem.recolectTime" name="recolecTime" required>
+          <select class="custom-select" [ngModel]="serviceItem.recolectTime" name="serviceTime" required>
             <option *ngFor="let timeAvailable of timeAvailArray" [value]="timeAvailable.id" [disabled]="!timeAvailable.enabled">{{timeAvailable.hour}}</option>
 
           </select>

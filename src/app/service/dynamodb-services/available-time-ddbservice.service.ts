@@ -3,6 +3,8 @@ import {environment} from '../../../environments/environment';
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {AvailTimeLog} from '../../shared/model/available-time-log.model';
+import {IDDBcallback} from './iddbcallback';
+import {ServiceItem} from '../../shared/model/service-item.model';
 
 @Injectable()
 export class AvailableTimeDDBserviceService {
@@ -33,5 +35,49 @@ export class AvailableTimeDDBserviceService {
         });
       }
     }
+  }
+
+  writeItem(item: AvailTimeLog) {
+    try {
+      console.log('AvailableTimeDDBserviceService: Adding new item entry. Date:' + item.dateStr);
+      this.write(item);
+    } catch (exc) {
+      console.log('AvailableTimeDDBserviceService: Couldn\'t write to DDB');
+    }
+  }
+
+  write(item: AvailTimeLog): void {
+    console.log('AvailableTimeDDBserviceService: writing ' + item.dateStr + ' entry');
+
+    const clientParams: any = {
+      params: {TableName: environment.ddbAvailabilityTable}
+    };
+    if (environment.dynamodb_endpoint) {
+      clientParams.endpoint = environment.dynamodb_endpoint;
+    }
+    const DDB = new DynamoDB(clientParams);
+
+    // Write the item to the table
+    const itemParams = {
+      TableName: environment.ddbAvailabilityTable,
+      Item: {
+        'dateStr': {S: item.dateStr},
+        'busyHours': {
+          L: [
+            {
+              M: {
+                'id': {N: item.busyHours[0].id},
+                'items': {L: [{S: item.busyHours[0].items[0]}]}
+              }
+            }
+          ]
+        }
+      }
+    };
+    DDB.putItem(itemParams,
+      function (result) {
+        console.log('AvailableTimeDDBserviceService: wrote entry: ' + JSON.stringify(result));
+      }
+    );
   }
 }

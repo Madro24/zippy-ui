@@ -4,6 +4,7 @@ import {AvailTimeLog} from '../shared/model/available-time-log.model';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {CommonUtilService} from './common-util.service';
+import {IDDBcallback} from './dynamodb-services/iddbcallback';
 
 const START_AVAIL_TIME = '08:20';
 const LAST_AVAIL_TIME = '14:00';
@@ -63,8 +64,6 @@ export class DataAvailabilityMapService {
     workdayArray.push(new WorkdayHour(index, time));
   }
 
-
-
   nextWorkday(currentTime: string, increaseBy: number): string {
     const splitTime = currentTime.split(':');
 
@@ -75,6 +74,10 @@ export class DataAvailabilityMapService {
     sumMinutes = sumMinutes % 60;
 
     return this.commonUtils.twoDigitsFormat(sumHour) + ':' + this.commonUtils.twoDigitsFormat(sumMinutes);
+  }
+
+  addAvailTimeLog (item: AvailTimeLog) {
+    this.availabilityDDBService.writeItem(item) ;
   }
 
 }
