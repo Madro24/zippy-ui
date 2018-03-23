@@ -146,23 +146,26 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       const formattedTime =
         this.commonUtils.twoDigitsFormat(+this.serviceItem.recolectTime);
 
-      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.type.charAt(0) + '1';
+      this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.type.charAt(0);
     }
     this.serviceItem.usedFares.distanceFare = distanceFare.toString();
     this.serviceItem.usedFares.timeFare = timeFare.toString();
     this.serviceItem.totalCost = this.getTotalCost(this.serviceItem.destinations[0].distance);
 
     this.setServiceItemToUpperCase(this.serviceItem);
+
+
+    const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
+
+    // setting new AvailTimeLog
+    const schedLogItem = this.scheduledLogItem(availTimeLog, this.serviceItem);
+
     console.log(this.serviceItem);
 
     if (this.isEditAction) {
       this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     } else {
       this.dataMapService.pushItem(this.serviceItem, this);
-
-      // Add AvailTimeLog
-      const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
-      const schedLogItem = this.scheduledLogItem(availTimeLog, this.serviceItem);
 
       if (availTimeLog == null) {
         this.dataAvailTimeService.addAvailTimeLog(schedLogItem);
@@ -217,18 +220,32 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     }
 
     const timelogIndex = scheduledTimeLog.busyHours.findIndex(x => x.id === item.recolectTime);
-
     if (timelogIndex === -1) {
-      const timeLog = new ScheduledItemLog();
-      timeLog.id = item.recolectTime;
-      timeLog.items = new Array<string>();
-      timeLog.items.push(item.itemId);
-      scheduledTimeLog.busyHours.push(timeLog);
+      item.itemId = item.itemId + '1';
     } else {
-      scheduledTimeLog.busyHours[timelogIndex].items.push(item.itemId);
+      item.itemId = item.itemId + '2';
     }
 
+
+    this.appendBusyHourLog(item.itemId, item.recolectTime, scheduledTimeLog.busyHours);
+    const nextTimeLog = +item.recolectTime + 1;
+    this.appendBusyHourLog(item.itemId, nextTimeLog.toString(), scheduledTimeLog.busyHours);
+
     return scheduledTimeLog;
+  }
+
+  appendBusyHourLog(itemId: string, recolectTime: string, busyHoursArray: Array<ScheduledItemLog>): void {
+
+
+    if (busyHoursArray[+recolectTime] == null) {
+      const timeLog = new ScheduledItemLog();
+      timeLog.id = recolectTime;
+      timeLog.items = new Array<string>();
+      timeLog.items.push(itemId);
+      busyHoursArray.push(timeLog);
+    } else {
+      busyHoursArray[+recolectTime].items.push(itemId);
+    }
   }
 
   changeDatePicker() {

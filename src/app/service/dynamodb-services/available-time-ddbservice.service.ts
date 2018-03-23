@@ -57,21 +57,44 @@ export class AvailableTimeDDBserviceService {
     }
     const DDB = new DynamoDB(clientParams);
 
+    //
+    let busyHoursParams;
+    if (item.busyHours.length === 1 ) {
+      busyHoursParams = {
+        L: [
+          {
+            M: {
+              'id': {S: item.busyHours[0].id},
+              'items': {L: [{S: item.busyHours[0].items[0]}]}
+            }
+          }
+        ]
+      };
+    } else if (item.busyHours.length === 2){
+      busyHoursParams = {
+        L: [
+          {
+            M: {
+              'id': {S: item.busyHours[0].id},
+              'items': {L: [{S: item.busyHours[0].items[0]}]}
+            }
+          },
+          {
+            M: {
+              'id': {S: item.busyHours[1].id},
+              'items': {L: [{S: item.busyHours[1].items[0]}]}
+            }
+          }
+        ]
+      };
+    }
+
     // Write the item to the table
     const itemParams = {
       TableName: environment.ddbAvailabilityTable,
       Item: {
         'dateStr': {S: item.dateStr},
-        'busyHours': {
-          L: [
-            {
-              M: {
-                'id': {S: item.busyHours[0].id},
-                'items': {L: [{S: item.busyHours[0].items[0]}]}
-              }
-            }
-          ]
-        }
+        'busyHours': busyHoursParams
       }
     };
     DDB.putItem(itemParams,
