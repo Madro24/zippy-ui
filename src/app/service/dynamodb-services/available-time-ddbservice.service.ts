@@ -66,7 +66,7 @@ export class AvailableTimeDDBserviceService {
           L: [
             {
               M: {
-                'id': {N: item.busyHours[0].id},
+                'id': {S: item.busyHours[0].id},
                 'items': {L: [{S: item.busyHours[0].items[0]}]}
               }
             }
@@ -100,7 +100,7 @@ export class AvailableTimeDDBserviceService {
       clientParams.endpoint = environment.dynamodb_endpoint;
     }
 
-    const DB = new DynamoDB.DocumentClient(clientParams)
+    const DB = new DynamoDB.DocumentClient(clientParams);
     // Write the item to the table
     const itemParams = {
       TableName: environment.ddbAvailabilityTable,

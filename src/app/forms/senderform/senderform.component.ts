@@ -162,9 +162,9 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
       // Add AvailTimeLog
       const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
-      const schedLogItem = this.scheduledLogItem(availTimeLog,this.serviceItem);
+      const schedLogItem = this.scheduledLogItem(availTimeLog, this.serviceItem);
 
-      if (availTimeLog === null) {
+      if (availTimeLog == null) {
         this.dataAvailTimeService.addAvailTimeLog(schedLogItem);
       } else {
           this.dataAvailTimeService.updateAvailTimeLog(schedLogItem);
@@ -204,7 +204,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
   scheduledLogItem(scheduledTimeLog: AvailTimeLog, item: ServiceItem): AvailTimeLog {
 
-    if (scheduledTimeLog === null) {
+    if (scheduledTimeLog == null) {
       scheduledTimeLog = new AvailTimeLog();
       scheduledTimeLog.dateStr = item.recolectDate.year
         + this.commonUtils.twoDigitsFormat(item.recolectDate.month)
@@ -212,7 +212,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
     }
 
-    if (!scheduledTimeLog.busyHours || scheduledTimeLog.busyHours === null) {
+    if (scheduledTimeLog.busyHours == null) {
       scheduledTimeLog.busyHours = new Array<ScheduledItemLog>();
     }
 

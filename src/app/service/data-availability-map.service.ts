@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { CommonUtilService } from './common-util.service';
 import { IDDBcallback } from './dynamodb-services/iddbcallback';
+import {ServiceItem} from '../shared/model/service-item.model';
 
 const START_AVAIL_TIME = '08:20';
 const LAST_AVAIL_TIME = '14:00';
@@ -45,10 +46,13 @@ export class DataAvailabilityMapService {
 
   addAvailTimeLog(item: AvailTimeLog) {
     this.availabilityDDBService.writeItem(item);
+    this.mapArray.push(item);
   }
 
   updateAvailTimeLog(item: AvailTimeLog) {
     this.availabilityDDBService.updateItem(item);
+    const index = this.mapArray.findIndex(x => x.dateStr === item.dateStr);
+    this.mapArray[index] = item;
   }
 
   getByDate(dateInput: {year, month, day}): AvailTimeLog {
@@ -91,9 +95,9 @@ export class DataAvailabilityMapService {
     const timeLogFound = this.mapArray.find(x => x.dateStr === dateIn);
 
     if (timeLogFound != null) {
-      for (let schedLog of timeLogFound.busyHours) {
-        if (schedLog.items.length > 1) {
-          const indexWorkDay = this.workdayArray.findIndex(x => x.id === +schedLog.id);
+      for (const log of timeLogFound.busyHours) {
+        if (log.items.length > 1) {
+          const indexWorkDay = this.workdayArray.findIndex(x => x.id === +log.id);
           this.workdayArray[indexWorkDay].enabled = false;
         }
       }
