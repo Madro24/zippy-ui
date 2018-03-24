@@ -12,6 +12,7 @@ export const environment = {
 
   ddbLoginTrailTable: 'LoginTrail',
   ddbServiceItemsTable: 'ServiceItems',
+  ddbAvailabilityTable: 'AvailabilityTime',
   cognito_idp_endpoint: '',
   cognito_identity_endpoint: '',
   sts_endpoint: '',

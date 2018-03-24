@@ -135,7 +135,8 @@ export class ServiceItemDDBService {
               'day': {N: item.recolectDate.day.toString()}
             }
         },
-        'recolectTime': { S: item.recolectTime },
+        'recolectTimeIndex': { S: item.recolectTimeIndex },
+        'recolectTimeHour': { S: item.recolectTimeHour },
         'itemId': {S: item.itemId},
         'originLocation': {S: item.originLocation},
         'payBy': {S: item.payBy},

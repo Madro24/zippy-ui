@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
-import {AvailTimeLog} from '../../shared/model/available-time-log.model';
-import {IDDBcallback} from './iddbcallback';
-import {ServiceItem} from '../../shared/model/service-item.model';
+import { AvailTimeLog } from '../../shared/model/available-time-log.model';
+import { IDDBcallback } from './iddbcallback';
+import { ServiceItem } from '../../shared/model/service-item.model';
 
 @Injectable()
 export class AvailableTimeDDBserviceService {
@@ -30,7 +30,7 @@ export class AvailableTimeDDBserviceService {
       } else {
         // print all the movies
         console.log('AvailableTimeDDBserviceService: Query succeeded.');
-        data.Items.forEach(function (logitem) {
+        data.Items.forEach(function(logitem) {
           mapArray.push(logitem);
         });
       }
@@ -50,7 +50,7 @@ export class AvailableTimeDDBserviceService {
     console.log('AvailableTimeDDBserviceService: writing ' + item.dateStr + ' entry');
 
     const clientParams: any = {
-      params: {TableName: environment.ddbAvailabilityTable}
+      params: { TableName: environment.ddbAvailabilityTable }
     };
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
@@ -59,30 +59,30 @@ export class AvailableTimeDDBserviceService {
 
     //
     let busyHoursParams;
-    if (item.busyHours.length === 1 ) {
+    if (item.busyHours.length === 1) {
       busyHoursParams = {
         L: [
           {
             M: {
-              'id': {S: item.busyHours[0].id},
-              'items': {L: [{S: item.busyHours[0].items[0]}]}
+              'id': { S: item.busyHours[0].id },
+              'items': { L: [{ S: item.busyHours[0].items[0] }] }
             }
           }
         ]
       };
-    } else if (item.busyHours.length === 2){
+    } else if (item.busyHours.length === 2) {
       busyHoursParams = {
         L: [
           {
             M: {
-              'id': {S: item.busyHours[0].id},
-              'items': {L: [{S: item.busyHours[0].items[0]}]}
+              'id': { S: item.busyHours[0].id },
+              'items': { L: [{ S: item.busyHours[0].items[0] }] }
             }
           },
           {
             M: {
-              'id': {S: item.busyHours[1].id},
-              'items': {L: [{S: item.busyHours[1].items[0]}]}
+              'id': { S: item.busyHours[1].id },
+              'items': { L: [{ S: item.busyHours[1].items[0] }] }
             }
           }
         ]
@@ -93,12 +93,12 @@ export class AvailableTimeDDBserviceService {
     const itemParams = {
       TableName: environment.ddbAvailabilityTable,
       Item: {
-        'dateStr': {S: item.dateStr},
+        'dateStr': { S: item.dateStr },
         'busyHours': busyHoursParams
       }
     };
     DDB.putItem(itemParams,
-      function (result) {
+      function(result) {
         console.log('AvailableTimeDDBserviceService: wrote entry: ' + JSON.stringify(result));
       }
     );
@@ -117,7 +117,7 @@ export class AvailableTimeDDBserviceService {
     console.log('AvailableTimeDDBserviceService: writing ' + item.dateStr + ' entry');
 
     const clientParams: any = {
-      params: {TableName: environment.ddbAvailabilityTable}
+      params: { TableName: environment.ddbAvailabilityTable }
     };
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
@@ -139,7 +139,10 @@ export class AvailableTimeDDBserviceService {
     };
 
 
-    DB.update(itemParams);
+    DB.update(itemParams, function(err, data) {
+      if (err) console.log(err);
+      else console.log(data);
+    });
   }
 
 

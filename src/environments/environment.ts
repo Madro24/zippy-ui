@@ -7,17 +7,17 @@ export const environment = {
   production: false,
 
       region: 'us-east-1',
-      identityPoolId: 'us-east-1:4073d698-150a-48ee-ab78-fc4d79b65901',
-      userPoolId: 'us-east-1_oX7QuKhqM',
-      clientId: '696j7pu1ulhtqgu7nf91ea262c',
+      identityPoolId: 'us-east-1:3c5216c1-61fa-4668-9116-ae146c56f8b9',
+      userPoolId: 'us-east-1_16B1Hezj7',
+      clientId: '645icno4kan2aquv5gv7bvmgiu',
 
       rekognitionBucket: '',
       albumName: 'usercontent',
       bucketRegion: 'us-east-1',
 
-      ddbLoginTrailTable: 'LoginTrail',
-      ddbServiceItemsTable: 'ServiceItems',
-      ddbAvailabilityTable: 'AvailabilityTime',
+      ddbLoginTrailTable: 'DLoginTrail',
+      ddbServiceItemsTable: 'DServiceItems',
+      ddbAvailabilityTable: 'DAvailabilityTime',
       cognito_idp_endpoint: '',
       cognito_identity_endpoint: '',
       sts_endpoint: '',

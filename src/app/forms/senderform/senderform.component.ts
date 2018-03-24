@@ -1,28 +1,30 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ServiceTypeEnum, ServiceStatusEnum, PayByEnum} from '../../shared/enum/global-enums';
-import {ServiceItem} from '../../shared/model/service-item.model';
-import {Destination} from '../../shared/model/destination.model';
-import {DataMapService} from '../../service/data-map.service';
-import {Router, ActivatedRoute} from '@angular/router';
-import {CommonUtilService} from '../../service/common-util.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ServiceTypeEnum, ServiceStatusEnum, PayByEnum } from '../../shared/enum/global-enums';
+import { ServiceItem } from '../../shared/model/service-item.model';
+import { Destination } from '../../shared/model/destination.model';
+import { DataMapService } from '../../service/data-map.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CommonUtilService } from '../../service/common-util.service';
 import { NgForm } from '@angular/forms';
-import {AvailTimeLog} from '../../shared/model/available-time-log.model';
-import {ScheduledItemLog} from '../../shared/model/scheduled-items.model';
-import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
-import {DataAvailabilityMapService, WorkdayHour} from '../../service/data-availability-map.service';
+import { AvailTimeLog } from '../../shared/model/available-time-log.model';
+import { ScheduledItemLog } from '../../shared/model/scheduled-items.model';
+import { IDDBcallback } from '../../service/dynamodb-services/iddbcallback';
+import { DataAvailabilityMapService, WorkdayHour } from '../../service/data-availability-map.service';
+import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
 const defaultServType = 'EXPRESS';
 const defaultPayBy = 'REMITENTE';
-const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
+const defaultDay = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 const defaultTime = '0';
 const distanceFare = 8.90;
 const timeFare = 2.25;
 @Component({
   selector: 'app-senderform',
   templateUrl: './senderform.component.html',
-  styleUrls: ['./senderform.component.css']
+  styleUrls: ['./senderform.component.css'],
+  providers: [NgbDatepickerConfig] // add NgbDatepickerConfig to the component providers
 })
 export class SenderformComponent implements OnInit, IDDBcallback {
   @ViewChild('itemRegForm') itemRegForm: NgForm;
@@ -36,18 +38,30 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   timeAvailArray: Array<WorkdayHour>;
 
   constructor(private router: Router,
-              private actRoute: ActivatedRoute,
-              private dataMapService: DataMapService,
-              private dataAvailTimeService: DataAvailabilityMapService,
-              private commonUtils: CommonUtilService) {
+    private actRoute: ActivatedRoute,
+    private dataMapService: DataMapService,
+    private dataAvailTimeService: DataAvailabilityMapService,
+    private commonUtils: CommonUtilService,
+    private config: NgbDatepickerConfig) {
 
-    //  this.model = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
+    // customize default values of datepickers used by this component tree
+    config.minDate = defaultDay;
+    config.maxDate = { year: 2020, month: 12, day: 31 };
+
+    // days that don't belong to current month are not visible
+    config.outsideDays = 'hidden';
+
+    // weekends are disabled
+    config.markDisabled = (date: NgbDateStruct) => {
+      const d = new Date(date.year, date.month - 1, date.day);
+      return d.getDay() === 0 || d.getDay() === 6;
+    };
   }
 
   ngOnInit() {
     this.itemId = this.actRoute.snapshot.params['itemId'];
     if (this.itemId != null) {
-      this.dataMapService.getServiceItemById(this.itemId, <IDDBcallback> {
+      this.dataMapService.getServiceItemById(this.itemId, <IDDBcallback>{
         callback: () => {
           this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId === this.itemId);
           console.log('Item ID:' + this.serviceItem.itemId);
@@ -56,28 +70,30 @@ export class SenderformComponent implements OnInit, IDDBcallback {
         }
       })
         .subscribe(
-          item => this.serviceItem = item,
-          error => {
-            console.log('Error getting service items array. ' + error);
-            this.router.navigate(['/admin-home']);
-          }
+        item => this.serviceItem = item,
+        error => {
+          console.log('Error getting service items array. ' + error);
+          this.router.navigate(['/admin-home']);
+        }
         );
       console.log('this.serviceItem:' + this.serviceItem.itemId);
       this.isEditAction = true;
+      this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.serviceItem.recolectDate);
     } else {
       this.enableUrlMapField = false;
       this.isEditAction = false;
       this.newServiceItem();
+      this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(defaultDay);
     }
 
-    this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(defaultDay);
+
   }
 
   newServiceItem() {
     this.serviceItem = new ServiceItem();
     this.serviceItem.date = now.toISOString();
     this.serviceItem.recolectDate = defaultDay;
-    this.serviceItem.recolectTime = defaultTime;
+    this.serviceItem.recolectTimeIndex = defaultTime;
     this.serviceItem.itemStatus = defaultItemStatus;
     this.serviceItem.payBy = defaultPayBy;
 
@@ -129,7 +145,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   getSearchMapURI(location: string): string {
-    return encodeURI('https://www.google.com/maps/search/' +  location);
+    return encodeURI('https://www.google.com/maps/search/' + location);
   }
 
   onSubmit() {
@@ -144,7 +160,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     if (!this.isEditAction) {
 
       const formattedTime =
-        this.commonUtils.twoDigitsFormat(+this.serviceItem.recolectTime);
+        this.commonUtils.twoDigitsFormat(+this.serviceItem.recolectTimeIndex);
 
       this.serviceItem.itemId = formattedDate + formattedTime + this.serviceItem.type.charAt(0);
     }
@@ -158,7 +174,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
 
     // setting new AvailTimeLog
-    const schedLogItem = this.scheduledLogItem(availTimeLog, this.serviceItem);
+    const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
 
     console.log(this.serviceItem);
 
@@ -170,7 +186,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       if (availTimeLog == null) {
         this.dataAvailTimeService.addAvailTimeLog(schedLogItem);
       } else {
-          this.dataAvailTimeService.updateAvailTimeLog(schedLogItem);
+        this.dataAvailTimeService.updateAvailTimeLog(schedLogItem);
       }
 
     }
@@ -180,14 +196,15 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   mapFormToObj() {
-    if ( this.itemRegForm.value.itemStatus != null) {
+    if (this.itemRegForm.value.itemStatus != null) {
       this.serviceItem.itemStatus = this.itemRegForm.value.itemStatus;
     } else {
       this.serviceItem.itemStatus = defaultItemStatus;
     }
     this.serviceItem.type = this.itemRegForm.value.itemType;
     this.serviceItem.recolectDate = this.itemRegForm.value.dp;
-    this.serviceItem.recolectTime = this.itemRegForm.value.serviceTime;
+    this.serviceItem.recolectTimeIndex = this.itemRegForm.value.serviceTime;
+    this.serviceItem.recolectTimeHour = this.dataAvailTimeService.getWorkDayTimeById(+this.serviceItem.recolectTimeIndex);
     this.serviceItem.sender.name = this.itemRegForm.value.senderName;
     this.serviceItem.sender.phone = this.itemRegForm.value.senderPhone;
     this.serviceItem.originLocation = this.itemRegForm.value.originLocation;
@@ -205,50 +222,9 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     return (+value * distanceFare).toFixed(2);
   }
 
-  scheduledLogItem(scheduledTimeLog: AvailTimeLog, item: ServiceItem): AvailTimeLog {
-
-    if (scheduledTimeLog == null) {
-      scheduledTimeLog = new AvailTimeLog();
-      scheduledTimeLog.dateStr = item.recolectDate.year
-        + this.commonUtils.twoDigitsFormat(item.recolectDate.month)
-        + this.commonUtils.twoDigitsFormat(item.recolectDate.day);
-
+  changeDatePicker(dateSelected: any) {
+    if (dateSelected != null) {
+      this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(dateSelected);
     }
-
-    if (scheduledTimeLog.busyHours == null) {
-      scheduledTimeLog.busyHours = new Array<ScheduledItemLog>();
-    }
-
-    const timelogIndex = scheduledTimeLog.busyHours.findIndex(x => x.id === item.recolectTime);
-    if (timelogIndex === -1) {
-      item.itemId = item.itemId + '1';
-    } else {
-      item.itemId = item.itemId + '2';
-    }
-
-
-    this.appendBusyHourLog(item.itemId, item.recolectTime, scheduledTimeLog.busyHours);
-    const nextTimeLog = +item.recolectTime + 1;
-    this.appendBusyHourLog(item.itemId, nextTimeLog.toString(), scheduledTimeLog.busyHours);
-
-    return scheduledTimeLog;
-  }
-
-  appendBusyHourLog(itemId: string, recolectTime: string, busyHoursArray: Array<ScheduledItemLog>): void {
-
-
-    if (busyHoursArray[+recolectTime] == null) {
-      const timeLog = new ScheduledItemLog();
-      timeLog.id = recolectTime;
-      timeLog.items = new Array<string>();
-      timeLog.items.push(itemId);
-      busyHoursArray.push(timeLog);
-    } else {
-      busyHoursArray[+recolectTime].items.push(itemId);
-    }
-  }
-
-  changeDatePicker() {
-    this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.itemRegForm.value.dp);
   }
 }
