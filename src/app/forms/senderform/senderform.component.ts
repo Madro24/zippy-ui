@@ -17,7 +17,7 @@ const defaultItemStatus = 'ACTIVO';
 const defaultServType = 'EXPRESS';
 const defaultPayBy = 'REMITENTE';
 const defaultDay = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-const defaultTime = '0';
+const defaultTime = '';
 const distanceFare = 8.90;
 const timeFare = 2.25;
 @Component({
@@ -119,7 +119,13 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
   callback() {
     this.wasSaveClicked = false;
-    this.router.navigate(['/serviceItemList']);
+
+    if (this.isEditAction) {
+      this.serviceToForm();
+
+    } else {
+      this.router.navigate(['/serviceItemList']);
+    }
   }
 
   callbackWithParam(result: any) {
@@ -128,6 +134,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   setServiceItemToUpperCase(item: ServiceItem) {
     item.sender.name = item.sender.name.toUpperCase();
     item.originLocation = item.originLocation.toUpperCase();
+    item.destinations[0].receiver.name = item.destinations[0].receiver.name.toUpperCase();
     item.destinations[0].location = item.destinations[0].location.toUpperCase();
     item.destinations[0].packageContent = item.destinations[0].packageContent.toUpperCase();
     item.destinations[0].message = item.destinations[0].message.toUpperCase();
@@ -173,14 +180,15 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
     const availTimeLog = this.dataAvailTimeService.getByDate(this.serviceItem.recolectDate);
 
-    // setting new AvailTimeLog
-    const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
 
     console.log(this.serviceItem);
 
     if (this.isEditAction) {
       this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
     } else {
+      // setting new AvailTimeLog
+      const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
+
       this.dataMapService.pushItem(this.serviceItem, this);
 
       if (availTimeLog == null) {
@@ -218,6 +226,28 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     this.serviceItem.destinations[0].instructions = this.itemRegForm.value.destInst;
     this.serviceItem.destinations[0].distance = this.itemRegForm.value.destDistance;
   }
+
+  serviceToForm() {
+    this.itemRegForm.setValue( {
+      itemStatus : this.serviceItem.itemStatus,
+      itemType : this.serviceItem.type,
+      dp : this.serviceItem.recolectDate,
+      serviceTime : this.serviceItem.recolectTimeIndex,
+      senderName : this.serviceItem.sender.name,
+      senderPhone : this.serviceItem.sender.phone,
+      originLocation : this.serviceItem.originLocation,
+      payBy : this.serviceItem.payBy,
+
+      destLocation : this.serviceItem.destinations[0].location,
+      destUrlMap : this.serviceItem.destinations[0].urlMap,
+      destRecName : this.serviceItem.destinations[0].receiver.name,
+      destPkgContent : this.serviceItem.destinations[0].packageContent,
+      destMsg : this.serviceItem.destinations[0].message,
+      destInst : this.serviceItem.destinations[0].instructions,
+      destDistance : this.serviceItem.destinations[0].distance
+  });
+  }
+
   getTotalCost(value) {
     return (+value * distanceFare).toFixed(2);
   }
@@ -225,6 +255,14 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   changeDatePicker(dateSelected: any) {
     if (dateSelected != null) {
       this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(dateSelected);
+      this.itemRegForm.form.patchValue({
+        serviceTime: defaultTime
+      });
     }
+  }
+
+  closeDetails() {
+    this.itemRegForm.reset();
+    this.router.navigate(['/serviceItemList']);
   }
 }

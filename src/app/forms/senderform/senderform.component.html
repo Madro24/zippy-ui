@@ -1,11 +1,7 @@
 <h3 *ngIf="!isEditAction">Solicitud de Servicio</h3>
 <h3 *ngIf="isEditAction"> Folio : {{serviceItem.itemId}}</h3>
 
-<button *ngIf="isEditAction && !itemRegForm.touched" type="button" class="btn btn-info" (click)="printLabel()">
-  Imprimir Etiqueta
-  <i class="fa fa-tags"></i>
-</button>
-<div class="alert alert-warning" role="alert" *ngIf="isEditAction && itemRegForm.touched">
+<div class="alert alert-warning" role="alert" *ngIf="isEditAction && itemRegForm.dirty">
   ** Se realizaron cambios, guardalos para poder ver la etiqueta
 </div>
 <hr/>
@@ -19,7 +15,7 @@
 
         <fieldset *ngIf="isEditAction" class="form-group">
           <label>Estatus</label>
-          <select class="form-control" name="itemStatus"  [ngModel]="serviceItem.itemStatus">
+          <select class="form-control" name="itemStatus" [ngModel]="serviceItem.itemStatus">
             <option *ngFor="let itemStatus of getServiceStatus()" [value]="itemStatus">{{itemStatus}}</option>
           </select>
         </fieldset>
@@ -35,8 +31,7 @@
           <label>Dia de recoleccion</label>
           <div class="form-group">
             <div class="input-group datepicker-input">
-              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [ngModel]="serviceItem.recolectDate" (ngModelChange)="changeDatePicker($event)"
-                     required>
+              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [ngModel]="serviceItem.recolectDate" (ngModelChange)="changeDatePicker($event)" required>
               <button class="input-group-addon" (click)="d.toggle()" type="button">
                 <i class="fa fa-calendar"></i>
               </button>
@@ -47,6 +42,7 @@
         <fieldset class="form-group">
           <label>Hora de recoleccion</label>
           <select class="custom-select" [ngModel]="serviceItem.recolectTimeIndex" name="serviceTime" required>
+            <option disabled selected value> -- selecciona horario -- </option>
             <option *ngFor="let timeAvailable of timeAvailArray" [value]="timeAvailable.id" [disabled]="!timeAvailable.enabled">{{timeAvailable.hour}}</option>
 
           </select>
@@ -91,7 +87,7 @@
         <!--Multiple Destination-->
         <!--<app-delivery-service-form *ngFor="let destination of serviceItem.destinations"-->
         <!--[destinationItem]="destination"></app-delivery-service-form>-->
-        <div class="d-block d-sm-block d-md-none" >
+        <div class="d-block d-sm-block d-md-none">
           <hr/>
         </div>
 
@@ -129,7 +125,7 @@
 
         <fieldset class="form-group">
           <label>Distancia (Precio por Kilometro: $8.90)</label>
-          <input class="form-control"  name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required>
+          <input class="form-control" name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required>
         </fieldset>
 
         <h2>Costo Total: {{ getTotalCost(this.distance.value) }}</h2>
@@ -137,13 +133,14 @@
     </div>
     <div class="row btnForm">
       <div class="col btnForm">
-        <button class="btn btn-primary" type="submit"
-                *ngIf="!isEditAction || (isEditAction && itemRegForm.touched)"
-                [disabled]="!itemRegForm.valid">Guardar
+        <button class="btn btn-primary" type="submit" *ngIf="!isEditAction || (isEditAction && itemRegForm.dirty)" [disabled]="!itemRegForm.valid">Guardar
           <i class="fa fa-save"></i>
           <i class="fa fa-spinner fa-spin" style="font-size:13px"
                                                                  *ngIf=wasSavedClicked></i></button>
-        <button class="btn btn-primary" [routerLink]="['/serviceItemList']">
+        <button *ngIf="isEditAction && !itemRegForm.dirty" type="button" class="btn btn-info" (click)="printLabel()">
+          Imprimir Etiqueta <i class="fa fa-tags"></i>
+        </button>
+        <button class="btn btn-primary" (click)="closeDetails()">
           Regresar
           <i class="fa fa-arrow-left"></i>
         </button>

@@ -35,3 +35,8 @@ textarea {
 .btnForm > button {
   margin: 10px;
 }
+
+option:checked, option:hover {
+    color: white;
+    background: #488f8f;
+}

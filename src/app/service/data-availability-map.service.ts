@@ -9,7 +9,7 @@ import {ServiceItem} from '../shared/model/service-item.model';
 import {ScheduledItemLog} from '../shared/model/scheduled-items.model';
 
 const START_AVAIL_TIME = '08:20';
-const LAST_AVAIL_TIME = '14:00';
+const LAST_AVAIL_TIME = '17:40';
 const INCR_AVAIL_TIME = 20;
 
 @Injectable()
