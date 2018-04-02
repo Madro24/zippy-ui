@@ -38,6 +38,7 @@ import {ServiceItemLabelComponent} from './forms/service-item-label/service-item
 import {CommonUtilService} from './service/common-util.service';
 import {DataAvailabilityMapService} from './service/data-availability-map.service';
 import {AvailableTimeDDBserviceService} from './service/dynamodb-services/available-time-ddbservice.service';
+import { GmapComponent } from './gmap/gmap.component';
 
 
 const appRoutes: Routes = [
@@ -58,7 +59,9 @@ const appRoutes: Routes = [
   {path: 'jwttokens', component: JwtComponent},
   {path: 'useractivity', component: UseractivityComponent},
   {path: 'securehome', component: SecureHomeComponent},
-  {path: 'service-item-label/:itemId', component: ServiceItemLabelComponent, canActivate: [AuthGuardService]}
+  {path: 'service-item-label/:itemId', component: ServiceItemLabelComponent, canActivate: [AuthGuardService]},
+  {path: 'gmap', component: GmapComponent}
+
 
 
 ];
@@ -86,6 +89,7 @@ const appRoutes: Routes = [
     AdminHomeComponent,
     ServiceDetailComponent,
     ServiceItemLabelComponent,
+    GmapComponent,
   ],
   imports: [
     RouterModule.forRoot(
