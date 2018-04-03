@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {AppComponent} from './app.component';
 import {FormsComponent} from './forms/forms.component';
@@ -38,7 +38,10 @@ import {ServiceItemLabelComponent} from './forms/service-item-label/service-item
 import {CommonUtilService} from './service/common-util.service';
 import {DataAvailabilityMapService} from './service/data-availability-map.service';
 import {AvailableTimeDDBserviceService} from './service/dynamodb-services/available-time-ddbservice.service';
+
 import { GmapComponent } from './gmap/gmap.component';
+import { AgmCoreModule } from '@agm/core';
+
 
 
 const appRoutes: Routes = [
@@ -98,8 +101,13 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    AgmCoreModule.forRoot({
+     apiKey: "AIzaSyDKXuJmCYtjFCpVzgKIugmmlMXHCxhhKjA",
+     libraries: ["places"]
+   })
   ],
   providers: [
     CognitoUtil,
