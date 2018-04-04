@@ -68,4 +68,12 @@ export class GmapComponent implements OnInit {
         });
       }
     }
+
+    mapClicked($event) {
+      console.log($event.coords.lat);
+      console.log($event.coords.lng);
+      this.latitude = $event.coords.lat;
+      this.longitude = $event.coords.lng;
+          this.zoom = 14;
+    }
   }
