@@ -41,6 +41,7 @@ import {AvailableTimeDDBserviceService} from './service/dynamodb-services/availa
 
 import { GmapComponent } from './gmap/gmap.component';
 import { AgmCoreModule } from '@agm/core';
+import {environment} from '../environments/environment';
 
 
 
@@ -105,7 +106,7 @@ const appRoutes: Routes = [
     NgbModule.forRoot(),
     HttpClientModule,
     AgmCoreModule.forRoot({
-     apiKey: "AIzaSyDKXuJmCYtjFCpVzgKIugmmlMXHCxhhKjA",
+     apiKey: environment.googleAPIKey,
      libraries: ["places"]
    })
   ],

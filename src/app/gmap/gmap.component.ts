@@ -19,6 +19,8 @@ export class GmapComponent implements OnInit {
     public zoom: number;
     public markLat: number;
     public markLong: number
+    public geocoder: google.maps.Geocoder;
+    
 
     @ViewChild("search")
     public searchElementRef: ElementRef;
@@ -37,12 +39,14 @@ export class GmapComponent implements OnInit {
       this.markLong = this.longitude;
       //create search FormControl
       this.searchControl = new FormControl();
+      
 
       //set current position
       this.setCurrentPosition();
 
       //load Places Autocomplete
       this.mapsAPILoader.load().then(() => {
+        this.geocoder = new google.maps.Geocoder();
         let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
           bounds: {east:-117.127747,north:32.556383, south:32.321788, west:-116.776543},
           strictBounds: true,
@@ -85,5 +89,25 @@ export class GmapComponent implements OnInit {
       this.markLat = $event.coords.lat;
       this.markLong = $event.coords.lng;
       this.zoom = zoomDefault;
+    }
+
+    // REVERSE GEOCODING TO ADDRESS
+    geocodeLatLng(){
+      this.geocoder = new google.maps.Geocoder();
+      const latlng = {lat: this.markLat, lng: this.markLong};
+      this.geocoder.geocode({'location': latlng}, function(results, status) {
+          console.log('Reverse Geocode:'+ JSON.stringify(results));
+          console.log('Status:'+ JSON.stringify(status));
+          if (status.toString() === 'OK') {
+            if (results[0]) {
+              console.log("Selected address:" + results[0].formatted_address);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+    
+      });
     }
   }

@@ -17,6 +17,7 @@ export const environment = {
   cognito_identity_endpoint: '',
   sts_endpoint: '',
   dynamodb_endpoint: '',
-  s3_endpoint: ''
+  s3_endpoint: '',
+  googleAPIKey: 'AIzaSyAPkDjtK3B0b3xKmVmUZbabR_29Xk5r2a0'
 
 };

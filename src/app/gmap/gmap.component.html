@@ -21,4 +21,7 @@
       <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)" [clickableIcons]="false">
         <agm-marker [latitude]="markLat" [longitude]="markLong" [title]="Origen"></agm-marker>
       </agm-map>
+      <div class="form-group">
+        <button (click)="geocodeLatLng()">Submit</button>
+      </div>
     </div>
