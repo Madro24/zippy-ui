@@ -18,7 +18,7 @@
       <div class="form-group">
         <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
       </div>
-      <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
-        <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+      <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)" [clickableIcons]="false">
+        <agm-marker [latitude]="markLat" [longitude]="markLong" [title]="Origen"></agm-marker>
       </agm-map>
     </div>

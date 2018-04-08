@@ -4,6 +4,9 @@ import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
 
+
+const zoomDefault: number = 21;
+
 @Component({
   selector: 'app-gmap',
   templateUrl: './gmap.component.html',
@@ -14,6 +17,8 @@ export class GmapComponent implements OnInit {
     public longitude: number;
     public searchControl: FormControl;
     public zoom: number;
+    public markLat: number;
+    public markLong: number
 
     @ViewChild("search")
     public searchElementRef: ElementRef;
@@ -25,10 +30,11 @@ export class GmapComponent implements OnInit {
 
     ngOnInit() {
       //set google maps defaults
-      this.zoom = 4;
-      this.latitude = 39.8282;
-      this.longitude = -98.5795;
-
+      this.zoom = zoomDefault;
+      this.latitude = 32.52496990665209;
+      this.longitude = -116.99894662938277;
+      this.markLat = this.latitude;
+      this.markLong = this.longitude;
       //create search FormControl
       this.searchControl = new FormControl();
 
@@ -38,7 +44,9 @@ export class GmapComponent implements OnInit {
       //load Places Autocomplete
       this.mapsAPILoader.load().then(() => {
         let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-          types: ["address"]
+          bounds: {east:-117.127747,north:32.556383, south:32.321788, west:-116.776543},
+          strictBounds: true,
+          componentRestrictions: {country:"mx"}
         });
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
@@ -53,7 +61,9 @@ export class GmapComponent implements OnInit {
             //set latitude, longitude and zoom
             this.latitude = place.geometry.location.lat();
             this.longitude = place.geometry.location.lng();
-            this.zoom = 12;
+            this.markLat = this.latitude;
+            this.markLong = this.longitude;
+            this.zoom = zoomDefault;
           });
         });
       });
@@ -64,7 +74,7 @@ export class GmapComponent implements OnInit {
         navigator.geolocation.getCurrentPosition((position) => {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
-          this.zoom = 12;
+          this.zoom = zoomDefault;
         });
       }
     }
@@ -72,8 +82,8 @@ export class GmapComponent implements OnInit {
     mapClicked($event) {
       console.log($event.coords.lat);
       console.log($event.coords.lng);
-      this.latitude = $event.coords.lat;
-      this.longitude = $event.coords.lng;
-          this.zoom = 14;
+      this.markLat = $event.coords.lat;
+      this.markLong = $event.coords.lng;
+      this.zoom = zoomDefault;
     }
   }
