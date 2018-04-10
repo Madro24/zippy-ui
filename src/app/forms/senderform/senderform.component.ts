@@ -11,6 +11,7 @@ import { ScheduledItemLog } from '../../shared/model/scheduled-items.model';
 import { IDDBcallback } from '../../service/dynamodb-services/iddbcallback';
 import { DataAvailabilityMapService, WorkdayHour } from '../../service/data-availability-map.service';
 import { NgbDatepickerConfig, NgbDateStruct, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { GMapAddress } from '../../gmap/gmap.component'
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
@@ -36,6 +37,8 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   enableUrlMapField = false;
 
   timeAvailArray: Array<WorkdayHour>;
+
+  closeResult: string;
 
   constructor(private router: Router,
     private actRoute: ActivatedRoute,
@@ -267,12 +270,17 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     this.router.navigate(['/serviceItemList']);
   }
 
-  open(content) {
-    this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  gmapAddrSelected(address: GMapAddress) {
+    this.itemRegForm.form.patchValue({
+      originLocation: address
     });
+
+
+
+  }
+
+  open(content) {
+    this.modalService.open(content, { size: 'lg' });
   }
 
   private getDismissReason(reason: any): string {

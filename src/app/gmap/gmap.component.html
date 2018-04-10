@@ -1,27 +1,15 @@
 <p>
   gmap works!
 </p>
-  <!-- <iframe
-    width="600"
-    height="450"
-    frameborder="0" style="border:0"
-    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyDKXuJmCYtjFCpVzgKIugmmlMXHCxhhKjA&origin=Oslo+Norway&destination=Telemark+Norway&avoid=tolls|highways" allowfullscreen>
-  </iframe> -->
-  <!-- <form class="form-inline" #form="ngForm" (ngSubmit)="setCenter($event)" ac>
-    <div class="form-group">
-      <input type="text" class="form-control" name="searchOrigin" [(ngModel)]="searchOrigin" placeholder="Lugar de recoleccion" required>
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Go</button>
-  </form> -->
   <div class="container">
       <h1>Google Maps</h1>
       <div class="form-group">
         <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
       </div>
       <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)" [clickableIcons]="false">
-        <agm-marker [latitude]="markLat" [longitude]="markLong" [title]="Origen"></agm-marker>
+        <agm-marker [latitude]="markerLat" [longitude]="markerLong" [title]="Origen"></agm-marker>
       </agm-map>
       <div class="form-group">
-        <button (click)="geocodeLatLng()">Submit</button>
+        <button (click)="geocodeLatLng()">Aceptar</button>
       </div>
     </div>
