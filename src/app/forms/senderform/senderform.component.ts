@@ -10,7 +10,7 @@ import { AvailTimeLog } from '../../shared/model/available-time-log.model';
 import { ScheduledItemLog } from '../../shared/model/scheduled-items.model';
 import { IDDBcallback } from '../../service/dynamodb-services/iddbcallback';
 import { DataAvailabilityMapService, WorkdayHour } from '../../service/data-availability-map.service';
-import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerConfig, NgbDateStruct, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
@@ -42,7 +42,8 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     private dataMapService: DataMapService,
     private dataAvailTimeService: DataAvailabilityMapService,
     private commonUtils: CommonUtilService,
-    private config: NgbDatepickerConfig) {
+    private config: NgbDatepickerConfig,
+    private modalService: NgbModal) {
 
     // customize default values of datepickers used by this component tree
     config.minDate = defaultDay;
@@ -264,5 +265,23 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   closeDetails() {
     this.itemRegForm.reset();
     this.router.navigate(['/serviceItemList']);
+  }
+
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 }

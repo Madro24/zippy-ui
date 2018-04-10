@@ -60,6 +60,9 @@
         <fieldset class="form-group">
           <label>Origen</label>
           <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required>
+          <button class="btn btn-primary" (click)="open(content)" type="button">
+            <i class="fa fa-location-arrow"></i>
+          </button>
         </fieldset>
 
         <div class="form-group">
@@ -133,14 +136,14 @@
     </div>
     <div class="row btnForm">
       <div class="col btnForm">
-        <button class="btn btn-primary" type="submit" *ngIf="!isEditAction || (isEditAction && itemRegForm.dirty)" [disabled]="!itemRegForm.valid">Guardar
+        <button class="btn btn-primary" type="submit" *ngIf="!isEditAction || (isEditAction && itemRegForm.dirty)" [disabled]="!itemRegForm.valid">
+          Guardar
           <i class="fa fa-save"></i>
-          <i class="fa fa-spinner fa-spin" style="font-size:13px"
-                                                                 *ngIf=wasSavedClicked></i></button>
+          <i class="fa fa-spinner fa-spin" style="font-size:13px" *ngIf=wasSavedClicked></i></button>
         <button *ngIf="isEditAction && !itemRegForm.dirty" type="button" class="btn btn-info" (click)="printLabel()">
           Imprimir Etiqueta <i class="fa fa-tags"></i>
         </button>
-        <button class="btn btn-primary" (click)="closeDetails()">
+        <button class="btn btn-primary" (click)="closeDetails()" type="button">
           Regresar
           <i class="fa fa-arrow-left"></i>
         </button>
@@ -150,3 +153,19 @@
 
 
 </div>
+
+<!-- Modal -->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-gmap></app-gmap>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
