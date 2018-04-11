@@ -10,7 +10,7 @@ import { AvailTimeLog } from '../../shared/model/available-time-log.model';
 import { ScheduledItemLog } from '../../shared/model/scheduled-items.model';
 import { IDDBcallback } from '../../service/dynamodb-services/iddbcallback';
 import { DataAvailabilityMapService, WorkdayHour } from '../../service/data-availability-map.service';
-import { NgbDatepickerConfig, NgbDateStruct, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerConfig, NgbDateStruct, NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { GMapAddress } from '../../gmap/gmap.component'
 
 const now = new Date();
@@ -39,6 +39,8 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   timeAvailArray: Array<WorkdayHour>;
 
   closeResult: string;
+
+  modalRef: NgbModalRef;
 
   constructor(private router: Router,
     private actRoute: ActivatedRoute,
@@ -272,15 +274,13 @@ export class SenderformComponent implements OnInit, IDDBcallback {
 
   gmapAddrSelected(address: GMapAddress) {
     this.itemRegForm.form.patchValue({
-      originLocation: address
-    });
-
-
-
+      originLocation: address.formattedAddr
+    }); 
+    this.modalRef.close();
   }
 
   open(content) {
-    this.modalService.open(content, { size: 'lg' });
+    this.modalRef = this.modalService.open(content, { size: 'lg' });
   }
 
   private getDismissReason(reason: any): string {

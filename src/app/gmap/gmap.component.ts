@@ -3,6 +3,9 @@ import { Component, ElementRef, NgZone, OnInit, ViewChild, EventEmitter, Output,
 import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+
 
 
 const zoomDefault: number = 21;
@@ -11,6 +14,8 @@ export class GMapAddress {
   lat: number;
   lon: number;
   formattedAddr: string;
+
+  constructor() {}
 }
 
 @Component({
@@ -29,7 +34,7 @@ export class GmapComponent implements OnInit {
     public markerAddress: string;
     public geocoder: google.maps.Geocoder;
     
-    @Output() addressSelected = new EventEmitter<GMapAddress>();
+    @Output("addrSelected") addressSelected = new EventEmitter<GMapAddress>();
 
     @ViewChild("search")
     public searchElementRef: ElementRef;
@@ -80,6 +85,10 @@ export class GmapComponent implements OnInit {
           });
         });
       });
+
+      const geocodeLatLngObs = Observable.create(observer => {
+
+      });
     }
 
     private setCurrentPosition() {
@@ -102,8 +111,22 @@ export class GmapComponent implements OnInit {
 
     // REVERSE GEOCODING TO ADDRESS
     geocodeLatLng(){
+      this.geocodeLatLngObs().subscribe(
+        (data: GMapAddress) => {
+          this.addressSelected.emit(data);
+        },
+        (error: string) => {
+          window.alert(error);
+        },
+        () => { console.log('geocodeLatLngObs completed!') }
+      );
+    }
+
+    geocodeLatLngObs(): Observable<GMapAddress> {
       const latlng = {lat: this.markerLat, lng: this.markerLong};
-      this.geocoder.geocode({'location': latlng}, function(results, status) {
+      
+      return Observable.create( (observer: Observer<GMapAddress>) => {
+        this.geocoder.geocode({'location': latlng}, function(results, status) {
           if (status.toString() === 'OK') {
             if (results[0]) {
               this.markerAddress =  results[0].formatted_address;
@@ -112,14 +135,17 @@ export class GmapComponent implements OnInit {
               address.formattedAddr =  this.markerAddress;
               address.lat = this.markerLat;
               address.lon = this.markerLong;
-
-              this.addressSelected.emit(address);
+              observer.next(address);
             } else {
-              window.alert('No results found');
+              observer.error('No results found');
+              //window.alert('No results found');
             }
           } else {
-            window.alert('Geocoder failed due to: ' + status);
+            observer.error('Geocoder failed due to: ' + status);
+            //window.alert('Geocoder failed due to: ' + status);
           }
-      });
+        });
+      })
     }
+
   }

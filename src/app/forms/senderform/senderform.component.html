@@ -163,7 +163,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-gmap></app-gmap>
+    <app-gmap (addrSelected)="gmapAddrSelected($event)"></app-gmap>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
