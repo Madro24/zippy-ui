@@ -1,15 +1,13 @@
-<p>
-  gmap works!
-</p>
+
   <div class="container">
-      <h1>Google Maps</h1>
-      <div class="form-group">
+      <div class="row form-group">
         <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
       </div>
       <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)" [clickableIcons]="false">
         <agm-marker [latitude]="markerLat" [longitude]="markerLong" [title]="Origen"></agm-marker>
       </agm-map>
-      <div class="form-group">
-        <button (click)="geocodeLatLng()">Aceptar</button>
+      <hr />  
+      <div class="col-4 float-right">
+        <button class="btn btn-primary" (click)="geocodeLatLng()">Seleccionar Ubicacion</button>
       </div>
     </div>

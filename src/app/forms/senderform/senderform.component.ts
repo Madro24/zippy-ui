@@ -35,10 +35,8 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   isEditAction = false;
   wasSaveClicked = false;
   enableUrlMapField = false;
-
+  gmapModalOpen: string;
   timeAvailArray: Array<WorkdayHour>;
-
-  closeResult: string;
 
   modalRef: NgbModalRef;
 
@@ -273,23 +271,23 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   gmapAddrSelected(address: GMapAddress) {
-    this.itemRegForm.form.patchValue({
-      originLocation: address.formattedAddr
-    }); 
+    let changedAddr;
+    if (this.gmapModalOpen === 'Origin') {
+      changedAddr = {originLocation: address.formattedAddr};
+    } else {
+      changedAddr = {destLocation: address.formattedAddr};
+    }
+
+    this.itemRegForm.form.patchValue(
+      changedAddr
+    ); 
     this.modalRef.close();
   }
+  
 
-  open(content) {
+  open(content, modalMap: string) {
+    this.gmapModalOpen = modalMap;
     this.modalRef = this.modalService.open(content, { size: 'lg' });
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
 }

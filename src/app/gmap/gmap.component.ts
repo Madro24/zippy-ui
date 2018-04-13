@@ -35,7 +35,10 @@ export class GmapComponent implements OnInit {
     public geocoder: google.maps.Geocoder;
     
     @Output("addrSelected") addressSelected = new EventEmitter<GMapAddress>();
-
+    @Input() addrType: String;
+    @Input() selectedLat: number;
+    @Input() selectedLon: number;
+ 
     @ViewChild("search")
     public searchElementRef: ElementRef;
 

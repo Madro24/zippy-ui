@@ -59,10 +59,12 @@
 
         <fieldset class="form-group">
           <label>Origen</label>
-          <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required>
-          <button class="btn btn-primary" (click)="open(content)" type="button">
-            <i class="fa fa-location-arrow"></i>
-          </button>
+          <div class="input-group">
+            <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required disabled>
+            <button class="input-group-addon" (click)="open(content,'Origin')" type="button">
+              <i class="fa fa-map"></i>
+            </button>
+          </div>
         </fieldset>
 
         <div class="form-group">
@@ -98,12 +100,12 @@
 
         <fieldset class="form-group">
           <label>Destino </label>
-          <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel">
-        </fieldset>
-
-        <fieldset class="form-group">
-          <label>Copiar link de mapa: <a [href]="getSearchMapURI(destLoc.value)" target="_blank" (click)="enableUrlMap()">google maps</a> </label>
-          <input class="form-control" name="destUrlMap" [ngModel]="serviceItem.destinations[0].urlMap" required [disabled]="!isEditAction && (!destLoc.valid || !enableUrlMapField)">
+          <div class="input-group">
+            <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel" disabled>
+            <button class="input-group-addon" (click)="open(content,'Destination')" type="button">
+              <i class="fa fa-map"></i>
+            </button>
+          </div>
         </fieldset>
 
         <fieldset class="form-group">
@@ -157,15 +159,13 @@
 <!-- Modal -->
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Modal title</h4>
+    <h4 *ngIf="gmapModalOpen === 'Origin'" class="modal-title">Lugar de Recoleccion</h4>
+    <h4  *ngIf="gmapModalOpen === 'Destination'"  class="modal-title">Lugar de Entrega</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <app-gmap (addrSelected)="gmapAddrSelected($event)"></app-gmap>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>
