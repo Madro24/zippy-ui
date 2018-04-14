@@ -4,6 +4,7 @@ import { PriceLog } from "./price-log.model";
 import { TimeModel } from "./time.model";
 import { ServiceTypeEnum, PayByEnum, ServiceStatusEnum } from "../enum/global-enums";
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import {GMapAddress} from './gmap-address.model';
 
 export class ServiceItem {
   itemId: string;
@@ -12,6 +13,7 @@ export class ServiceItem {
   payBy: string;
   sender: Customer;
   originLocation: string;
+  originlocationGmap: GMapAddress;
   itemStatus: string;
   deliveryGuy: string;
   destinations: Array<Destination>;

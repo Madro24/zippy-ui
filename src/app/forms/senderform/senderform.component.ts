@@ -1,26 +1,27 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ServiceTypeEnum, ServiceStatusEnum, PayByEnum } from '../../shared/enum/global-enums';
-import { ServiceItem } from '../../shared/model/service-item.model';
-import { Destination } from '../../shared/model/destination.model';
-import { DataMapService } from '../../service/data-map.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CommonUtilService } from '../../service/common-util.service';
-import { NgForm } from '@angular/forms';
-import { AvailTimeLog } from '../../shared/model/available-time-log.model';
-import { ScheduledItemLog } from '../../shared/model/scheduled-items.model';
-import { IDDBcallback } from '../../service/dynamodb-services/iddbcallback';
-import { DataAvailabilityMapService, WorkdayHour } from '../../service/data-availability-map.service';
-import { NgbDatepickerConfig, NgbDateStruct, NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { GMapAddress } from '../../gmap/gmap.component'
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ServiceTypeEnum, ServiceStatusEnum, PayByEnum} from '../../shared/enum/global-enums';
+import {ServiceItem} from '../../shared/model/service-item.model';
+import {Destination} from '../../shared/model/destination.model';
+import {DataMapService} from '../../service/data-map.service';
+import {Router, ActivatedRoute} from '@angular/router';
+import {CommonUtilService} from '../../service/common-util.service';
+import {NgForm} from '@angular/forms';
+import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
+import {DataAvailabilityMapService, WorkdayHour} from '../../service/data-availability-map.service';
+import {NgbDatepickerConfig, NgbDateStruct, NgbModal, NgbModalRef, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {GMapAddress} from '../../shared/model/gmap-address.model';
+import {GmapService} from '../../service/gmap.service';
+import Distance = google.maps.Distance;
 
 const now = new Date();
 const defaultItemStatus = 'ACTIVO';
 const defaultServType = 'EXPRESS';
 const defaultPayBy = 'REMITENTE';
-const defaultDay = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
 const defaultTime = '';
 const distanceFare = 8.90;
 const timeFare = 2.25;
+
 @Component({
   selector: 'app-senderform',
   templateUrl: './senderform.component.html',
@@ -37,20 +38,23 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   enableUrlMapField = false;
   gmapModalOpen: string;
   timeAvailArray: Array<WorkdayHour>;
+  originAddrGmap: GMapAddress;
+  destinationAddrGmap: GMapAddress;
 
   modalRef: NgbModalRef;
 
   constructor(private router: Router,
-    private actRoute: ActivatedRoute,
-    private dataMapService: DataMapService,
-    private dataAvailTimeService: DataAvailabilityMapService,
-    private commonUtils: CommonUtilService,
-    private config: NgbDatepickerConfig,
-    private modalService: NgbModal) {
+              private actRoute: ActivatedRoute,
+              private dataMapService: DataMapService,
+              private dataAvailTimeService: DataAvailabilityMapService,
+              private commonUtils: CommonUtilService,
+              private config: NgbDatepickerConfig,
+              private modalService: NgbModal,
+              private gmapService: GmapService) {
 
     // customize default values of datepickers used by this component tree
     config.minDate = defaultDay;
-    config.maxDate = { year: 2020, month: 12, day: 31 };
+    config.maxDate = {year: 2020, month: 12, day: 31};
 
     // days that don't belong to current month are not visible
     config.outsideDays = 'hidden';
@@ -74,11 +78,11 @@ export class SenderformComponent implements OnInit, IDDBcallback {
         }
       })
         .subscribe(
-        item => this.serviceItem = item,
-        error => {
-          console.log('Error getting service items array. ' + error);
-          this.router.navigate(['/admin-home']);
-        }
+          item => this.serviceItem = item,
+          error => {
+            console.log('Error getting service items array. ' + error);
+            this.router.navigate(['/admin-home']);
+          }
         );
       console.log('this.serviceItem:' + this.serviceItem.itemId);
       this.isEditAction = true;
@@ -232,24 +236,24 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   serviceToForm() {
-    this.itemRegForm.setValue( {
-      itemStatus : this.serviceItem.itemStatus,
-      itemType : this.serviceItem.type,
-      dp : this.serviceItem.recolectDate,
-      serviceTime : this.serviceItem.recolectTimeIndex,
-      senderName : this.serviceItem.sender.name,
-      senderPhone : this.serviceItem.sender.phone,
-      originLocation : this.serviceItem.originLocation,
-      payBy : this.serviceItem.payBy,
+    this.itemRegForm.setValue({
+      itemStatus: this.serviceItem.itemStatus,
+      itemType: this.serviceItem.type,
+      dp: this.serviceItem.recolectDate,
+      serviceTime: this.serviceItem.recolectTimeIndex,
+      senderName: this.serviceItem.sender.name,
+      senderPhone: this.serviceItem.sender.phone,
+      originLocation: this.serviceItem.originLocation,
+      payBy: this.serviceItem.payBy,
 
-      destLocation : this.serviceItem.destinations[0].location,
-      destUrlMap : this.serviceItem.destinations[0].urlMap,
-      destRecName : this.serviceItem.destinations[0].receiver.name,
-      destPkgContent : this.serviceItem.destinations[0].packageContent,
-      destMsg : this.serviceItem.destinations[0].message,
-      destInst : this.serviceItem.destinations[0].instructions,
-      destDistance : this.serviceItem.destinations[0].distance
-  });
+      destLocation: this.serviceItem.destinations[0].location,
+      destUrlMap: this.serviceItem.destinations[0].urlMap,
+      destRecName: this.serviceItem.destinations[0].receiver.name,
+      destPkgContent: this.serviceItem.destinations[0].packageContent,
+      destMsg: this.serviceItem.destinations[0].message,
+      destInst: this.serviceItem.destinations[0].instructions,
+      destDistance: this.serviceItem.destinations[0].distance
+    });
   }
 
   getTotalCost(value) {
@@ -273,21 +277,45 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   gmapAddrSelected(address: GMapAddress) {
     let changedAddr;
     if (this.gmapModalOpen === 'Origin') {
+      this.originAddrGmap = address;
       changedAddr = {originLocation: address.formattedAddr};
     } else {
+      this.destinationAddrGmap = address;
       changedAddr = {destLocation: address.formattedAddr};
     }
 
     this.itemRegForm.form.patchValue(
       changedAddr
-    ); 
+    );
     this.modalRef.close();
+
+    if (this.originAddrGmap !== null && this.destinationAddrGmap != null) {
+      this.calculateDistance();
+    }
+
   }
-  
+
 
   open(content, modalMap: string) {
     this.gmapModalOpen = modalMap;
-    this.modalRef = this.modalService.open(content, { size: 'lg' });
+    this.modalRef = this.modalService.open(content, {size: 'lg'});
+  }
+
+  calculateDistance() {
+    this.gmapService.calculateDistanceObs(this.originAddrGmap, this.destinationAddrGmap).subscribe(
+      (data: Distance) => {
+        const distKm = data.value / 1000;
+        this.itemRegForm.form.patchValue({
+          destDistance: '' + distKm.toString()
+        });
+      },
+      (error: string) => {
+        window.alert(error);
+      },
+      () => {
+        console.log('calculate distance completed!');
+      }
+    );
   }
 
 }
