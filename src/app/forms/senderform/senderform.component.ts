@@ -21,6 +21,7 @@ const defaultDay = {year: now.getFullYear(), month: now.getMonth() + 1, day: now
 const defaultTime = '';
 const distanceFare = 8.90;
 const timeFare = 2.25;
+const googleMapsUrl = 'https://www.google.com/maps/place/';
 
 @Component({
   selector: 'app-senderform',
@@ -72,13 +73,19 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       this.dataMapService.getServiceItemById(this.itemId, <IDDBcallback>{
         callback: () => {
           this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId === this.itemId);
+          this.originAddrGmap = this.serviceItem.originLocationGmap;
+          this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
           console.log('Item ID:' + this.serviceItem.itemId);
         },
         callbackWithParam: (result: any) => {
         }
       })
         .subscribe(
-          item => this.serviceItem = item,
+          item => {
+            this.serviceItem = item;
+            this.originAddrGmap = this.serviceItem.originLocationGmap;
+            this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
+          },
           error => {
             console.log('Error getting service items array. ' + error);
             this.router.navigate(['/admin-home']);
@@ -223,11 +230,14 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     this.serviceItem.recolectTimeHour = this.dataAvailTimeService.getWorkDayTimeById(+this.serviceItem.recolectTimeIndex);
     this.serviceItem.sender.name = this.itemRegForm.value.senderName;
     this.serviceItem.sender.phone = this.itemRegForm.value.senderPhone;
-    this.serviceItem.originLocation = this.itemRegForm.value.originLocation;
+    this.serviceItem.originLocation = this.originAddrGmap.formattedAddr;
+    this.serviceItem.originLocationGmap = this.originAddrGmap;
     this.serviceItem.payBy = this.itemRegForm.value.payBy;
 
-    this.serviceItem.destinations[0].location = this.itemRegForm.value.destLocation;
-    this.serviceItem.destinations[0].urlMap = this.itemRegForm.value.destUrlMap;
+    this.serviceItem.destinations[0].location = this.destinationAddrGmap.formattedAddr;
+    this.serviceItem.destinations[0].locationGmap = this.destinationAddrGmap;
+    const destLatLon = this.destinationAddrGmap.lat + ',' + this.destinationAddrGmap.lon;
+    this.serviceItem.destinations[0].urlMap = googleMapsUrl + destLatLon + '/@' + destLatLon + ',19z';
     this.serviceItem.destinations[0].receiver.name = this.itemRegForm.value.destRecName;
     this.serviceItem.destinations[0].packageContent = this.itemRegForm.value.destPkgContent;
     this.serviceItem.destinations[0].message = this.itemRegForm.value.destMsg;
@@ -292,7 +302,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     if (this.originAddrGmap !== null && this.destinationAddrGmap != null) {
       this.calculateDistance();
     }
-
+    this.itemRegForm.form.markAsDirty();
   }
 
 

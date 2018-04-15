@@ -7,7 +7,7 @@ import {Observer} from 'rxjs/Observer';
 import {GMapAddress} from '../shared/model/gmap-address.model';
 
 
-const zoomDefault = 21;
+const zoomDefault = 19;
 
 @Component({
   selector: 'app-gmap',

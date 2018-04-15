@@ -115,6 +115,13 @@ export class ServiceItemDDBService {
                   'instructions': {S: item.destinations[0].instructions},
                   'urlMap': {S: item.destinations[0].urlMap},
                   'location': {S: item.destinations[0].location},
+                  'locationGmap': {
+                    M: {
+                      'formattedAddr': {S: item.destinations[0].locationGmap.formattedAddr},
+                      'lat': {N: item.destinations[0].locationGmap.lat.toString()},
+                      'lon': {N: item.destinations[0].locationGmap.lon.toString()},
+                    }
+                  },
                   'message': {S: item.destinations[0].message},
                   'packageContent': {S: item.destinations[0].packageContent},
                   'receiver': {
@@ -139,6 +146,13 @@ export class ServiceItemDDBService {
         'recolectTimeHour': { S: item.recolectTimeHour },
         'itemId': {S: item.itemId},
         'originLocation': {S: item.originLocation},
+        'originLocationGmap': {
+          M: {
+            'formattedAddr': {S: item.originLocationGmap.formattedAddr},
+            'lat': {N: item.originLocationGmap.lat.toString()},
+            'lon': {N: item.originLocationGmap.lon.toString()},
+          }
+        },
         'payBy': {S: item.payBy},
         'sender': {
           M: {

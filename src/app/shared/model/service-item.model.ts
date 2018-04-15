@@ -13,7 +13,7 @@ export class ServiceItem {
   payBy: string;
   sender: Customer;
   originLocation: string;
-  originlocationGmap: GMapAddress;
+  originLocationGmap: GMapAddress;
   itemStatus: string;
   deliveryGuy: string;
   destinations: Array<Destination>;

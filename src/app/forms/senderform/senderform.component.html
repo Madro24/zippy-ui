@@ -60,7 +60,7 @@
         <fieldset class="form-group">
           <label>Origen</label>
           <div class="input-group">
-            <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required disabled>
+            <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required readonly>
             <button class="input-group-addon" (click)="open(content,'Origin')" type="button">
               <i class="fa fa-map"></i>
             </button>
@@ -101,7 +101,7 @@
         <fieldset class="form-group">
           <label>Destino </label>
           <div class="input-group">
-            <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel" disabled>
+            <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel" readonly>
             <button class="input-group-addon" (click)="open(content,'Destination')" type="button">
               <i class="fa fa-map"></i>
             </button>
@@ -130,7 +130,7 @@
 
         <fieldset class="form-group">
           <label>Distancia (Precio por Kilometro: $8.90)</label>
-          <input class="form-control" name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required>
+          <input class="form-control" name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required readonly>
         </fieldset>
 
         <h2>Costo Total: {{ getTotalCost(this.distance.value) }}</h2>
