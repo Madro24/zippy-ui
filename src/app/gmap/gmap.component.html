@@ -4,9 +4,9 @@
         <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
       </div>
       <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)" [clickableIcons]="false">
-        <agm-marker [latitude]="markerLat" [longitude]="markerLong" [title]="Origen"></agm-marker>
+        <agm-marker [latitude]="markerLat" [longitude]="markerLong" [title]="title"></agm-marker>
       </agm-map>
-      <hr />  
+      <hr />
       <div class="col-4 float-right">
         <button class="btn btn-primary" (click)="geocodeLatLng()">Seleccionar Ubicacion</button>
       </div>

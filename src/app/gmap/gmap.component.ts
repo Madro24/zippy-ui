@@ -16,6 +16,7 @@ const zoomDefault = 19;
   encapsulation: ViewEncapsulation.None
 })
 export class GmapComponent implements OnInit {
+  public title: string;
   public latitude: number;
   public longitude: number;
   public searchControl: FormControl;
@@ -26,7 +27,7 @@ export class GmapComponent implements OnInit {
   public geocoder: google.maps.Geocoder;
 
   @Output() addressSelected = new EventEmitter<GMapAddress>();
-  @Input() addrType: String;
+  @Input() addrType: string;
   @Input() selectedLat: number;
   @Input() selectedLon: number;
 
@@ -40,6 +41,7 @@ export class GmapComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.title = this.addrType;
     //set google maps defaults
     this.zoom = zoomDefault;
     this.latitude = 32.52496990665209;
