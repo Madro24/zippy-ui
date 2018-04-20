@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ServiceItemDDBService } from './dynamodb-services/ddbServiceItems.service';
 import { ServiceItem } from '../shared/model/service-item.model';
 import { Observable } from 'rxjs/Rx';
-import {IDDBcallback} from './dynamodb-services/iddbcallback';
+import { Observer } from 'rxjs/Observer';
 
 @Injectable()
 export class DataMapService {
@@ -11,9 +11,9 @@ export class DataMapService {
     this.serviceItemArray = [];
   }
 
-  getItems( callback: IDDBcallback): Observable<Array<ServiceItem>>  {
+  getItems(): Observable<Array<ServiceItem>>  {
     if (this.serviceItemArray.length === 0) {
-      this.serviceItemDDB.getActiveItems(this.serviceItemArray,  callback);
+      return this.serviceItemDDB.getActiveItemsObs();
     }
     return Observable.of(this.serviceItemArray);
   }
@@ -22,31 +22,62 @@ export class DataMapService {
     return this.serviceItemArray[index];
   }
 
-  getServiceItemById (itemId: string, callback: IDDBcallback): Observable<ServiceItem> {
-    if (this.serviceItemArray.length === 0) {
-      this.serviceItemDDB.getActiveItems(this.serviceItemArray,  callback);
-    }
-
-    const findItem = this.serviceItemArray.find(x => x.itemId === itemId);
-    return Observable.of(findItem);
-
+  getServiceItemById (itemId: string): Observable<ServiceItem> {
+    console.log('getServiceItemById, ItemId:' + itemId);
+    return Observable.create( (observer: Observer<ServiceItem>) => {
+      if (this.serviceItemArray.length === 0) {
+        this.serviceItemDDB.getActiveItemsObs().subscribe(
+          (data: Array<ServiceItem>) => {
+            this.serviceItemArray = data;
+            const findItem = this.serviceItemArray.find(x => x.itemId === itemId);
+            observer.next(findItem);
+            observer.complete();
+          },
+          (error: string) => {
+            observer.error(error);
+          }
+        );
+      } else {
+        const findItem = this.serviceItemArray.find(x => x.itemId === itemId);
+        observer.next(findItem);
+        observer.complete();
+      }
+    });
   }
 
-  pushItem(item: ServiceItem, callback: IDDBcallback) {
-    this.serviceItemDDB.writeServiceItem(item, callback);
-    this.serviceItemArray.push(item);
-    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+  pushItem(item: ServiceItem): Observable<ServiceItem> {
+    console.log('Add ServiceItem, Item:' + item);
+    return Observable.create( (observer: Observer<ServiceItem>) => {
+      this.serviceItemDDB.writeItemObs(item).subscribe(
+        (data: ServiceItem) => {
+          this.serviceItemArray.push(item);
+          this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+          observer.next(data);
+          observer.complete();
+        },
+        (error: string) => {
+          observer.error(error);
+        }
+      );
+    }); 
   }
 
-  updateItem(item: ServiceItem, itemId: string, callback: IDDBcallback) {
+  updateItem(item: ServiceItem, itemId: string) {
     console.log('Update ServiceItem, itemId:' + itemId + '. Item:' + item);
-    this.serviceItemDDB.writeServiceItem(item, callback);
-
-    const index = this.serviceItemArray.findIndex(x => x.itemId === itemId);
-    this.serviceItemArray[index] = item;
-    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+    return Observable.create( (observer: Observer<ServiceItem>) => {
+      this.serviceItemDDB.writeItemObs(item).subscribe(
+        (data: ServiceItem) => {
+          const index = this.serviceItemArray.findIndex(x => x.itemId === itemId);
+          this.serviceItemArray[index] = item;
+          this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+          observer.next(data);
+          observer.complete();
+        },
+        (error: string) => {
+          observer.error(error);
+        }
+      );
+    }); 
   }
-
-
 
 }

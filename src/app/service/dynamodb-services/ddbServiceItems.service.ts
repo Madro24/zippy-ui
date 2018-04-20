@@ -5,6 +5,8 @@ import {ServiceItem} from '../../shared/model/service-item.model';
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {IDDBcallback} from './iddbcallback';
+import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
 
 @Injectable()
 export class ServiceItemDDBService {
@@ -47,6 +49,38 @@ export class ServiceItemDDBService {
     }
   }
 
+  getActiveItemsObs(): Observable<Array<ServiceItem>> {
+    console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
+    const params = {
+      TableName: environment.ddbServiceItemsTable,
+    };
+
+    const clientParams: any = {};
+    if (environment.dynamodb_endpoint) {
+      clientParams.endpoint = environment.dynamodb_endpoint;
+    }
+    
+
+    return Observable.create( (observer: Observer<Array<ServiceItem>>) => {
+      let mapArray = Array<ServiceItem>();
+      const docClient = new DynamoDB.DocumentClient(clientParams);
+      docClient.scan(params, function onQuery(err, data) {
+        if (err) {
+          console.error('ServiceItemDDBService: Unable to query the table. Error JSON:', JSON.stringify(err, null, 2));
+          observer.error('ServiceItemDDBService: Unable to query the table. Error JSON:' + JSON.stringify(err, null, 2));
+        } else {
+          console.log('ServiceItemDDBService: Query succeeded.');
+          data.Items.forEach(function (logitem: ServiceItem) {
+            mapArray.push(logitem);
+          });
+          mapArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+          observer.next(mapArray);
+          observer.complete();
+        }
+      });
+    });
+  }
+
   getActiveItems(mapArray: Array<ServiceItem>, callback: IDDBcallback) {
     console.log('ServiceItemDDBService: reading from DDB with creds - ' + AWS.config.credentials);
     const params = {
@@ -80,17 +114,8 @@ export class ServiceItemDDBService {
     }
   }
 
-  writeServiceItem(item: ServiceItem, callback: IDDBcallback) {
-    try {
-      console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
-      this.write(item, callback);
-    } catch (exc) {
-      console.log('ServiceItemDDBService: Couldn\'t write to DDB');
-    }
-
-  }
-
-  write(item: ServiceItem, callback: IDDBcallback): void {
+  writeItemObs(item: ServiceItem): Observable<ServiceItem> {
+    console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
     console.log('ServiceItemDDBService: writing ' + item.type + ' entry');
 
     const clientParams: any = {
@@ -101,6 +126,24 @@ export class ServiceItemDDBService {
     }
     const DDB = new DynamoDB(clientParams);
 
+    return Observable.create( (observer: Observer<ServiceItem>) => {
+      try{
+        // Write the item to the table
+        const itemParams = this.prepareWriteParam(item);
+        DDB.putItem(itemParams,
+          function (result) {
+            console.log('ServiceItemDDBService: wrote entry: ' + JSON.stringify(result));
+            observer.next(item);
+            observer.complete();
+          }
+        );
+      } catch (exc) {
+        observer.error('ServiceItemDDBService: Couldn\'t write to DDB');
+      }
+    });
+  }
+
+  prepareWriteParam(item: ServiceItem): DynamoDB.PutItemInput {
     // Write the item to the table
     const itemParams = {
       TableName: environment.ddbServiceItemsTable,
@@ -171,6 +214,32 @@ export class ServiceItemDDBService {
         }
       }
     };
+    return itemParams;
+  }
+
+  writeServiceItem(item: ServiceItem, callback: IDDBcallback) {
+    try {
+      console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
+      this.write(item, callback);
+    } catch (exc) {
+      console.log('ServiceItemDDBService: Couldn\'t write to DDB');
+    }
+
+  }
+
+  write(item: ServiceItem, callback: IDDBcallback): void {
+    console.log('ServiceItemDDBService: writing ' + item.type + ' entry');
+
+    const clientParams: any = {
+      params: {TableName: environment.ddbServiceItemsTable}
+    };
+    if (environment.dynamodb_endpoint) {
+      clientParams.endpoint = environment.dynamodb_endpoint;
+    }
+    const DDB = new DynamoDB(clientParams);
+
+    // Write the item to the table
+    const itemParams = this.prepareWriteParam(item);
     DDB.putItem(itemParams,
       function (result) {
         console.log('ServiceItemDDBService: wrote entry: ' + JSON.stringify(result));

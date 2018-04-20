@@ -70,17 +70,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   ngOnInit() {
     this.itemId = this.actRoute.snapshot.params['itemId'];
     if (this.itemId != null) {
-      this.dataMapService.getServiceItemById(this.itemId, <IDDBcallback>{
-        callback: () => {
-          this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId === this.itemId);
-          this.originAddrGmap = this.serviceItem.originLocationGmap;
-          this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
-          console.log('Item ID:' + this.serviceItem.itemId);
-        },
-        callbackWithParam: (result: any) => {
-        }
-      })
-        .subscribe(
+      this.dataMapService.getServiceItemById(this.itemId).subscribe(
           item => {
             this.serviceItem = item;
             this.originAddrGmap = this.serviceItem.originLocationGmap;
@@ -199,12 +189,18 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     console.log(this.serviceItem);
 
     if (this.isEditAction) {
-      this.dataMapService.updateItem(this.serviceItem, this.itemId, this);
+      this.dataMapService.updateItem(this.serviceItem, this.itemId).subscribe(
+        (data) => {console.log('Item updated:' + data)}, 
+        (error) => {console.log('Error updating:' + error)}
+      );
     } else {
       // setting new AvailTimeLog
       const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
 
-      this.dataMapService.pushItem(this.serviceItem, this);
+      this.dataMapService.pushItem(this.serviceItem).subscribe(
+        (data) => {console.log('Item inserted:' + data)}, 
+        (error) => {console.log('Error interting:' + error)}
+      );
 
       if (availTimeLog == null) {
         this.dataAvailTimeService.addAvailTimeLog(schedLogItem);

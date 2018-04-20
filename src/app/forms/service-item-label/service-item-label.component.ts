@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataMapService } from '../../service/data-map.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ServiceItem } from '../../shared/model/service-item.model';
-import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
+
 
 
 @Component({
@@ -10,7 +10,7 @@ import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
   templateUrl: './service-item-label.component.html',
   styleUrls: ['./service-item-label.component.css']
 })
-export class ServiceItemLabelComponent implements OnInit, IDDBcallback {
+export class ServiceItemLabelComponent implements OnInit {
   public serviceItem: ServiceItem;
   private itemId: string;
 
@@ -21,7 +21,7 @@ export class ServiceItemLabelComponent implements OnInit, IDDBcallback {
     this.itemId = this.actRoute.snapshot.params['itemId'];
     console.log('index:' + this.itemId);
     if (this.itemId != null) {
-      this.dataMapService.getServiceItemById(this.itemId, this)
+      this.dataMapService.getServiceItemById(this.itemId)
         .subscribe(
           item => this.serviceItem = item,
           error => {
@@ -40,11 +40,4 @@ export class ServiceItemLabelComponent implements OnInit, IDDBcallback {
   back() {
       this.router.navigate(['/serviceItem/', this.itemId]);
   }
-
-  callback() {
-    this.serviceItem = this.dataMapService.serviceItemArray.find(x => x.itemId === this.itemId);
-    console.log('Item ID:' + this.serviceItem.itemId);
-  }
-  callbackWithParam(result: any){}
-
 }
