@@ -8,21 +8,21 @@
 <div class="container">
 
 
-  <form role="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" #itemRegForm="ngForm">
+  <form role="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" [formGroup] ="itemRegForm">
     <div class="row">
       <div class="col-md-5">
         <h4> Datos Remitente</h4>
 
         <fieldset *ngIf="isEditAction" class="form-group">
           <label>Estatus</label>
-          <select class="form-control" name="itemStatus" [ngModel]="serviceItem.itemStatus">
+          <select class="form-control" name="itemStatus" formControlName="itemStatus">
             <option *ngFor="let itemStatus of getServiceStatus()" [value]="itemStatus">{{itemStatus}}</option>
           </select>
         </fieldset>
 
         <div class="form-group">
           <label>Servicio</label>
-          <select class="form-control" name="itemType" [ngModel]="serviceItem.type">
+          <select class="form-control" name="itemType" formControlName="itemType">
             <option *ngFor="let type of getServiceTypes()" [value]="type">{{type}}</option>
           </select>
         </div>
@@ -31,7 +31,7 @@
           <label>Dia de recoleccion</label>
           <div class="form-group">
             <div class="input-group datepicker-input">
-              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [ngModel]="serviceItem.recolectDate" (ngModelChange)="changeDatePicker($event)" required>
+              <input class="form-control" formControlName="dp" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" (ngModelChange)="changeDatePicker($event)" required>
               <button class="input-group-addon" (click)="d.toggle()" type="button">
                 <i class="fa fa-calendar"></i>
               </button>
@@ -41,7 +41,7 @@
 
         <fieldset class="form-group">
           <label>Hora de recoleccion</label>
-          <select class="custom-select" [ngModel]="serviceItem.recolectTimeIndex" name="serviceTime" required>
+          <select class="custom-select" name="serviceTime" formControlName="serviceTime" required>
             <option disabled selected value> -- selecciona horario -- </option>
             <option *ngFor="let timeAvailable of timeAvailArray" [value]="timeAvailable.id" [disabled]="!timeAvailable.enabled">{{timeAvailable.hour}}</option>
 
@@ -50,17 +50,17 @@
 
         <fieldset class="form-group">
           <label>Quien envia</label>
-          <input class="form-control" name="senderName" [ngModel]="serviceItem.sender.name" required>
+          <input class="form-control" name="senderName" formControlName="senderName" required>
         </fieldset>
         <fieldset class="form-group">
           <label>Celular</label>
-          <input class="form-control" name="senderPhone" placeholder="664-XXXXXXX" [ngModel]="serviceItem.sender.phone" required>
+          <input class="form-control" name="senderPhone" placeholder="664-XXXXXXX" formControlName="senderPhone" required>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Origen</label>
           <div class="input-group">
-            <input class="form-control" name="originLocation" [ngModel]="serviceItem.originLocation" required readonly>
+            <input class="form-control" name="originLocation" formControlName="originLocation" required readonly>
             <button class="input-group-addon" (click)="open(content,'Origin')" type="button">
               <i class="fa fa-map"></i>
             </button>
@@ -69,7 +69,7 @@
 
         <div class="form-group">
           <label>Paga</label>
-          <select class="form-control" name="payBy" [ngModel]="serviceItem.payBy">
+          <select class="form-control" name="payBy" formControlName="payBy">
             <option *ngFor="let payBy of getPayByList()" [value]="payBy">{{payBy}}</option>
           </select>
         </div>
@@ -101,7 +101,7 @@
         <fieldset class="form-group">
           <label>Destino </label>
           <div class="input-group">
-            <input class="form-control" name="destLocation" [ngModel]="serviceItem.destinations[0].location" required #destLoc="ngModel" readonly>
+            <input class="form-control" name="destLocation" formControlName="destLocation" required readonly>
             <button class="input-group-addon" (click)="open(content,'Destination')" type="button">
               <i class="fa fa-map"></i>
             </button>
@@ -110,30 +110,30 @@
 
         <fieldset class="form-group">
           <label>Quien recibe</label>
-          <input class="form-control" name="destRecName" [ngModel]="serviceItem.destinations[0].receiver.name" required>
+          <input class="form-control" name="destRecName" formControlName="destRecName" required>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Contenido</label>
-          <input class="form-control" name="destPkgContent" [ngModel]="serviceItem.destinations[0].packageContent" required>
+          <input class="form-control" name="destPkgContent" formControlName="destPkgContent"  required>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Mensaje al destinatario</label>
-          <textarea class="form-control" rows="3" name="destMsg" [ngModel]="serviceItem.destinations[0].message" required></textarea>
+          <textarea class="form-control" rows="3" name="destMsg" formControlName="destMsg" required></textarea>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Instruccion al mensajero</label>
-          <textarea class="form-control" rows="3" name="destInst" [ngModel]="serviceItem.destinations[0].instructions" required></textarea>
+          <textarea class="form-control" rows="3" name="destInst" formControlName="destInst" required></textarea>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Distancia (Precio por Kilometro: $8.90)</label>
-          <input class="form-control" name="destDistance" #distance="ngModel" [ngModel]="serviceItem.destinations[0].distance" required readonly>
+          <input class="form-control" name="destDistance" formControlName="destDistance" required readonly>
         </fieldset>
 
-        <h2>Costo Total: {{ getTotalCost(this.distance.value) }}</h2>
+        <h2>Costo Total: {{ getTotalCost() }}</h2>
       </div>
     </div>
     <div class="row btnForm">

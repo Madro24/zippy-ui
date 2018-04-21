@@ -109,7 +109,8 @@ const appRoutes: Routes = [
     AgmCoreModule.forRoot({
      apiKey: environment.googleAPIKey,
      libraries: ['places', 'geometry']
-   })
+   }),
+   ReactiveFormsModule
   ],
   providers: [
     CognitoUtil,

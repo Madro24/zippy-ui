@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterContentInit} from '@angular/core';
 import {ServiceTypeEnum, ServiceStatusEnum, PayByEnum} from '../../shared/enum/global-enums';
 import {ServiceItem} from '../../shared/model/service-item.model';
 import {Destination} from '../../shared/model/destination.model';
 import {DataMapService} from '../../service/data-map.service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {CommonUtilService} from '../../service/common-util.service';
-import {NgForm} from '@angular/forms';
-import {IDDBcallback} from '../../service/dynamodb-services/iddbcallback';
+import {NgForm, FormGroup, FormControl, Validators} from '@angular/forms';
 import {DataAvailabilityMapService, WorkdayHour} from '../../service/data-availability-map.service';
 import {NgbDatepickerConfig, NgbDateStruct, NgbModal, NgbModalRef, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {GMapAddress} from '../../shared/model/gmap-address.model';
@@ -29,8 +28,9 @@ const googleMapsUrl = 'https://www.google.com/maps/place/';
   styleUrls: ['./senderform.component.css'],
   providers: [NgbDatepickerConfig] // add NgbDatepickerConfig to the component providers
 })
-export class SenderformComponent implements OnInit, IDDBcallback {
-  @ViewChild('itemRegForm') itemRegForm: NgForm;
+export class SenderformComponent implements OnInit {
+  //@ViewChild('itemRegForm') itemRegForm: NgForm;
+  itemRegForm: FormGroup;
   serviceItem: ServiceItem;
 
   private itemId: string;
@@ -68,29 +68,47 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   ngOnInit() {
+    this.itemRegForm = new FormGroup({
+      'itemStatus': new FormControl(defaultItemStatus, Validators.required),
+      'itemType': new FormControl(defaultServType, Validators.required),
+      'dp': new FormControl(defaultDay, Validators.required),
+      'serviceTime': new FormControl(null, Validators.required),
+      'senderName': new FormControl(null, Validators.required),
+      'senderPhone': new FormControl(null, Validators.required),
+      'originLocation': new FormControl(null, Validators.required),
+      'payBy': new FormControl(defaultPayBy, Validators.required),
+      'destLocation': new FormControl(null, Validators.required),
+      'destRecName': new FormControl(null, Validators.required),
+      'destPkgContent': new FormControl(null, Validators.required),
+      'destMsg': new FormControl(null, Validators.required),
+      'destInst': new FormControl(null, Validators.required),
+      'destDistance': new FormControl(0, Validators.required)
+    });
+   
+
     this.itemId = this.actRoute.snapshot.params['itemId'];
-    if (this.itemId != null) {
-      this.dataMapService.getServiceItemById(this.itemId).subscribe(
-          item => {
-            this.serviceItem = item;
-            this.originAddrGmap = this.serviceItem.originLocationGmap;
-            this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
-          },
-          error => {
-            console.log('Error getting service items array. ' + error);
-            this.router.navigate(['/admin-home']);
-          }
-        );
-      console.log('this.serviceItem:' + this.serviceItem.itemId);
-      this.isEditAction = true;
-      this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.serviceItem.recolectDate);
-    } else {
+    if (this.itemId == null) {
       this.enableUrlMapField = false;
       this.isEditAction = false;
       this.newServiceItem();
       this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(defaultDay);
+    } else {
+      this.dataMapService.getServiceItemById(this.itemId).subscribe(
+        item => {
+          this.serviceItem = item;
+          this.originAddrGmap = this.serviceItem.originLocationGmap;
+          this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
+          console.log('this.serviceItem:' + this.serviceItem.itemId);
+          this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.serviceItem.recolectDate);
+          this.isEditAction = true;
+          this.serviceToForm();
+        },
+        error => {
+          console.log('Error getting service items array. ' + error);
+          this.router.navigate(['/admin-home']);
+        }
+      ); 
     }
-
 
   }
 
@@ -215,7 +233,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   mapFormToObj() {
-    if (this.itemRegForm.value.itemStatus != null) {
+    if (this.itemRegForm !== null && this.itemRegForm.value.itemStatus != null) {
       this.serviceItem.itemStatus = this.itemRegForm.value.itemStatus;
     } else {
       this.serviceItem.itemStatus = defaultItemStatus;
@@ -251,9 +269,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       senderPhone: this.serviceItem.sender.phone,
       originLocation: this.serviceItem.originLocation,
       payBy: this.serviceItem.payBy,
-
       destLocation: this.serviceItem.destinations[0].location,
-      destUrlMap: this.serviceItem.destinations[0].urlMap,
       destRecName: this.serviceItem.destinations[0].receiver.name,
       destPkgContent: this.serviceItem.destinations[0].packageContent,
       destMsg: this.serviceItem.destinations[0].message,
@@ -263,13 +279,15 @@ export class SenderformComponent implements OnInit, IDDBcallback {
   }
 
   getTotalCost(value) {
-    return (+value * distanceFare).toFixed(2);
+    const distance = +this.itemRegForm.get('destDistance').value;
+    const totalCost = distance * distanceFare;
+    return totalCost.toFixed(2);
   }
 
   changeDatePicker(dateSelected: any) {
     if (dateSelected != null) {
       this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(dateSelected);
-      this.itemRegForm.form.patchValue({
+      this.itemRegForm.patchValue({
         serviceTime: defaultTime
       });
     }
@@ -290,7 +308,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
       changedAddr = {destLocation: address.formattedAddr};
     }
 
-    this.itemRegForm.form.patchValue(
+    this.itemRegForm.patchValue(
       changedAddr
     );
     this.modalRef.close();
@@ -298,7 +316,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     if (this.originAddrGmap !== null && this.destinationAddrGmap != null) {
       this.calculateDistance();
     }
-    this.itemRegForm.form.markAsDirty();
+    this.itemRegForm.markAsDirty();
   }
 
 
@@ -311,7 +329,7 @@ export class SenderformComponent implements OnInit, IDDBcallback {
     this.gmapService.calculateDistanceObs(this.originAddrGmap, this.destinationAddrGmap).subscribe(
       (data: Distance) => {
         const distKm = data.value / 1000;
-        this.itemRegForm.form.patchValue({
+        this.itemRegForm.patchValue({
           destDistance: '' + distKm.toString()
         });
       },
