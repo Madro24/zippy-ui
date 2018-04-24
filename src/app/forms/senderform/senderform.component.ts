@@ -95,10 +95,11 @@ export class SenderformComponent implements OnInit {
     } else {
       this.dataMapService.getServiceItemById(this.itemId).subscribe(
         item => {
+          console.log('Item found :' + JSON.stringify(item));
           this.serviceItem = item;
           this.originAddrGmap = this.serviceItem.originLocationGmap;
           this.destinationAddrGmap = this.serviceItem.destinations[0].locationGmap;
-          console.log('this.serviceItem:' + this.serviceItem.itemId);
+          
           this.timeAvailArray = this.dataAvailTimeService.getAvailabilityByDate(this.serviceItem.recolectDate);
           this.isEditAction = true;
           this.serviceToForm();
@@ -208,7 +209,7 @@ export class SenderformComponent implements OnInit {
 
     if (this.isEditAction) {
       this.dataMapService.updateItem(this.serviceItem, this.itemId).subscribe(
-        (data) => {console.log('Item updated:' + data)}, 
+        (data) => {console.log('Item updated:' + JSON.stringify(data))}, 
         (error) => {console.log('Error updating:' + error)}
       );
     } else {
@@ -216,7 +217,7 @@ export class SenderformComponent implements OnInit {
       const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
 
       this.dataMapService.pushItem(this.serviceItem).subscribe(
-        (data) => {console.log('Item inserted:' + data)}, 
+        (data) => {console.log('Item inserted:' + JSON.stringify(data))}, 
         (error) => {console.log('Error interting:' + error)}
       );
 
@@ -228,7 +229,7 @@ export class SenderformComponent implements OnInit {
 
     }
 
-    this.itemRegForm.reset();
+    this.itemRegForm.markAsPristine();
 
   }
 

@@ -4,11 +4,12 @@
     Servicios Solicitados
   </div>
 
-  <div class="addServiceBtn">
+
+  <div class="addServiceBtn" *ngIf="!displayError">
     <button class="btn btn-primary" [routerLink]="['/serviceItem']" *ngIf=!isLoadingData><i class="fa fa-plus"></i> Agregar Servicio</button>
     <a class="btn rounded-btn" [routerLink]="['/serviceItem']" *ngIf=isLoadingData>Cargando <i class="fa fa-spinner fa-spin" style="font-size:15px"></i></a>
   </div>
-  <div class="card-body table-responsive text-center mx-auto">
+  <div class="card-body table-responsive text-center mx-auto" *ngIf="!displayError">
     <table class="table">
       <thead>
         <tr>
@@ -36,5 +37,13 @@
 
       </tbody>
     </table>
+  </div>
+
+  <div class="alert alert-danger" role="alert" *ngIf="displayError">
+      <i class="fa fa-plug" aria-hidden="true"></i>
+      Se produjo un error al obtener la informacion. Intentar de nuevo 
+      <button class="btn btn-danger"  onClick="window.location.reload()">
+          <i class="fa fa-refresh"></i>
+      </button>
   </div>
 </div>

@@ -10,7 +10,8 @@ import {CommonUtilService} from '../../service/common-util.service';
 })
 export class ServicesTableComponent implements OnInit {
   _serviceItemArray: Array<ServiceItem>;
-  public isLoadingData = false;
+  isLoadingData = false;
+  displayError = false;
 
   constructor(private dataMapService: DataMapService,
               private commonUtils: CommonUtilService) {
@@ -24,7 +25,10 @@ export class ServicesTableComponent implements OnInit {
     this.dataMapService.getItems()
       .subscribe(
         resultArray => this._serviceItemArray = resultArray,
-        error => console.log('Error getting service items array. ' + error)
+        error => {
+          console.log('Error getting service items array. ' + error);
+          this.displayError = true;
+        }
       );
   }
 
