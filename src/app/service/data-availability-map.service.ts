@@ -4,7 +4,6 @@ import { AvailTimeLog } from '../shared/model/available-time-log.model';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { CommonUtilService } from './common-util.service';
-import { IDDBcallback } from './dynamodb-services/iddbcallback';
 import {ServiceItem} from '../shared/model/service-item.model';
 import {ScheduledItemLog} from '../shared/model/scheduled-items.model';
 
@@ -21,39 +20,66 @@ export class DataAvailabilityMapService {
 
   }
 
-  init(): void {
-    this.mapArray = [];
-    this.initAvailArray(this.mapArray);
+  init(): Observable<boolean> {
+   
     this.workdayArray = [];
     this.initWorkdayArray(START_AVAIL_TIME, LAST_AVAIL_TIME, this.workdayArray);
-  }
 
-  initAvailArray(mapArray: Array<AvailTimeLog>) {
-    this.availabilityDDBService.getAllItems(mapArray);
+    this.mapArray = [];
+    return Observable.create(
+      (observer: Observer<boolean>) => {
+        this.availabilityDDBService.getAllItemsObs().subscribe(
+          (data: Array<AvailTimeLog>) => {
+            this.mapArray = data;
+            observer.next(true);
+            observer.complete();
+          },
+          (error: string) => {
+            observer.error(error);
+          }
+        );
+      }
+    );
   }
-
-  // loadAvailabilityArray(): Observable<Array<AvailTimeLog>> {
-  //   return Observable.create((observer: Observer) => {
-  //     if (this.mapArray.length === 0) {
-  //       this.availabilityDDBService.getAllItems(this.mapArray);
-  //     }
-  //     observer.next(this.mapArray);
-  //   });
-  // }
 
   getAvailabilityArray(): Array<AvailTimeLog> {
     return this.mapArray;
   }
 
-  addAvailTimeLog(item: AvailTimeLog) {
-    this.availabilityDDBService.writeItem(item);
-    this.mapArray.push(item);
+  addAvailTimeLog(item: AvailTimeLog): Observable<AvailTimeLog>  {
+    return Observable.create(
+      (observer: Observer<AvailTimeLog>) => {
+        this.availabilityDDBService.writeItemObs(item).subscribe(
+          (data) => {
+            this.mapArray.push(item);
+            observer.next(item);
+            observer.complete();
+          },
+          (error) => {
+            observer.error(error);
+          }
+        );
+      }
+    );
   }
 
-  updateAvailTimeLog(item: AvailTimeLog) {
-    this.availabilityDDBService.updateItem(item);
-    const index = this.mapArray.findIndex(x => x.dateStr === item.dateStr);
-    this.mapArray[index] = item;
+  updateAvailTimeLog(item: AvailTimeLog): Observable<AvailTimeLog>  {
+    
+    return Observable.create(
+      (observer: Observer<AvailTimeLog>) => {
+        this.availabilityDDBService.updateItemObs(item).subscribe(
+          (data) => {
+            const index = this.mapArray.findIndex(x => x.dateStr === item.dateStr);
+            this.mapArray[index] = item;
+            observer.next(item);
+            observer.complete();
+          },
+          (error) => {
+            observer.error(error);
+          }
+        );
+      }
+    );
   }
 
   getByDate(dateInput: {year, month, day}): AvailTimeLog {

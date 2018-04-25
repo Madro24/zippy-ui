@@ -45,14 +45,23 @@ export class DataMapService {
     });
   }
 
+  itemInsertSuccess(item: ServiceItem): void {
+    this.serviceItemArray.push(item);
+    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+  }
+
+  itemUpdateSuccess(item: ServiceItem): void {
+    const index = this.serviceItemArray.findIndex(x => x.itemId === item.itemId);
+    this.serviceItemArray[index] = item;
+    this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
+  }
+
   pushItem(item: ServiceItem): Observable<ServiceItem> {
     console.log('Add ServiceItem, Item:' + item);
     return Observable.create( (observer: Observer<ServiceItem>) => {
       this.serviceItemDDB.writeItemObs(item).subscribe(
-        (data: ServiceItem) => {
-          this.serviceItemArray.push(item);
-          this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
-          observer.next(data);
+        (data: boolean) => {
+          observer.next(item);
           observer.complete();
         },
         (error: string) => {
@@ -66,11 +75,8 @@ export class DataMapService {
     console.log('Update ServiceItem, itemId:' + itemId + '. Item:' + item);
     return Observable.create( (observer: Observer<ServiceItem>) => {
       this.serviceItemDDB.writeItemObs(item).subscribe(
-        (data: ServiceItem) => {
-          const index = this.serviceItemArray.findIndex(x => x.itemId === itemId);
-          this.serviceItemArray[index] = item;
-          this.serviceItemArray.sort((item1, item2) => ServiceItem.compare(item1, item2));
-          observer.next(data);
+        (data: boolean) => {
+          observer.next(item);
           observer.complete();
         },
         (error: string) => {

@@ -41,6 +41,7 @@ export class SenderformComponent implements OnInit {
   timeAvailArray: Array<WorkdayHour>;
   originAddrGmap: GMapAddress;
   destinationAddrGmap: GMapAddress;
+  displayError: boolean = false;
 
   modalRef: NgbModalRef;
 
@@ -209,27 +210,58 @@ export class SenderformComponent implements OnInit {
 
     if (this.isEditAction) {
       this.dataMapService.updateItem(this.serviceItem, this.itemId).subscribe(
-        (data) => {console.log('Item updated:' + JSON.stringify(data))}, 
-        (error) => {console.log('Error updating:' + error)}
+        (data) => {
+          console.log('Item updated:' + JSON.stringify(data));
+          this.dataMapService.itemUpdateSuccess(this.serviceItem);
+          this.itemRegForm.markAsPristine();
+        }, 
+        (error) => {
+          console.log('Error updating:' + error);
+          this.displayError = true;
+        }
       );
     } else {
       // setting new AvailTimeLog
       const schedLogItem = this.dataAvailTimeService.createScheduledLogItem(availTimeLog, this.serviceItem);
 
       this.dataMapService.pushItem(this.serviceItem).subscribe(
-        (data) => {console.log('Item inserted:' + JSON.stringify(data))}, 
-        (error) => {console.log('Error interting:' + error)}
+        (data) => {
+          console.log('Item inserted:' + JSON.stringify(data));
+        
+          if (availTimeLog == null) {
+            this.dataAvailTimeService.addAvailTimeLog(schedLogItem).subscribe(
+              (data) => {
+                console.log('TimeLog inserted:' + JSON.stringify(data));
+                this.dataMapService.itemInsertSuccess(this.serviceItem);
+                this.itemRegForm.markAsPristine();
+                this.router.navigate(['/serviceItem/', this.serviceItem.itemId]);
+              },
+              (error) => {
+                console.log('Error inserting timeLog:' + error);
+                this.displayError = true;
+              }
+            );
+          } else {
+            this.dataAvailTimeService.updateAvailTimeLog(schedLogItem).subscribe(
+              (data) => {
+                console.log('TimeLog updated:' + JSON.stringify(data));
+                this.itemRegForm.markAsPristine();
+                this.router.navigate(['/serviceItem/', this.serviceItem.itemId]);
+              },
+              (error) => {
+                console.log('Error updating timeLog:' + error);
+                this.displayError = true;
+              }
+            );
+          }
+    
+        }, 
+        (error) => {
+          console.log('Error interting:' + error);
+          this.displayError = true;
+        }
       );
-
-      if (availTimeLog == null) {
-        this.dataAvailTimeService.addAvailTimeLog(schedLogItem);
-      } else {
-        this.dataAvailTimeService.updateAvailTimeLog(schedLogItem);
-      }
-
     }
-
-    this.itemRegForm.markAsPristine();
 
   }
 

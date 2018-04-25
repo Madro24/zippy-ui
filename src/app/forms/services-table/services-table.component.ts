@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {DataMapService} from '../../service/data-map.service';
 import {ServiceItem} from '../../shared/model/service-item.model';
 import {CommonUtilService} from '../../service/common-util.service';
+import {DataAvailabilityMapService} from '../../service/data-availability-map.service';
 
 @Component({
   selector: 'app-services-table',
@@ -13,12 +14,17 @@ export class ServicesTableComponent implements OnInit {
   isLoadingData = false;
   displayError = false;
 
-  constructor(private dataMapService: DataMapService,
-              private commonUtils: CommonUtilService) {
+  constructor(private dataMapService: DataMapService
+              , private commonUtils: CommonUtilService
+              , private dataAvailMapService: DataAvailabilityMapService) {
   }
 
   ngOnInit() {
     this.getServiceItems();
+    this.dataAvailMapService.init().subscribe(
+      (data) => {},
+      (error) =>  this.displayError = true
+  );
   }
 
   getServiceItems(): void {

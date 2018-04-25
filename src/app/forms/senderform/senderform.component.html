@@ -4,6 +4,11 @@
 <div class="alert alert-warning" role="alert" *ngIf="isEditAction && itemRegForm.dirty">
   ** Se realizaron cambios, guardalos para poder ver la etiqueta
 </div>
+
+<div class="alert alert-danger" role="alert" *ngIf="displayError">
+  ** Se produjo un error al guardar los cambios. Intenta de nuevo mas tarde.
+</div>
+
 <hr/>
 <div class="container">
 

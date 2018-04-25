@@ -40,7 +40,6 @@ export class ServiceItemDDBService {
       if (err) {
         console.error('ServiceItemDDBService: Unable to query the table. Error JSON:', JSON.stringify(err, null, 2));
       } else {
-        // print all the movies
         console.log('ServiceItemDDBService: Query succeeded.');
         data.Items.forEach(function (logitem) {
           mapArray.push(logitem);
@@ -114,7 +113,7 @@ export class ServiceItemDDBService {
     }
   }
 
-  writeItemObs(item: ServiceItem): Observable<ServiceItem> {
+  writeItemObs(item: ServiceItem): Observable<boolean> {
     console.log('ServiceItemDDBService: Adding new service item entry. Type:' + item.type);
     console.log('ServiceItemDDBService: writing ' + item.type + ' entry');
 
@@ -124,22 +123,28 @@ export class ServiceItemDDBService {
     if (environment.dynamodb_endpoint) {
       clientParams.endpoint = environment.dynamodb_endpoint;
     }
-    const DDB = new DynamoDB(clientParams);
+    
 
-    return Observable.create( (observer: Observer<ServiceItem>) => {
-      try{
-        // Write the item to the table
-        const itemParams = this.prepareWriteParam(item);
-        DDB.putItem(itemParams,
-          function (result) {
-            console.log('ServiceItemDDBService: wrote entry: ' + JSON.stringify(result));
-            observer.next(item);
-            observer.complete();
-          }
-        );
-      } catch (exc) {
-        observer.error('ServiceItemDDBService: Couldn\'t write to DDB');
-      }
+    return Observable.create( 
+      (observer: Observer<boolean>) => {
+        try{
+          const DDB = new DynamoDB(clientParams);
+          // Write the item to the table
+          const itemParams = this.prepareWriteParam(item);
+          DDB.putItem(itemParams,
+            function (result) {
+              console.log('ServiceItemDDBService: wrote entry error: ' + JSON.stringify(result));
+              if (result == null) {
+                observer.next(true);
+                observer.complete();
+              } else {
+                observer.error(JSON.stringify(result));
+              }
+            }
+          );
+        } catch (exc) {
+          observer.error('ServiceItemDDBService: Couldn\'t write to DDB');
+        }
     });
   }
 
