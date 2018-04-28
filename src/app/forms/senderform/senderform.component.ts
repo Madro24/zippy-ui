@@ -245,6 +245,7 @@ export class SenderformComponent implements OnInit {
             this.dataAvailTimeService.updateAvailTimeLog(schedLogItem).subscribe(
               (data) => {
                 console.log('TimeLog updated:' + JSON.stringify(data));
+                this.dataMapService.itemInsertSuccess(this.serviceItem);
                 this.itemRegForm.markAsPristine();
                 this.router.navigate(['/serviceItem/', this.serviceItem.itemId]);
               },
