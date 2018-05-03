@@ -198,7 +198,7 @@ export class SenderformComponent implements OnInit {
     }
     this.serviceItem.usedFares.distanceFare = distanceFare.toString();
     this.serviceItem.usedFares.timeFare = timeFare.toString();
-    this.serviceItem.totalCost = this.getTotalCost(this.serviceItem.destinations[0].distance);
+    this.serviceItem.totalCost = this.getTotalCost();
 
     this.setServiceItemToUpperCase(this.serviceItem);
 
@@ -312,7 +312,7 @@ export class SenderformComponent implements OnInit {
     });
   }
 
-  getTotalCost(value) {
+  getTotalCost() {
     const distance = +this.itemRegForm.get('destDistance').value;
     const totalCost = distance * distanceFare;
     return totalCost.toFixed(2);
