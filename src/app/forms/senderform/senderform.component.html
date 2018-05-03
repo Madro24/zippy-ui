@@ -55,11 +55,11 @@
 
         <fieldset class="form-group">
           <label>Quien envia</label>
-          <input class="form-control" name="senderName" formControlName="senderName" required>
+          <input class="form-control" name="senderName" formControlName="senderName" maxlength="50" required>
         </fieldset>
         <fieldset class="form-group">
           <label>Celular</label>
-          <input class="form-control" name="senderPhone" placeholder="664-XXXXXXX" formControlName="senderPhone" required>
+          <input class="form-control" name="senderPhone" placeholder="664XXXXXXX" formControlName="senderPhone" maxlength="10"  required>
         </fieldset>
 
         <fieldset class="form-group">
@@ -115,22 +115,22 @@
 
         <fieldset class="form-group">
           <label>Quien recibe</label>
-          <input class="form-control" name="destRecName" formControlName="destRecName" required>
+          <input class="form-control" name="destRecName" formControlName="destRecName" maxlength="50"  required>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Contenido</label>
-          <input class="form-control" name="destPkgContent" formControlName="destPkgContent"  required>
+          <input class="form-control" name="destPkgContent" formControlName="destPkgContent" maxlength="50"  required>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Mensaje al destinatario</label>
-          <textarea class="form-control" rows="3" name="destMsg" formControlName="destMsg" required></textarea>
+          <textarea class="form-control" rows="3" name="destMsg" formControlName="destMsg" maxlength="90"  required></textarea>
         </fieldset>
 
         <fieldset class="form-group">
           <label>Instruccion al mensajero</label>
-          <textarea class="form-control" rows="3" name="destInst" formControlName="destInst" required></textarea>
+          <textarea class="form-control" rows="3" name="destInst" formControlName="destInst" maxlength="90"  required></textarea>
         </fieldset>
 
         <fieldset class="form-group">
