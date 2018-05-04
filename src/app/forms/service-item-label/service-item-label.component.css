@@ -1,6 +1,5 @@
 div {
   text-align: left;
-  font-size: 12px;
 }
 
 .label-top {
@@ -43,4 +42,9 @@ div {
 .qrcode {
   text-align: right;
   padding-left: 0px;
+}
+
+
+@media (max-width: 544px) {
+  div.msgdiv, div.instdiv{font-size: 10px;}
 }
